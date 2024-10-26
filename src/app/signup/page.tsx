@@ -3,6 +3,7 @@
 import { supabase } from "../utils/supabase"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { toast, Toaster } from "react-hot-toast"
+import LoadingButton from "../_components/LoadingButton"
 
 type Owner = {
   nickname: string
@@ -11,7 +12,7 @@ type Owner = {
 }
 
 const SignUp = () => {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<Owner>()
+  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<Owner>()
   const onSubmit: SubmitHandler<Owner> = async(data) => {
     const { nickname, email, password } = data
     const { error } = await supabase.auth.signUp({ 
@@ -29,7 +30,7 @@ const SignUp = () => {
       toast.error("登録に失敗しました")
     } else { 
       reset()
-      toast.success("確認メールを送信しました")
+      toast.success("確認メールを送信しました。\n登録したメールアドレスからユーザー認証をしてください。")
     }
   }
 
@@ -97,13 +98,10 @@ const SignUp = () => {
             />
           <p className="text-red-500 text-xs">{errors.password?.message}</p>
         </div>
-        <div className="flex items-center justify-center mt-10">
-          <button 
-            className="bg-primary hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
-            type="submit">
-              新規登録
-          </button>
-        </div>
+        <LoadingButton 
+          isSubmitting={isSubmitting}
+          buttonText="新規登録"
+        />
       </form>
       <Toaster />
     </div>

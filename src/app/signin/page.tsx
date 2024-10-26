@@ -4,6 +4,7 @@ import { supabase } from "../utils/supabase"
 import { useRouter } from "next/navigation"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { toast, Toaster } from "react-hot-toast"
+import LoadingButton from "../_components/LoadingButton"
 
 type Owner = {
   email: string
@@ -11,7 +12,7 @@ type Owner = {
 }
 
 const SignIn = () =>  {
-  const { register, handleSubmit, reset, formState: { errors }} = useForm<Owner>()
+  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<Owner>()
   const router = useRouter()
 
   const onSubmit: SubmitHandler<Owner> = async(data) => {
@@ -80,13 +81,10 @@ const SignIn = () =>  {
             />
           <p className="text-red-500 text-xs">{errors.password?.message}</p>
         </div>
-        <div className="flex items-center justify-center mt-10">
-          <button 
-            className="bg-primary hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
-            type="submit">
-              ログイン
-          </button>
-        </div>
+        <LoadingButton 
+          isSubmitting={isSubmitting}
+          buttonText="新規登録"
+        />
       </form>
       <Toaster />
     </div>
