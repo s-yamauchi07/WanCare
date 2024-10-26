@@ -10,7 +10,7 @@ type Owner = {
   password: string
 }
 
-export default function SignUp() {
+const SignUp = () => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm<Owner>()
   const onSubmit: SubmitHandler<Owner> = async(data) => {
     const { nickname, email, password } = data
@@ -44,21 +44,21 @@ export default function SignUp() {
             Nickname
           </label>
           <input 
-            className="rounded w-full py-2 px-3 border-primary leading-tight focus:outline-none focus:shadow-outline"
+            className="border border-primary rounded w-full py-2 px-3 border-primary leading-tight focus:outline-none focus:shadow-outline"
             id="nickname"
             type="text"
             placeholder="たろう"
             {...register("nickname", {
               required: "nicknameは必須です。",
             })} />
-          <p className="text-red-500 text-xs italic">{errors.nickname?.message}</p>
+          <p className="text-red-500 text-xs">{errors.nickname?.message}</p>
         </div>
         <div className="mb-6">
           <label className="block text-primary text-sm font-bold mb-2" id="email">
             Email
           </label>
           <input
-            className="rounded w-full py-2 px-3 border-primary leading-tight focus:outline-none focus:shadow-outline"
+            className="border border-primary rounded w-full py-2 px-3 border-primary leading-tight focus:outline-none focus:shadow-outline"
             id="email"
             type="email"
             placeholder="taro@test.com"
@@ -70,7 +70,7 @@ export default function SignUp() {
               }
             })}
             />
-        <p className="text-red-500 text-xs italic">{errors.email?.message}</p>
+        <p className="text-red-500 text-xs">{errors.email?.message}</p>
         </div>
         <div className="mb-6">
           <label
@@ -79,7 +79,7 @@ export default function SignUp() {
             Password
           </label>
           <input
-            className="rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+            className="border border-primary rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
             id="password"
             type="password"
             placeholder="*******"
@@ -95,7 +95,7 @@ export default function SignUp() {
               }
             })}
             />
-          <p className="text-red-500 text-xs italic">{errors.password?.message}</p>
+          <p className="text-red-500 text-xs">{errors.password?.message}</p>
         </div>
         <div className="flex items-center justify-center mt-10">
           <button 
@@ -109,3 +109,5 @@ export default function SignUp() {
     </div>
   )
 }
+
+export default SignUp;
