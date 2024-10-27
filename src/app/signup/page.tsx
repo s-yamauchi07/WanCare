@@ -3,7 +3,9 @@
 import { supabase } from "../utils/supabase"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { toast, Toaster } from "react-hot-toast"
+import Input from "../_components/Input"
 import LoadingButton from "../_components/LoadingButton"
+
 
 type Owner = {
   nickname: string
@@ -40,64 +42,48 @@ const SignUp = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="w-80 px-8 pt-6 pb-8 mb-4">
         <h2 className="text-primary text-center text-2xl font-bold m-14">新規登録</h2>
-        <div className="mb-6">
-          <label className="block text-primary text-sm font-bold mb-2" id="username">
-            Nickname
-          </label>
-          <input 
-            className="border border-primary rounded w-full py-2 px-3 border-primary leading-tight focus:outline-none focus:shadow-outline"
-            id="nickname"
-            type="text"
-            placeholder="たろう"
-            {...register("nickname", {
-              required: "nicknameは必須です。",
-            })} />
-          <p className="text-red-500 text-xs">{errors.nickname?.message}</p>
-        </div>
-        <div className="mb-6">
-          <label className="block text-primary text-sm font-bold mb-2" id="email">
-            Email
-          </label>
-          <input
-            className="border border-primary rounded w-full py-2 px-3 border-primary leading-tight focus:outline-none focus:shadow-outline"
-            id="email"
-            type="email"
-            placeholder="taro@test.com"
-            {...register("email", {
-              required: "emailは必須です。",
-              pattern: { 
-                value: /([a-z\d+\-.]+)@([a-z\d-]+(?:\.[a-z]+)*)/i,
-                message: "メールアドレスの形式が不正です。"
-              }
-            })}
-            />
-        <p className="text-red-500 text-xs">{errors.email?.message}</p>
-        </div>
-        <div className="mb-6">
-          <label
-            className="block text-primary text-sm font-bold mb-2"
-            id="password">
-            Password
-          </label>
-          <input
-            className="border border-primary rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-            id="password"
-            type="password"
-            placeholder="*******"
-            {...register("password", {
-              required: "passwordは必須です。",
-              pattern: { 
-                value: /^(?=.*?[a-z])(?=.*?\d)[a-z\d]+$/i,
-                message: "passwordは英数字混合で入力してください。"
-              },
-              minLength: {
-                value: 6,
-                message: "passwordは6文字以上で入力してください。"  
-              }
-            })}
-            />
-          <p className="text-red-500 text-xs">{errors.password?.message}</p>
-        </div>
+        <Input
+          id="nickname"
+          labelName="nickname"
+          type="text"
+          placeholder="たろう"
+          register={{...register("nickname", {
+            required: "nicknameは必須です。",
+          })}} 
+          error={errors.nickname?.message}
+        />
+        <Input
+          id="email"
+          labelName="email"
+          type="email"
+          placeholder="taro@test.com"
+          register={{...register("email", {
+            required: "emailは必須です。",
+            pattern: { 
+              value: /([a-z\d+\-.]+)@([a-z\d-]+(?:\.[a-z]+)*)/i,
+              message: "メールアドレスの形式が不正です。"
+            }
+          })}} 
+          error={errors.email?.message}
+        />
+        <Input
+          id="password"
+          labelName="password"
+          type="password"
+          placeholder="*******"
+          register={{...register("password", {
+            required: "passwordは必須です。",
+            pattern: { 
+              value: /^(?=.*?[a-z])(?=.*?\d)[a-z\d]+$/i,
+              message: "passwordは英数字混合で入力してください。"
+            },
+            minLength: {
+              value: 6,
+              message: "passwordは6文字以上で入力してください。"  
+            }
+          })}} 
+          error={errors.password?.message}
+        />
         <LoadingButton 
           isSubmitting={isSubmitting}
           buttonText="新規登録"
