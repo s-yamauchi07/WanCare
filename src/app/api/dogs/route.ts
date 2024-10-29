@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "../../utils/supabase";
+import { formatDate } from "../../utils/dateFormat";
+import { UserAuthentication } from "../../utils/userAuthentication";
+import { handleError } from "../../utils/errorHandler";
 
 const prisma = new PrismaClient();
 
@@ -12,19 +14,6 @@ interface DogData {
   adoptionDate: Date
   breedId: string
 }
-
-const UserAuthentication = async (request: NextRequest) => {
-  const token = request.headers.get("Authorization") ?? "";
-  return await supabase.auth.getUser(token);
-}
-
-const handleError = (error: unknown) => {
-  if (error instanceof Error) {
-    return NextResponse.json({ status: error.message }, { status: 400 });
-  }
-};
-
-const formatDate = (date: Date) => new Date(date).toISOString();
 
 // 新規登録
 export const POST = async(request: NextRequest) => {
