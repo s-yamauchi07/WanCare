@@ -33,3 +33,30 @@ export const POST = async(request: NextRequest) => {
     return handleError(error);
   }
 }
+
+// 一覧
+export const GET = async(request: NextRequest) => {
+  const { data, error } = await userAuthentication(request);
+  if (error) return handleError(error);
+  const currentUserId = data.user.id;
+
+  try {
+    const cares = await prisma.care.findMany({
+      where: {
+        ownerId: currentUserId,
+      },
+      include: {
+        careList: {
+          select: {
+            name: true,
+            icon: true,
+          }
+        },
+      },
+    })
+    return NextResponse.json({ status: "OK", cares: cares }, { status: 200 });
+  } catch(error) {
+    return handleError(error);
+  }
+
+}
