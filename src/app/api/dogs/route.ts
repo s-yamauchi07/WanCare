@@ -3,17 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { formatDate } from "../../utils/dateFormat";
 import { UserAuthentication } from "../../utils/userAuthentication";
 import { handleError } from "../../utils/errorHandler";
+import { DogType } from "@/_types/dogType";
 
 const prisma = new PrismaClient();
-
-interface DogData {
-  imageKey: string
-  name: string
-  sex: string
-  birthDate: Date
-  adoptionDate: Date
-  breedId: string
-}
 
 // 新規登録
 export const POST = async(request: NextRequest) => {
@@ -22,7 +14,7 @@ export const POST = async(request: NextRequest) => {
 
   try {
     const body = await request.json();
-    const { imageKey, name, sex, birthDate, adoptionDate, breedId }:DogData = body;
+    const { imageKey, name, sex, birthDate, adoptionDate, breedId }:DogType = body;
     
     // 現在のログインユーザーのidをcurrentUserIdに保存
     const currentUserId = data.user.id;
@@ -72,7 +64,7 @@ export const PUT = async (request: NextRequest) => {
 
   try {
     const body = await request.json();
-    const { imageKey, name, sex, birthDate, adoptionDate, breedId }:DogData = body;
+    const { imageKey, name, sex, birthDate, adoptionDate, breedId }:DogType = body;
 
     const currentUserId = data.user.id;
 
