@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { formatDate } from "../../utils/dateFormat";
 import { UserAuthentication } from "../../utils/userAuthentication";
 import { handleError } from "../../utils/errorHandler";
-import { DogType } from "@/_types/dogType";
+import { Dog } from "@/_types/dog";
 
 const prisma = new PrismaClient();
 
@@ -14,7 +14,7 @@ export const POST = async(request: NextRequest) => {
 
   try {
     const body = await request.json();
-    const { imageKey, name, sex, birthDate, adoptionDate, breedId }:DogType = body;
+    const { imageKey, name, sex, birthDate, adoptionDate, breedId }:Dog = body;
     
     // 現在のログインユーザーのidをcurrentUserIdに保存
     const currentUserId = data.user.id;
@@ -64,7 +64,7 @@ export const PUT = async (request: NextRequest) => {
 
   try {
     const body = await request.json();
-    const { imageKey, name, sex, birthDate, adoptionDate, breedId }:DogType = body;
+    const { imageKey, name, sex, birthDate, adoptionDate, breedId }:Dog = body;
 
     const currentUserId = data.user.id;
 

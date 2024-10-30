@@ -1,4 +1,4 @@
-export interface DogType {
+export interface Dog {
   imageKey: string
   name: string
   sex: string
