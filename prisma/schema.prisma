@@ -74,7 +74,8 @@ model Care {
 
 model CareList {
   id            String    @id @default(uuid()) @db.Uuid
-  name          String
+  name          String    @unique
+  icon          String    
   cares         Care[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
