@@ -38,13 +38,15 @@ export async function breedSeed(prisma: PrismaClient) {
   ];
 
   try {
-    for (const breed of dogBreeds) {
+    for (let i = 0; i < dogBreeds.length; i++) {
+      const breed = dogBreeds[i];
       await prisma.breed.upsert({
         where: { name: breed },
         update: {name: breed },
         create: {
           id: uuidv4(),
           name: breed,
+          order: i,
         },
       });
     }

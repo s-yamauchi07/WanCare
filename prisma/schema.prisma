@@ -52,7 +52,7 @@ model Breed {
   dogs          Dog[]
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-
+  order         Int
   @@map("breeds")
 }
 
@@ -79,7 +79,8 @@ model CareList {
   cares         Care[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-
+  order         Int
+  
   @@map("care_lists")
 }
 

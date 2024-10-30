@@ -18,14 +18,16 @@ export async function careSeed(prisma: PrismaClient) {
   ];
 
   try {
-    for (const care of careLists) {
+    for (let i = 0; i < careLists.length; i++) {
+      const care = careLists[i];
       await prisma.careList.upsert({
         where: { name: care.name},
         update: { name: care.name, icon: care.icon},
         create: {
           id: uuidv4(),
           name: care.name,
-          icon: care.icon
+          icon: care.icon,
+          order: i + 1,
         }
       })
     }
