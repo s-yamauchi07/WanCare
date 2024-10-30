@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { formatDate } from "../../utils/dateFormat";
-import { UserAuthentication } from "../../utils/userAuthentication";
+import { userAuthentication } from "../../utils/userAuthentication";
 import { handleError } from "../../utils/errorHandler";
 import { Dog } from "@/_types/dog";
 
@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 
 // 新規登録
 export const POST = async(request: NextRequest) => {
-  const { data, error } = await UserAuthentication(request);
+  const { data, error } = await userAuthentication(request);
   if (error) return handleError(error);
 
   try {
@@ -45,7 +45,7 @@ export const POST = async(request: NextRequest) => {
 
 // 詳細
 export const GET = async(request: NextRequest) => {
-  const { data, error } = await UserAuthentication(request);
+  const { data, error } = await userAuthentication(request);
   if (error) return handleError(error);
 
   try {
@@ -65,7 +65,7 @@ export const GET = async(request: NextRequest) => {
 
 // 編集
 export const PUT = async (request: NextRequest) => {
-  const { error, data } = await UserAuthentication(request);
+  const { error, data } = await userAuthentication(request);
   if (error) return handleError(error);
 
   try {
@@ -96,7 +96,7 @@ export const PUT = async (request: NextRequest) => {
 
 // 削除
 export const DELETE = async (request: NextRequest) => {
-  const { data, error } = await UserAuthentication(request);
+  const { data, error } = await userAuthentication(request);
   if (error) return handleError(error);
 
   const currentUserId = data.user.id;
