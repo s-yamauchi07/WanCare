@@ -1,0 +1,35 @@
+import { PrismaClient } from "@prisma/client";
+import { NextRequest, NextResponse } from "next/server";
+import { userAuthentication } from "@/app/utils/userAuthentication";
+import { handleError } from "@/app/utils/errorHandler";
+import { formatDate } from "@/app/utils/dateFormat";
+import { Care } from "@/_types/care";
+
+const prisma = new PrismaClient();
+
+// 新規登録
+export const POST = async(request: NextRequest) => {
+  const { data, error } = await userAuthentication(request);
+  if (error) return handleError(error);
+
+  try {
+    const body = await request.json();
+    const { careDate, amount, memo, imageKey, careListId }:Care = body;
+    const currentUserId = data.user.id;
+
+    await prisma.care.create({
+      data: {
+        careDate: formatDate(careDate),
+        amount,
+        memo,
+        imageKey,
+        careListId,
+        ownerId: currentUserId
+      },
+    });
+
+    return NextResponse.json({ status: "OK", message: "お世話記録を登録しました"}, {status: 200 });
+  } catch(error) {
+    return handleError(error);
+  }
+}
