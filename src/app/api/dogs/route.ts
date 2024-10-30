@@ -15,9 +15,15 @@ export const POST = async(request: NextRequest) => {
   try {
     const body = await request.json();
     const { imageKey, name, sex, birthDate, adoptionDate, breedId }:Dog = body;
-    
-    // 現在のログインユーザーのidをcurrentUserIdに保存
     const currentUserId = data.user.id;
+    const dog = await prisma.dog.findUnique({
+      where: {
+        ownerId: currentUserId
+      },
+    })
+
+    // もし現在ログイン中のユーザーに既にペット情報が登録されていたらエラーを返す。
+    if (dog) return handleError(new Error("dog information has already exist"));
 
     await prisma.dog.create({
       data: {
@@ -34,7 +40,7 @@ export const POST = async(request: NextRequest) => {
     return NextResponse.json({ status: "OK", message: "ペット情報を登録しました"}, {status: 200 });
   } catch(error) {
     return handleError(error);
-}
+  }
 }
 
 // 詳細
