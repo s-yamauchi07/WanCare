@@ -85,7 +85,6 @@ export const PUT = async (request: NextRequest) => {
         birthDate: formatDate(birthDate),
         adoptionDate: formatDate(adoptionDate),
         breedId,
-        ownerId: currentUserId,
       },
     });
 
