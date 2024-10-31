@@ -35,7 +35,7 @@ export const POST = async(request: NextRequest) => {
 }
 
 // 一覧
-export const GET = async(request: NextRequest) => {
+export const GET = async (request: NextRequest) => {
   const { data, error } = await userAuthentication(request);
   if (error) return handleError(error);
   const currentUserId = data.user.id;
@@ -52,6 +52,9 @@ export const GET = async(request: NextRequest) => {
             icon: true,
           }
         },
+      },
+      orderBy: {
+        careDate: 'desc',
       },
     })
     return NextResponse.json({ status: "OK", cares: cares }, { status: 200 });
