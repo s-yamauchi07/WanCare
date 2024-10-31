@@ -23,6 +23,8 @@
     "uuid": "^11.0.1"
   },
   "devDependencies": {
+    "@egoist/tailwindcss-icons": "^1.8.1",
+    "@iconify/json": "^2.2.266",
     "@types/node": "^20.17.1",
     "@types/react": "^18",
     "@types/react-dom": "^18",
