@@ -57,7 +57,7 @@ export const GET = async (request: NextRequest, { params } : { params : { id: st
 // 編集
 export const PUT = async(request: NextRequest, { params } : { params: { id: string }} ) => {
   const { id } = params
-  const { body } = await request.json();
+  const  body  = await request.json();
   const { careDate, amount, memo, imageKey, careListId }:Care = body;
   const { data, error } = await userAuthentication(request);
   if (error) return handleError(error);
