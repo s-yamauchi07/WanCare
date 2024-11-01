@@ -1,9 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 
-const prisma = new PrismaClient();
-
-async function main() {
+export async function breedSeed(prisma: PrismaClient) {
   const dogBreeds = [
     "アイリッシュウルフハウンド", "アイリッシュセッター", "秋田犬", "アフガンハウンド","アメリカンコッカースパニエル", "アメリカンスタッフォードシャーテリア", "アメリカンピットブルテリア","アラスカンマラミュート", 
     "イタリアングレーハウンド", "イングリッシュコッカースパニエル","イングリッシュスプリンガースパニエル", "イングリッシュセッター", "イングリッシュポインター",
@@ -40,13 +38,15 @@ async function main() {
   ];
 
   try {
-    for (const breed of dogBreeds) {
+    for (let i = 0; i < dogBreeds.length; i++) {
+      const breed = dogBreeds[i];
       await prisma.breed.upsert({
         where: { name: breed },
         update: {name: breed },
         create: {
           id: uuidv4(),
           name: breed,
+          order: i,
         },
       });
     }
@@ -57,6 +57,3 @@ async function main() {
     await prisma.$disconnect(); //prismaとの接続を遮断
   }
 }
-
-main();
-  

@@ -52,7 +52,7 @@ model Breed {
   dogs          Dog[]
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-
+  order         Int
   @@map("breeds")
 }
 
@@ -74,11 +74,13 @@ model Care {
 
 model CareList {
   id            String    @id @default(uuid()) @db.Uuid
-  name          String
+  name          String    @unique
+  icon          String    
   cares         Care[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-
+  order         Int
+  
   @@map("care_lists")
 }
 
