@@ -71,16 +71,18 @@ export const PUT = async(request: NextRequest,  { params } : { params: {id: stri
         },
       });
   
-      // tagを紐付けし直す
-      for (const tag of tags) {
-        const updateTag = await findOrCreateTag(tag);
-      
-        await prisma.diaryTag.create({
-          data: {
-            diaryId: diary.id,
-            tagId: updateTag.id
-          },
-        });
+      if(tags && tags.length > 0) {
+        // tagを紐付けし直す
+        for (const tag of tags) {
+          const updateTag = await findOrCreateTag(tag);
+        
+          await prisma.diaryTag.create({
+            data: {
+              diaryId: diary.id,
+              tagId: updateTag.id
+            },
+          });
+        }
       }
       return diary;
     })

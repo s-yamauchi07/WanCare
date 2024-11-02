@@ -57,15 +57,17 @@ export const POST = async(request: NextRequest) => {
       })
   
       // 既存タグか、新規タグかのチェックを行いDBに保存。
-      for(const tag of tags) {
-        const addTag = await findOrCreateTag(tag);
+      if(tags && tags.length > 0) {
+        for(const tag of tags) {
+          const addTag = await findOrCreateTag(tag);
 
-        await prisma.diaryTag.create({
-          data: {
-            diaryId: diary.id,
-            tagId: addTag.id
-          },
-        });
+          await prisma.diaryTag.create({
+            data: {
+              diaryId: diary.id,
+              tagId: addTag.id
+            },
+          });
+        }
       }
 
       return diary;
