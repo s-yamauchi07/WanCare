@@ -4,25 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { handleError } from "@/app/utils/errorHandler";
 import { Diary } from "@/_types/diary";
 import { findOrCreateTag } from "@/app/utils/findOrCreateTag";
+import { verifyUser } from "@/app/utils/verifyUser";
 
 const prisma = new PrismaClient();
-
-const verifyUser = async(userId: string, diaryId: string) => {
-  const diary = await prisma.diary.findUnique({
-    where: {
-      id: diaryId
-    },
-  })
-
-  if(!diary) {
-    throw new Error("diary record not found.")
-  }
-
-  if ( userId !== diary.ownerId) {
-    throw new Error("this authentication user doesn't match this diary record writer.")
-  }
-}
-
 
 // 詳細
 export const GET = async(request:NextRequest, { params } : { params: {id: string }} ) => {
@@ -65,7 +49,7 @@ export const PUT = async(request: NextRequest,  { params } : { params: {id: stri
   const currentUserId = data.user.id;
 
   try {
-    await verifyUser(currentUserId, id);
+    await verifyUser(currentUserId, id, prisma);
 
     const updatedDiary = await prisma.$transaction(async(prisma) => {
       const diary = await prisma.diary.update({
@@ -114,7 +98,7 @@ export const DELETE = async(request: NextRequest, { params } : { params: { id: s
   if (error) return handleError(request)
 
   const currentUserId = data.user.id;
-  await verifyUser(currentUserId, id)
+  await verifyUser(currentUserId, id, prisma)
   
   try {
     await prisma.$transaction(async(prisma) => {
