@@ -140,7 +140,7 @@ model DiaryTag {
 
 model Tag {
   id            String        @id @default(uuid()) @db.Uuid
-  name          String
+  name          String        @unique
   diaryTags     DiaryTag[]
   summaryTags   SummaryTag[]
   createdAt     DateTime      @default(now())
