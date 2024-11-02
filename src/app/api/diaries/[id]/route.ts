@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { handleError } from "@/app/utils/errorHandler";
 import { Diary } from "@/_types/diary";
+import { findOrCreateTag } from "@/app/utils/findOrCreateTag";
 
 const prisma = new PrismaClient();
 
@@ -44,15 +45,6 @@ export const GET = async(request:NextRequest, { params } : { params: {id: string
             },
           },
         },
-        comments: {
-          include: {
-            owner: {
-              select: {
-                nickname: true
-              },
-            },
-          },
-        },
       },
     });
 
@@ -75,55 +67,39 @@ export const PUT = async(request: NextRequest,  { params } : { params: {id: stri
   try {
     await verifyUser(currentUserId, id);
 
-    const updatedDiary = await prisma.diary.update({
-      where: {
-        id
-      },
-      data: {
-        title,
-        content,
-        imageKey: imageKey || null,
-        summaryId: summaryId || null,
-      }
-    });
-
-    // diaryに紐づくカテゴリーの中間テーブルを削除
-    await prisma.diaryTag.deleteMany({
-      where: {
-        diaryId: id
-      },
-    });
-
-    // tagを紐付けし直す
-    for (const tag of tags) {
-      const existTag = await prisma.tag.findUnique({
+    const updatedDiary = await prisma.$transaction(async(prisma) => {
+      const diary = await prisma.diary.update({
         where: {
-          name: tag
+          id
         },
-      })
-
-      if(existTag) {
+        data: {
+          title,
+          content,
+          imageKey: imageKey || null,
+          summaryId: summaryId || null,
+        }
+      });
+  
+      // diaryに紐づくカテゴリーの中間テーブルを削除
+      await prisma.diaryTag.deleteMany({
+        where: {
+          diaryId: id
+        },
+      });
+  
+      // tagを紐付けし直す
+      for (const tag of tags) {
+        const updateTag = await findOrCreateTag(tag);
+      
         await prisma.diaryTag.create({
           data: {
             diaryId: updatedDiary.id,
-            tagId: existTag.id
-          },
-        });
-      } else {
-        const newTag = await prisma.tag.create({
-          data: {
-            name: tag
-          },
-        });
-
-        await prisma.diaryTag.create({
-          data: {
-            diaryId: updatedDiary.id,
-            tagId: newTag.id
+            tagId: updateTag.id
           },
         });
       }
-    }
+      return diary;
+    })
 
     return NextResponse.json({ status: "OK", diary: updatedDiary}, { status: 200});
   } catch(error) {
@@ -141,26 +117,28 @@ export const DELETE = async(request: NextRequest, { params } : { params: { id: s
   await verifyUser(currentUserId, id)
   
   try {
-    // 関連する中間テーブルのデータを削除する
-    await prisma.diaryTag.deleteMany({
-      where: {
-        diaryId: id,
-      },
-    });
-
-   await prisma.diary.delete({
-      where: {
-        id
-      },
-    });
-
-    // どのdiaryとも紐付きがなくなったらtag自体も削除する。
-    await prisma.tag.deleteMany({
-      where: {
-        diaryTags: {
-          none: {}
+    await prisma.$transaction(async(prisma) => {
+      // 関連する中間テーブルのデータを削除する
+      await prisma.diaryTag.deleteMany({
+        where: {
+          diaryId: id,
         },
-      },
+      });
+  
+     await prisma.diary.delete({
+        where: {
+          id
+        },
+      });
+  
+      // 関連するdiaryのデータが無くなったらtag自体も削除する。
+      await prisma.tag.deleteMany({
+        where: {
+          diaryTags: {
+            none: {}
+          },
+        },
+      });
     });
 
     return NextResponse.json({status: "OK", message: "日記を削除しました" }, { status: 200 });

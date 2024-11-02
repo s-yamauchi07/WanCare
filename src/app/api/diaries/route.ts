@@ -3,10 +3,11 @@ import { PrismaClient } from "@prisma/client"
 import { NextRequest, NextResponse } from "next/server";
 import { handleError } from "@/app/utils/errorHandler";
 import { Diary } from "@/_types/diary";
+import { findOrCreateTag } from "@/app/utils/findOrCreateTag";
 
 const prisma = new PrismaClient();
 
-// 一覧(全ユーザー)
+// 一覧(全ユーザーの投稿)
 export const GET = async(request: NextRequest) => {
   const { error } = await userAuthentication(request);
   if (error) return handleError(error);
@@ -25,7 +26,7 @@ export const GET = async(request: NextRequest) => {
           },
         },
       },
-    })
+    });
 
     return NextResponse.json({ status: "OK", diaries: diaries }, { status: 200});
   } catch(error) {
@@ -43,9 +44,7 @@ export const POST = async(request: NextRequest) => {
 
   try {
     const currentUserId = data.user.id;
-    // $transactionを用いて複数のDB操作を一貫して行う。
-    const result = await prisma.$transaction(async(prisma) => {
-
+    const allDiary = await prisma.$transaction(async(prisma) => {
       // 日記の作成
       const diary = await prisma.diary.create({
         data: {
@@ -57,41 +56,22 @@ export const POST = async(request: NextRequest) => {
         },
       })
   
-      // 入力されたtagの名前をtagテーブルから検索し、存在していたらexistTagに代入。
+      // 既存タグか、新規タグかのチェックを行いDBに保存。
       for(const tag of tags) {
-        const existTag = await prisma.tag.findUnique({
-          where: {
-            name: tag
+        const addTag = await findOrCreateTag(tag);
+
+        await prisma.diaryTag.create({
+          data: {
+            diaryId: diary.id,
+            tagId: addTag.id
           },
-        })
-        
-        // 既に登録済みのtagであれば、既存idを使用してdiaryTagsテーブルに保存。
-        if(existTag) {
-          await prisma.diaryTag.create({
-            data: {
-              diaryId: diary.id,
-              tagId: existTag.id
-            }
-          });
-        } else {
-          // 未登録のタグなら新規でtag登録して、diaryTagsテーブルに保存。
-          const newTag = await prisma.tag.create({
-            data: {
-              name: tag
-            },
-          });
-  
-          await prisma.diaryTag.create({
-            data: {
-              diaryId: diary.id,
-              tagId: newTag.id
-            },
-          });
-        }
+        });
       }
+
+      return diary;
     });
 
-    return NextResponse.json({ status: "OK", message: "日記の保存をしました", diary: result }, { status: 200 });
+    return NextResponse.json({ status: "OK", message: "日記の保存をしました", diary: allDiary }, { status: 200 });
   } catch(error) {
     return handleError(error);
   }
