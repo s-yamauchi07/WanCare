@@ -2,17 +2,9 @@ import { userAuthentication } from "@/app/utils/userAuthentication";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { handleError } from "@/app/utils/errorHandler";
-
+import { Diary } from "@/_types/diary";
 
 const prisma = new PrismaClient();
-
-interface Diary {
-  title: string
-  content: string
-  imageKey?: string | null
-  tags: string[]
-  summaryId?: string | null
-}
 
 const verifyUser = async(userId: string, diaryId: string) => {
   const diary = await prisma.diary.findUnique({
