@@ -77,7 +77,7 @@ export const PUT = async(request: NextRequest,  { params } : { params: {id: stri
       
         await prisma.diaryTag.create({
           data: {
-            diaryId: updatedDiary.id,
+            diaryId: diary.id,
             tagId: updateTag.id
           },
         });
