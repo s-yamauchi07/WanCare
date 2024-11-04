@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client"
 import { NextRequest, NextResponse } from "next/server";
 import { handleError } from "@/app/utils/errorHandler";
 import { Diary } from "@/_types/diary";
-import { findOrCreateTag } from "@/app/utils/findOrCreateTag";
+import { findOrCreateTag } from "@/app/api/diaries/_utils/findOrCreateTag";
 
 const prisma = new PrismaClient();
 
