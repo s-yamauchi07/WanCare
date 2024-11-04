@@ -32,6 +32,10 @@ export const GET = async(request:NextRequest, { params } : { params: {id: string
       },
     });
 
+    if (!detailDiary) {
+      return NextResponse.json({ status: "Not Found", message: "Diary Not found."}, { status: 404});
+    }
+
     return NextResponse.json({ status: "OK", diary: detailDiary}, { status: 200});
   } catch(error) {
     return handleError(error);
