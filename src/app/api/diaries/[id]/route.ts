@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { handleError } from "@/app/utils/errorHandler";
 import { Diary } from "@/_types/diary";
 import { findOrCreateTag } from "@/app/api/diaries/_utils/findOrCreateTag";
-import { verifyUser } from "@/app/api/diaries/_utils/verifyUser";
+import { verifyUser } from "@/app/utils/verifyUser";
 
 const prisma = new PrismaClient();
 

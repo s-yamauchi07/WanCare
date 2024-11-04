@@ -4,24 +4,9 @@ import { userAuthentication } from "@/app/utils/userAuthentication";
 import { handleError } from "@/app/utils/errorHandler";
 import { Care } from "@/_types/care";
 import { formatDate } from "@/app/utils/dateFormat";
+import { verifyUser } from "@/app/utils/verifyUser";
 
 const prisma = new PrismaClient();
-
-const verifyUser = async(userId: string, careId: string) => {
-  const care = await prisma.care.findUnique({
-    where: {
-      id: careId
-    },
-  })
-
-  if(!care) {
-    throw new Error("Care record not found.")
-  }
-
-  if (userId !== care.ownerId) {
-    throw new Error("this authentication user doesn't match this care record writer.")
-  }
-}
 
 // 詳細
 export const GET = async (request: NextRequest, { params } : { params : { id: string }} ) => {
@@ -32,7 +17,7 @@ export const GET = async (request: NextRequest, { params } : { params : { id: st
 
   try {
     // ユーザー認証チェック
-    await verifyUser(currentUserId, id);
+    await verifyUser(currentUserId, id, prisma);
 
     const detailCare = await prisma.care.findUnique({
       where: {
@@ -65,7 +50,7 @@ export const PUT = async(request: NextRequest, { params } : { params: { id: stri
   const currentUserId = data.user.id;
 
   try {
-    await verifyUser(currentUserId, id)
+    await verifyUser(currentUserId, id, prisma)
 
     const updatedCare = await prisma.care.update({
       where: {
@@ -96,7 +81,7 @@ export const DELETE = async(request: NextRequest, { params } : { params: { id: s
   const currentUserId = data.user.id;
 
   try {
-    await verifyUser(currentUserId, id);
+    await verifyUser(currentUserId, id, prisma);
 
     await prisma.care.delete({
       where: {
