@@ -17,7 +17,7 @@ export const GET = async(request:NextRequest, { params } : { params: {id: string
   try {
     const detailDiary = await prisma.diary.findUnique({
       where: {
-        id
+        id,
       },
       include: {
         diaryTags: {
@@ -27,6 +27,12 @@ export const GET = async(request:NextRequest, { params } : { params: {id: string
                 name: true
               },
             },
+          },
+        },
+        comments: {
+          select: {
+            comment: true,
+            ownerId: true,
           },
         },
       },
