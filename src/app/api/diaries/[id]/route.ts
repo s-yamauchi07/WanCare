@@ -17,7 +17,7 @@ export const GET = async(request:NextRequest, { params } : { params: {id: string
   try {
     const detailDiary = await prisma.diary.findUnique({
       where: {
-        id
+        id,
       },
       include: {
         diaryTags: {
@@ -25,6 +25,16 @@ export const GET = async(request:NextRequest, { params } : { params: {id: string
             tag: {
               select: {
                 name: true
+              },
+            },
+          },
+        },
+        comments: {
+          select: {
+            comment: true,
+            owner: {
+              select: {
+                nickname: true
               },
             },
           },
@@ -53,7 +63,7 @@ export const PUT = async(request: NextRequest,  { params } : { params: {id: stri
   const currentUserId = data.user.id;
 
   try {
-    await verifyUser(currentUserId, id, prisma);
+    await verifyUser(currentUserId, id, prisma.diary);
 
     const updatedDiary = await prisma.$transaction(async(prisma) => {
       const diary = await prisma.diary.update({
@@ -104,7 +114,7 @@ export const DELETE = async(request: NextRequest, { params } : { params: { id: s
   if (error) return handleError(request)
 
   const currentUserId = data.user.id;
-  await verifyUser(currentUserId, id, prisma)
+  await verifyUser(currentUserId, id, prisma.diary)
   
   try {
     await prisma.$transaction(async(prisma) => {
