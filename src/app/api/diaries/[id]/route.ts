@@ -32,7 +32,11 @@ export const GET = async(request:NextRequest, { params } : { params: {id: string
         comments: {
           select: {
             comment: true,
-            ownerId: true,
+            owner: {
+              select: {
+                nickname: true
+              },
+            },
           },
         },
       },
