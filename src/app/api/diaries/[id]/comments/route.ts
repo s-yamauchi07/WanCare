@@ -2,6 +2,7 @@ import { handleError } from "@/app/utils/errorHandler";
 import { userAuthentication } from "@/app/utils/userAuthentication";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { Comment } from "@/_types/comment";
 
 const prisma = new PrismaClient();
 
@@ -12,7 +13,7 @@ export const POST = async(request: NextRequest, { params } : { params : {id: str
   if (error) return handleError(error);
 
   const body = await request.json();
-  const { comment } = body;
+  const { comment } : Comment = body;
 
   try {
     const currentUserId = data.user.id;

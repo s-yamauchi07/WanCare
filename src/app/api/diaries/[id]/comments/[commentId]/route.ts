@@ -3,6 +3,7 @@ import { userAuthentication } from "@/app/utils/userAuthentication";
 import { verifyUser } from "@/app/utils/verifyUser";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { Comment } from "@/_types/comment";
 
 const prisma = new PrismaClient();
 
@@ -38,7 +39,7 @@ export const PUT = async(request: NextRequest, {params}: { params: { commentId: 
   await verifyUser(currentUserId, commentId, prisma.comment)
 
   const body = await request.json();
-  const { comment } = body;
+  const { comment }: Comment = body;
 
   try {
     const updatedComment = await prisma.comment.update({
