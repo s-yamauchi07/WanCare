@@ -17,7 +17,7 @@ export const GET = async (request: NextRequest, { params } : { params : { id: st
 
   try {
     // ユーザー認証チェック
-    await verifyUser(currentUserId, id, prisma);
+    await verifyUser(currentUserId, id, prisma.care);
 
     const detailCare = await prisma.care.findUnique({
       where: {
@@ -54,7 +54,7 @@ export const PUT = async(request: NextRequest, { params } : { params: { id: stri
   const currentUserId = data.user.id;
 
   try {
-    await verifyUser(currentUserId, id, prisma)
+    await verifyUser(currentUserId, id, prisma.care)
 
     const updatedCare = await prisma.care.update({
       where: {
@@ -85,7 +85,7 @@ export const DELETE = async(request: NextRequest, { params } : { params: { id: s
   const currentUserId = data.user.id;
 
   try {
-    await verifyUser(currentUserId, id, prisma);
+    await verifyUser(currentUserId, id, prisma.care);
 
     await prisma.care.delete({
       where: {
