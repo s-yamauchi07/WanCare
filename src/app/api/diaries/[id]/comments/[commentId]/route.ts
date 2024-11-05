@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
 // コメント削除
-export const DELETE = async(request: NextRequest, { params } : { params: { id: string, commentId: string }} ) => {
+export const DELETE = async(request: NextRequest, { params } : { params: { commentId: string }} ) => {
   const { commentId } = params
   const { data, error } = await userAuthentication(request);
   if (error) return handleError(request)
@@ -29,13 +29,13 @@ export const DELETE = async(request: NextRequest, { params } : { params: { id: s
 }
 
 // コメント編集
-export const PUT = async(request: NextRequest, {params}: { params: { id: string }} ) => {
-  const { id } = params
+export const PUT = async(request: NextRequest, {params}: { params: { commentId: string }} ) => {
+  const { commentId } = params
   const { data, error } = await userAuthentication(request);
   if (error) return handleError(request);
   
   const currentUserId = data.user.id;
-  await verifyUser(currentUserId, id, prisma.comment)
+  await verifyUser(currentUserId, commentId, prisma.comment)
 
   const body = await request.json();
   const { comment } = body;
@@ -43,7 +43,7 @@ export const PUT = async(request: NextRequest, {params}: { params: { id: string 
   try {
     const updatedComment = await prisma.comment.update({
       where: {
-        id,
+        id: commentId,
       },
       data: {
         comment,
