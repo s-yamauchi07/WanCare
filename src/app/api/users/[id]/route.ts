@@ -7,8 +7,12 @@ const prisma = new PrismaClient();
 
 export const GET = async(request: NextRequest, { params } : { params : { id: string }}) => {
   const { id } = params;
-  const { error } = await userAuthentication(request);
+  const {data, error } = await userAuthentication(request);
   if (error) return handleError(request);
+
+  // 認証ユーザーとparamsで取得したidが同じだったら、マイページに遷移させる。
+  const currentUserId = data.user.id;
+  if (currentUserId == id) return NextResponse.redirect(new URL("api/mypages", request.url));
 
   try {
     const otherUser = await prisma.owner.findUnique({
