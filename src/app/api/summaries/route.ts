@@ -73,3 +73,34 @@ export const POST = async(request: NextRequest) => {
     return handleError(error);
   }
 }
+
+// 全まとめ一覧を取得
+export const GET = async(request: NextRequest) => {
+  const { error } = await userAuthentication(request);
+  if (error) return handleError(error);
+
+  try {
+    const allSummaries = await prisma.summary.findMany({
+      select: {
+        title: true,
+        createdAt: true,
+        summaryTags: {
+          include: {
+            tag: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc"
+      },
+    });
+
+    return NextResponse.json({ status: "OK", summaries: allSummaries }, { status: 200});
+  } catch (error) {
+    return handleError(error);
+  }
+}
