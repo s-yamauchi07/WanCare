@@ -12,7 +12,7 @@ export const POST = async(request: NextRequest) => {
   const { data, error } = await userAuthentication(request);
   if (error) return handleError(error);
 
-  const { body } = await request.json();
+  const body = await request.json();
   const { title, explanation, tags, diaryIds } :Summary = body;
 
   try {
