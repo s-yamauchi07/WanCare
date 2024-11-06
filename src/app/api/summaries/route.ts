@@ -51,16 +51,19 @@ export const POST = async(request: NextRequest) => {
             },
           });
 
-          if (diary) {
-            await prisma.diary.update({
-              where: { 
-                id: diary.id
-              },
-              data: {
-                summaryId: summary.id,
-              },
-            });
+          if (!diary) {
+            return NextResponse.json({ status: "Not Found", message: "diary Not found."}, { status: 404});
           }
+
+          await prisma.diary.update({
+            where: { 
+              id: diary.id
+            },
+            data: {
+              summaryId: summary.id,
+            },
+          });
+
         });
         await  Promise.all(linkedSummary)
       }
