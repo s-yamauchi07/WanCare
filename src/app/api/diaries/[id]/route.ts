@@ -87,7 +87,7 @@ export const PUT = async(request: NextRequest,  { params } : { params: {id: stri
   
       if(tags && tags.length > 0) {
         // tagを紐付けし直す
-        for (const tag of tags) {
+        const updateTags = tags.map(async(tag) => {
           const updateTag = await findOrCreateTag(tag);
         
           await tx.diaryTag.create({
@@ -96,8 +96,10 @@ export const PUT = async(request: NextRequest,  { params } : { params: {id: stri
               tagId: updateTag.id
             },
           });
-        }
+        })
+        await Promise.all(updateTags);
       }
+      
       return diary;
     })
 

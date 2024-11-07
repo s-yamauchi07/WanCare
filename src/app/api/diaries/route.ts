@@ -44,9 +44,9 @@ export const POST = async(request: NextRequest) => {
 
   try {
     const currentUserId = data.user.id;
-    const addDiary = await prisma.$transaction(async(prisma) => {
+    const addDiary = await prisma.$transaction(async(tx) => {
       // 日記の作成
-      const diary = await prisma.diary.create({
+      const diary = await tx.diary.create({
         data: {
           title,
           content,
@@ -58,17 +58,17 @@ export const POST = async(request: NextRequest) => {
   
       // 既存タグか、新規タグかのチェックを行いDBに保存。
       if(tags && tags.length > 0) {
-        const CreateTags = tags.map(async(tag) => {
+        const createTags = tags.map(async(tag) => {
           const addTag = await findOrCreateTag(tag);
   
-          return prisma.diaryTag.create({
+          return tx.diaryTag.create({
             data: {
               diaryId: diary.id,
               tagId: addTag.id
             },
           });
         })
-        await Promise.all(CreateTags);
+        await Promise.all(createTags);
       }
 
       return diary;
