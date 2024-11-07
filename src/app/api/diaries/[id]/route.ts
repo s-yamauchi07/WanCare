@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { handleError } from "@/app/utils/errorHandler";
 import { Diary } from "@/_types/diary";
-import { findOrCreateTag } from "@/app/api/diaries/_utils/findOrCreateTag";
+import { findOrCreateTag } from "@/app/utils/findOrCreateTag";
 import { verifyUser } from "@/app/utils/verifyUser";
 
 const prisma = new PrismaClient();
@@ -65,8 +65,8 @@ export const PUT = async(request: NextRequest,  { params } : { params: {id: stri
   try {
     await verifyUser(currentUserId, id, prisma.diary);
 
-    const updatedDiary = await prisma.$transaction(async(prisma) => {
-      const diary = await prisma.diary.update({
+    const updatedDiary = await prisma.$transaction(async(tx) => {
+      const diary = await tx.diary.update({
         where: {
           id
         },
@@ -79,7 +79,7 @@ export const PUT = async(request: NextRequest,  { params } : { params: {id: stri
       });
   
       // diaryに紐づくカテゴリーの中間テーブルを削除
-      await prisma.diaryTag.deleteMany({
+      await tx.diaryTag.deleteMany({
         where: {
           diaryId: id
         },
@@ -90,7 +90,7 @@ export const PUT = async(request: NextRequest,  { params } : { params: {id: stri
         for (const tag of tags) {
           const updateTag = await findOrCreateTag(tag);
         
-          await prisma.diaryTag.create({
+          await tx.diaryTag.create({
             data: {
               diaryId: diary.id,
               tagId: updateTag.id
@@ -117,26 +117,35 @@ export const DELETE = async(request: NextRequest, { params } : { params: { id: s
   await verifyUser(currentUserId, id, prisma.diary)
   
   try {
-    await prisma.$transaction(async(prisma) => {
+    await prisma.$transaction(async(tx) => {
       // 関連する中間テーブルのデータを削除する
-      await prisma.diaryTag.deleteMany({
+      await tx.diaryTag.deleteMany({
         where: {
           diaryId: id,
         },
       });
   
-     await prisma.diary.delete({
+     await tx.diary.delete({
         where: {
           id
         },
       });
   
-      // 関連するdiaryのデータが無くなったらtag自体も削除する。
-      await prisma.tag.deleteMany({
+      // 関連するdiaryとsummaryのデータが無くなったらtag自体も削除する。
+      await tx.tag.deleteMany({
         where: {
-          diaryTags: {
-            none: {}
-          },
+          AND: [
+            {
+              diaryTags: {
+                none: {},
+              },
+            },
+            {
+              summaryTags: {
+                none: {},
+              },
+            },
+          ],
         },
       });
     });

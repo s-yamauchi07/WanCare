@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client"
 import { NextRequest, NextResponse } from "next/server";
 import { handleError } from "@/app/utils/errorHandler";
 import { Diary } from "@/_types/diary";
-import { findOrCreateTag } from "@/app/api/diaries/_utils/findOrCreateTag";
+import { findOrCreateTag } from "@/app/utils/findOrCreateTag";
 
 const prisma = new PrismaClient();
 
@@ -44,7 +44,7 @@ export const POST = async(request: NextRequest) => {
 
   try {
     const currentUserId = data.user.id;
-    const allDiary = await prisma.$transaction(async(prisma) => {
+    const addDiary = await prisma.$transaction(async(prisma) => {
       // 日記の作成
       const diary = await prisma.diary.create({
         data: {
@@ -74,7 +74,7 @@ export const POST = async(request: NextRequest) => {
       return diary;
     });
 
-    return NextResponse.json({ status: "OK", message: "日記の保存をしました", diary: allDiary }, { status: 200 });
+    return NextResponse.json({ status: "OK", message: "日記の保存をしました", diary: addDiary }, { status: 200 });
   } catch(error) {
     return handleError(error);
   }
