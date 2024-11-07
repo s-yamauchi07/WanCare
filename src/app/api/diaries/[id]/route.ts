@@ -131,12 +131,21 @@ export const DELETE = async(request: NextRequest, { params } : { params: { id: s
         },
       });
   
-      // 関連するdiaryのデータが無くなったらtag自体も削除する。
+      // 関連するdiaryとsummaryのデータが無くなったらtag自体も削除する。
       await prisma.tag.deleteMany({
         where: {
-          diaryTags: {
-            none: {}
-          },
+          AND: [
+            {
+              diaryTags: {
+                none: {},
+              },
+            },
+            {
+              summaryTags: {
+                none: {},
+              },
+            },
+          ],
         },
       });
     });
