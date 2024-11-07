@@ -79,7 +79,7 @@ export const PUT = async(request: NextRequest, { params } : { params : { id: str
       });
 
       if (tags && tags.length > 0) {
-        const updateTag = tags.map(async(tag) => {
+        const updateTags = tags.map(async(tag) => {
           const addTag = await findOrCreateTag(tag);
 
           return tx.summaryTag.create({
@@ -90,11 +90,11 @@ export const PUT = async(request: NextRequest, { params } : { params : { id: str
           });
         })
 
-        await Promise.all(updateTag);
+        await Promise.all(updateTags);
       }
 
       if (diaryIds && diaryIds.length > 0) {
-        const updateSummary = diaryIds.map(async(id) => {
+        const updateSummaries = diaryIds.map(async(id) => {
           const diary = await tx.diary.findUnique({
             where: {
               id,
@@ -114,7 +114,7 @@ export const PUT = async(request: NextRequest, { params } : { params : { id: str
             },
           });
         });
-        await Promise.all(updateSummary);
+        await Promise.all(updateSummaries);
       }
 
       return summary;
@@ -137,13 +137,13 @@ export const DELETE = async(request: NextRequest, { params } : { params : { id: 
 
   try {
     await prisma.$transaction(async(tx) => {
-      const deleteSummaryTags = await tx.summaryTag.deleteMany({
+      const deleteSummaryTags = tx.summaryTag.deleteMany({
         where: {
           summaryId: id,
         },
       });
       
-      const deleteDiaries = await tx.diary.updateMany({
+      const deleteDiaries = tx.diary.updateMany({
         where: {
           summaryId: id,
         },
@@ -152,14 +152,14 @@ export const DELETE = async(request: NextRequest, { params } : { params : { id: 
         },
       });
       
-      const deleteSummary = await tx.summary.delete({
+      const deleteSummary = tx.summary.delete({
         where: {
           id,
         },
       });
       
       await Promise.all([deleteSummaryTags, deleteDiaries, deleteSummary]);
-      
+
       await tx.tag.deleteMany({
         where: {
           AND: [
