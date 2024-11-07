@@ -61,8 +61,8 @@ export const PUT = async(request: NextRequest, { params } : { params : { id: str
   const { title, explanation, tags, diaryIds } : Summary = body;
   
   try {
-    const updateSummary = await prisma.$transaction(async(prisma) => {
-      const summary = await prisma.summary.update({
+    const updateSummary = await prisma.$transaction(async(tx) => {
+      const summary = await tx.summary.update({
         where: {
           id,
         },
@@ -72,7 +72,7 @@ export const PUT = async(request: NextRequest, { params } : { params : { id: str
         },
       });
 
-      await prisma.summaryTag.deleteMany({
+      await tx.summaryTag.deleteMany({
         where: {
           summaryId: id,
         },
@@ -82,7 +82,7 @@ export const PUT = async(request: NextRequest, { params } : { params : { id: str
         const updateTag = tags.map(async(tag) => {
           const addTag = await findOrCreateTag(tag);
 
-          return prisma.summaryTag.create({
+          return tx.summaryTag.create({
             data: {
               summaryId: summary.id,
               tagId: addTag.id
@@ -95,7 +95,7 @@ export const PUT = async(request: NextRequest, { params } : { params : { id: str
 
       if (diaryIds && diaryIds.length > 0) {
         const updateSummary = diaryIds.map(async(id) => {
-          const diary = await prisma.diary.findUnique({
+          const diary = await tx.diary.findUnique({
             where: {
               id,
             },
@@ -105,7 +105,7 @@ export const PUT = async(request: NextRequest, { params } : { params : { id: str
             return NextResponse.json({ status: "Not found", message: "diary Not found"}, { status: 404});
           }
 
-          await prisma.diary.update({
+          await tx.diary.update({
             where: {
               id: diary.id,
             },
@@ -121,6 +121,64 @@ export const PUT = async(request: NextRequest, { params } : { params : { id: str
     });
 
     return NextResponse.json({ status: "OK", summary: updateSummary}, { status: 200 });
+  } catch(error) {
+    return handleError(error);
+  }
+}
+
+// 削除
+export const DELETE = async(request: NextRequest, { params } : { params : { id: string }} ) => {
+  const { id } = params
+  const { data, error } = await userAuthentication(request)
+  if (error) return handleError(request)
+
+  const currentUserId = data.user.id;
+  await verifyUser(currentUserId, id, prisma.summary)
+
+  try {
+    await prisma.$transaction(async(tx) => {
+      const deleteSummaryTags = await tx.summaryTag.deleteMany({
+        where: {
+          summaryId: id,
+        },
+      });
+      
+      const deleteDiaries = await tx.diary.updateMany({
+        where: {
+          summaryId: id,
+        },
+        data: {
+          summaryId: null,
+        },
+      });
+      
+      const deleteSummary = await tx.summary.delete({
+        where: {
+          id,
+        },
+      });
+      
+      await Promise.all([deleteSummaryTags, deleteDiaries, deleteSummary]);
+      
+      await tx.tag.deleteMany({
+        where: {
+          AND: [
+            {
+              diaryTags: {
+                none: {},
+              },
+            },
+            {
+              summaryTags: {
+                none: {},
+              },
+            },
+          ],
+        },
+      });
+    });
+
+    return NextResponse.json({ status: "OK", message: "まとめを削除しました" }, { status: 200});
   } catch(error) {
     return handleError(error);
   }
