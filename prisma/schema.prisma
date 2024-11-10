@@ -59,7 +59,7 @@ model Breed {
 model Care {
   id            String    @id @default(uuid()) @db.Uuid
   careDate      DateTime
-  amount        Int?
+  amount        Float?
   memo          String?
   imageKey      String?
   owner         Owner     @relation(fields: [ownerId], references: [id])
