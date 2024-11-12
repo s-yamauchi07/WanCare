@@ -9,7 +9,7 @@ export const GET = async(request: NextRequest, { params } : { params: { keywords
   const decodedKeywords: string[] = keywords.map(keyword => decodeURIComponent(keyword))
 
   if(decodedKeywords.length === 0) {
-    return NextResponse.json({ status: "No Content", message:"タグを入力してください" }, { status: 404});
+    return NextResponse.json({ status: "No found", message:"タグを入力してください" }, { status: 404});
   }
 
   try {
