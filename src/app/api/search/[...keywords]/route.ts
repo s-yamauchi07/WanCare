@@ -7,9 +7,9 @@ const prisma = new PrismaClient();
 export const GET = async(request: NextRequest, { params } : { params: { keywords: string[]}} ) => {
   const { keywords } = params
   const decodedKeywords: string[] = keywords.map(keyword => decodeURIComponent(keyword))
-  
+
   if(decodedKeywords.length === 0) {
-    return NextResponse.json({ status: "Bad Request", message:"タグが見つかりませんでした" }, { status: 400});
+    return NextResponse.json({ status: "No Content", message:"タグを入力してください" }, { status: 404});
   }
 
   try {
@@ -44,7 +44,7 @@ export const GET = async(request: NextRequest, { params } : { params: { keywords
            },
          })),
        },
-     })
+     }),
     ]);
 
     return NextResponse.json({ status: "OK", diaries: diaries, summaries: summaries }, { status: 200});
