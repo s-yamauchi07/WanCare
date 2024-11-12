@@ -4,11 +4,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export const GET = async(request: NextRequest, { params } : { params: { keyword: string[]}} ) => {
-  const { keyword } = params
-  console.log(keyword)
-
-  if(!keyword) {
+export const GET = async(request: NextRequest, { params } : { params: { keywords: string[]}} ) => {
+  const { keywords } = params
+  const decodedKeywords: string[] = keywords.map(keyword => decodeURIComponent(keyword))
+  
+  if(decodedKeywords.length === 0) {
     return NextResponse.json({ status: "Bad Request", message:"タグが見つかりませんでした" }, { status: 400});
   }
 
@@ -16,12 +16,12 @@ export const GET = async(request: NextRequest, { params } : { params: { keyword:
     const [diaries, summaries] = await Promise.all([
       prisma.diary.findMany({
         where: {
-          OR: keyword.map(key => ({
+          OR: decodedKeywords.map(decodedKeyword => ({
             diaryTags: {
               some: {
                 tag: {
                   name: {
-                    contains: key
+                    contains: decodedKeyword
                   },
                 },
               },
@@ -32,12 +32,12 @@ export const GET = async(request: NextRequest, { params } : { params: { keyword:
       
       prisma.summary.findMany({
        where: {
-         OR: keyword.map(key => ({
+         OR: decodedKeywords.map(decodedKeyword => ({
            summaryTags: {
              some: {
                tag: {
                  name: {
-                   contains: key
+                   contains: decodedKeyword
                  },
                },
              },
