@@ -5,14 +5,14 @@ import { NextRequest, NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
 interface ResponseDiary {
-  id: string
-  title: string
-  content: string
-  imageKey: string | null
-  ownerId: string
-  summaryId: string | null
-  createdAt: Date
-  updatedAt: Date
+  id: string;
+  title: string;
+  content: string;
+  imageKey: string | null;
+  ownerId: string;
+  summaryId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export const GET = async(request: NextRequest) => {
