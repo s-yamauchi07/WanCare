@@ -20,7 +20,7 @@ export const GET = async(request: NextRequest) => {
   const keywords: string[] = searchParams.get('keywords')?.split(',').map(keyword => decodeURIComponent(keyword.trim())) || [];
 
   if(keywords.length === 0) {
-    return NextResponse.json({ status: "No found", message:"タグを入力してください" }, { status: 404});
+    return NextResponse.json({ status: "Not found", message:"タグを入力してください" }, { status: 404});
   }
 
   try {
