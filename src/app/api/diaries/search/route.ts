@@ -4,17 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-interface ResponseDiary {
-  id: string;
-  title: string;
-  content: string;
-  imageKey: string | null;
-  ownerId: string;
-  summaryId: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 export const GET = async(request: NextRequest) => {
   const { searchParams  }  = request.nextUrl;
   const keywords: string[] = searchParams.get('keywords')?.split(',').map(keyword => decodeURIComponent(keyword.trim())) || [];
@@ -24,7 +13,7 @@ export const GET = async(request: NextRequest) => {
   }
 
   try {
-    const diaries: ResponseDiary[] = await prisma.diary.findMany({
+    const diaries = await prisma.diary.findMany({
       where: {
         OR: keywords.map(keyword => ({
           diaryTags: {
@@ -37,6 +26,13 @@ export const GET = async(request: NextRequest) => {
             },
           },
         })),
+      },
+      include: {
+        diaryTags: {
+          include: {
+            tag: true,
+          },
+        },
       },
     });
 

@@ -4,17 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-
-interface ResponseSummary {
-  id: string;
-  title: string;
-  explanation: string;
-  ownerId: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-
 export const GET = async(request: NextRequest) => {
   const { searchParams } = request.nextUrl;
   const keywords: string[] = searchParams.get('keywords')?.split(',').map(keyword => decodeURIComponent(keyword.trim())) || [];
@@ -24,7 +13,7 @@ export const GET = async(request: NextRequest) => {
   }
 
   try {
-    const summaries: ResponseSummary[] = await prisma.summary.findMany({
+    const summaries = await prisma.summary.findMany({
       where: {
         OR: keywords.map(keyword => ({
           summaryTags: {
@@ -37,6 +26,13 @@ export const GET = async(request: NextRequest) => {
             },
           },
         })),
+      },
+      include: {
+        summaryTags: {
+          include: {
+            tag: true,
+          },
+        },
       },
     });
     
