@@ -2,13 +2,15 @@
 
 import Input from "@/app/_components/Input";
 import { Dog } from "@/_types/dog";
-import { Breed } from "@/_types/breed"
+import { Breed } from "@/_types/breed";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Label from "@/app/_components/Label";
 import { useEffect, useState } from "react";
 import LoadingButton from "@/app/_components/LoadingButton";
 import { handleError } from "@/app/utils/errorHandler";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
+import { supabase } from "@/app/utils/supabase";
+import { v4 as uuidv4 } from "uuid";
 
 const sexSelection = [
   {id: 1, name: "男の子"},
@@ -17,10 +19,12 @@ const sexSelection = [
 ]
 
 const DogForm: React.FC = () => {
-  const [breeds, setBreeds] = useState<Breed[]>([]);
+  const { register, handleSubmit, reset, watch, formState: { errors, isSubmitting}} = useForm<Dog>();
   const { token } = useSupabaseSession();
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting}} = useForm<Dog>();
-  
+  const [breeds, setBreeds] = useState<Breed[]>([]);
+  const imageKey = watch("imageKey");
+  const [uploadedKey, setUploadedKey] = useState<string | null>(null);
+
   useEffect(()=>{
     if(!token) return
 
@@ -41,8 +45,30 @@ const DogForm: React.FC = () => {
     fetchBreeds();
   },[token]);
 
+  //画像が選択された時の処理
+  useEffect(() => {
+    const handleChangeImage = async() => {
+      if(!imageKey || imageKey.length === 0) return;
+  
+      const file = imageKey[0];
+      const filePath = `private/${uuidv4()}`
+      const { data, error } = await supabase.storage
+        .from("profile_img")
+        .upload(filePath, file, {
+          cacheControl: "3600",
+          upsert: false,
+        })
+        console.log(data?.path)
+      if (error) {
+        alert(error.message)
+        return
+      }
+      setUploadedKey(data.path);
+    }
+    handleChangeImage();
+  }, [imageKey]);
+
   const onsubmit: SubmitHandler<Dog> = async(data) => {
-    console.log(data);
     try {
       const response = await fetch("/api/dogs", {
         headers: {
