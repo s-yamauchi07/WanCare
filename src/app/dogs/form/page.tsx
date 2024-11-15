@@ -8,6 +8,7 @@ import Label from "@/app/_components/Label";
 import { useEffect, useState } from "react";
 import LoadingButton from "@/app/_components/LoadingButton";
 import { handleError } from "@/app/utils/errorHandler";
+import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 
 const sexSelection = [
   {id: 1, name: "男の子"},
@@ -17,12 +18,20 @@ const sexSelection = [
 
 const DogForm: React.FC = () => {
   const [breeds, setBreeds] = useState<Breed[]>([]);
+  const { token } = useSupabaseSession();
   const { register, handleSubmit, reset, formState: { errors, isSubmitting}} = useForm<Dog>();
   
   useEffect(()=>{
+    if(!token) return
+
     const fetchBreeds = async() => {
       try {
-        const res = await fetch("/api/breeds")
+        const res = await fetch("/api/breeds",{
+          headers: {
+            "Content-Type" : "application/json",
+            Authentication: token,
+          },
+        })
         const { breeds } = await res.json();
         setBreeds(breeds);
       } catch(error) {
@@ -30,7 +39,7 @@ const DogForm: React.FC = () => {
       }
     }
     fetchBreeds();
-  },[]);
+  },[token]);
 
   const onsubmit: SubmitHandler<Dog> = async(data) => {
     console.log(data);
