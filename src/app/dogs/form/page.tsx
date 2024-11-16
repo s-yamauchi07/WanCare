@@ -22,7 +22,7 @@ const sexSelection = [
 const DogForm: React.FC = () => {
   useRouteGuard();
 
-  const { register, handleSubmit, reset, watch, setValue, formState: { errors, isSubmitting}} = useForm<Dog>();
+  const { register, handleSubmit, reset, watch, formState: { errors, isSubmitting}} = useForm<Dog>();
   const { token } = useSupabaseSession();
   const [breeds, setBreeds] = useState<Breed[]>([]);
   const imageKey = watch("imageKey");
@@ -50,55 +50,27 @@ const DogForm: React.FC = () => {
   },[token]);
 
   //画像が選択された時の処理(画像を変更するたびに発火)
-  // useEffect(() => {
-    // const handleChangeImage = async(e: ChangeEvent<HTMLInputElement>, ): Promise<void> => {
-    //   if(!e.target.files || e.target.files.length === 0) return;
-
-    //   const file = e.target.files[0];
-    //   const filePath = `private/${uuidv4()}`
-    //   const { data, error } = await supabase.storage
-    //     .from("profile_img")
-    //     .upload(filePath, file, {
-    //       cacheControl: "3600",
-    //       upsert: false,
-    //     })
-    //   if (error) {
-    //     alert(error.message)
-    //     return
-    //   }
-    //   console.log(data.path)
-    //   setValue("imageKey", data.path, { })
-    //   console.log(imageKey)
-      // setUploadedKey(data.path);
-    // }
-  //   handleChangeImage();
-  // }, [imageKey]);
   useEffect(() => {
-    const subscription = watch((value, { name }) => {
-      const uploadImage = async() => {
-        if (name === "imageKey" && (!value.imageKey || (value.imageKey && value.imageKey.length === 0))) return;
-        
-        if(value.imageKey && value.imageKey.length) {
-          const file = value.imageKey[0];
-          const filePath = `private/${uuidv4()}`
-          const { data, error } = await supabase.storage
-            .from("profile_img")
-            .upload(filePath, file, {
-              cacheControl: "3600",
-              upsert: false,
-            })
-          if (error) {
-            alert(error.message)
-            return
-          }
-          setUploadedKey(data.path);
-        }
+    const uploadImage = async () => {
+      if (!imageKey || (Array.isArray(imageKey) && imageKey.length === 0)) return;
+  
+      const file = imageKey[0];
+      const filePath = `private/${uuidv4()}`;
+      const { data, error } = await supabase.storage
+        .from("profile_img")
+        .upload(filePath, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+      if (error) {
+        alert(error.message);
+        return;
       }
-      uploadImage();
-    });
-
-    return () => subscription.unsubscribe()
-  }, [watch, setValue])
+      setUploadedKey(data.path);
+    };
+  
+    uploadImage();
+  }, [imageKey]); 
 
   // 画像表示を行う処理
   useEffect(() => {
