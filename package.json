@@ -20,7 +20,7 @@
     "react-dom": "^18",
     "react-hook-form": "^7.53.1",
     "react-hot-toast": "^2.4.1",
-    "uuid": "^11.0.1"
+    "uuid": "^11.0.3"
   },
   "devDependencies": {
     "@egoist/tailwindcss-icons": "^1.8.1",
