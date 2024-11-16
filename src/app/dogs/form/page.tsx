@@ -11,7 +11,6 @@ import { handleError } from "@/app/utils/errorHandler";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { supabase } from "@/app/utils/supabase";
 import { v4 as uuidv4 } from "uuid";
-import Image from "next/image";
 
 const sexSelection = [
   {id: 1, name: "男の子"},
@@ -51,7 +50,7 @@ const DogForm: React.FC = () => {
   useEffect(() => {
     const handleChangeImage = async() => {
       if(!imageKey || imageKey.length === 0) return;
-  
+
       const file = imageKey[0];
       const filePath = `private/${uuidv4()}`
       const { data, error } = await supabase.storage
@@ -78,7 +77,6 @@ const DogForm: React.FC = () => {
       const { data: { publicUrl}, } = await supabase.storage
         .from("profile_img")
         .getPublicUrl(uploadedKey)
-      console.log(publicUrl)
       setThumbnailImageUrl(publicUrl)  
     }
 
@@ -111,22 +109,20 @@ const DogForm: React.FC = () => {
 
       {thumbnailImageUrl ? (
         <div className="mb-6">
-          <div className="bg-green-400 border rounded-full w-28 h-28 flex items-center justify-center">
+          <div className="rounded-full w-28 h-28 flex items-center justify-center overflow-hidden relative">
             <label className="w-full h-full flex items-center justify-center">
-              <Image 
-                src={thumbnailImageUrl}
-                alt="profile_image"
-                width={120}
-                height={120}
-                />
               <input 
                 type="file" 
-                className="hidden"
+                className="absolute inset-0 opacity-0 cursor-pointer"
                 {...register("imageKey",{
                   required: "プロフィール画像は必須です。"
               })}
               />
             </label>
+            <div 
+              className="absolute inset-0 bg-cover bg-center pointer-events-none" 
+              style={{ backgroundImage: `url(${thumbnailImageUrl})` }}>
+            </div>
           </div>
           <div className="text-red-500 text-xs">{errors.imageKey?.message}</div>
         </div>
