@@ -11,6 +11,7 @@ import { handleError } from "@/app/utils/errorHandler";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { supabase } from "@/app/utils/supabase";
 import { v4 as uuidv4 } from "uuid";
+import { useRouteGuard } from "@/_hooks/useRouteGuard";
 
 const sexSelection = [
   {id: 1, name: "男の子"},
@@ -19,7 +20,9 @@ const sexSelection = [
 ]
 
 const DogForm: React.FC = () => {
-  const { register, handleSubmit, reset, watch, formState: { errors, isSubmitting}} = useForm<Dog>();
+  useRouteGuard();
+
+  const { register, handleSubmit, reset, watch, setValue, formState: { errors, isSubmitting}} = useForm<Dog>();
   const { token } = useSupabaseSession();
   const [breeds, setBreeds] = useState<Breed[]>([]);
   const imageKey = watch("imageKey");
@@ -34,7 +37,7 @@ const DogForm: React.FC = () => {
         const res = await fetch("/api/breeds",{
           headers: {
             "Content-Type" : "application/json",
-            Authentication: token,
+            Authorization: token,
           },
         })
         const { breeds } = await res.json();
@@ -46,51 +49,87 @@ const DogForm: React.FC = () => {
     fetchBreeds();
   },[token]);
 
-  //画像が選択された時の処理
-  useEffect(() => {
-    const handleChangeImage = async() => {
-      if(!imageKey || imageKey.length === 0) return;
+  //画像が選択された時の処理(画像を変更するたびに発火)
+  // useEffect(() => {
+    // const handleChangeImage = async(e: ChangeEvent<HTMLInputElement>, ): Promise<void> => {
+    //   if(!e.target.files || e.target.files.length === 0) return;
 
-      const file = imageKey[0];
-      const filePath = `private/${uuidv4()}`
-      const { data, error } = await supabase.storage
-        .from("profile_img")
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: false,
-        })
-      if (error) {
-        alert(error.message)
-        return
+    //   const file = e.target.files[0];
+    //   const filePath = `private/${uuidv4()}`
+    //   const { data, error } = await supabase.storage
+    //     .from("profile_img")
+    //     .upload(filePath, file, {
+    //       cacheControl: "3600",
+    //       upsert: false,
+    //     })
+    //   if (error) {
+    //     alert(error.message)
+    //     return
+    //   }
+    //   console.log(data.path)
+    //   setValue("imageKey", data.path, { })
+    //   console.log(imageKey)
+      // setUploadedKey(data.path);
+    // }
+  //   handleChangeImage();
+  // }, [imageKey]);
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      const uploadImage = async() => {
+        if (name === "imageKey" && (!value.imageKey || (value.imageKey && value.imageKey.length === 0))) return;
+        
+        if(value.imageKey && value.imageKey.length) {
+          const file = value.imageKey[0];
+          const filePath = `private/${uuidv4()}`
+          const { data, error } = await supabase.storage
+            .from("profile_img")
+            .upload(filePath, file, {
+              cacheControl: "3600",
+              upsert: false,
+            })
+          if (error) {
+            alert(error.message)
+            return
+          }
+          setUploadedKey(data.path);
+        }
       }
-      console.log(data.path)
-      setUploadedKey(data.path);
-    }
-    handleChangeImage();
-  }, [imageKey]);
+      uploadImage();
+    });
+
+    return () => subscription.unsubscribe()
+  }, [watch, setValue])
 
   // 画像表示を行う処理
   useEffect(() => {
-    if (!uploadedKey) return;
+    if (!imageKey) return;
 
     const fetchImage = async() => {
       const { data: { publicUrl}, } = await supabase.storage
         .from("profile_img")
-        .getPublicUrl(uploadedKey)
+        .getPublicUrl(imageKey)
       setThumbnailImageUrl(publicUrl)  
     }
 
     fetchImage()
-  }, [thumbnailImageUrl,uploadedKey])
+  }, [thumbnailImageUrl,imageKey])
 
   const onsubmit: SubmitHandler<Dog> = async(data) => {
+    console.log(data)
+    const req = {
+      ...data,
+      imageKey: uploadedKey
+    }
+
+    if(!token) return
     try {
       const response = await fetch("/api/dogs", {
         headers: {
-          "Content-Type" : "application.json",
+          "Content-Type" : "application/json",
+          Authorization: token,
         },
         method: "POST",
-        body: JSON.stringify(data),
+        body: JSON.stringify(req),
       });
   
       if(response.status === 200) {
@@ -106,8 +145,7 @@ const DogForm: React.FC = () => {
     <form onSubmit={handleSubmit(onsubmit)} className="w-80 px-8 pt-6 pb-8 mb-4">
       <h2 className="text-primary text-center text-2xl font-bold m-14">ペット登録</h2>
       
-
-      {thumbnailImageUrl ? (
+      {/* {thumbnailImageUrl ? (
         <div className="mb-6">
           <div className="rounded-full w-28 h-28 flex items-center justify-center overflow-hidden relative">
             <label className="w-full h-full flex items-center justify-center">
@@ -115,7 +153,8 @@ const DogForm: React.FC = () => {
                 type="file" 
                 className="absolute inset-0 opacity-0 cursor-pointer"
                 {...register("imageKey",{
-                  required: "プロフィール画像は必須です。"
+                  required: "プロフィール画像は必須です。",
+                  onChange: (e) => handleChangeImage(e)
               })}
               />
             </label>
@@ -126,7 +165,7 @@ const DogForm: React.FC = () => {
           </div>
           <div className="text-red-500 text-xs">{errors.imageKey?.message}</div>
         </div>
-      ) : (
+      ) : ( */}
         <div className="mb-6">
           <div className="bg-green-400 border rounded-full w-28 h-28 flex items-center justify-center">
             <label className="w-full h-full flex items-center justify-center">
@@ -135,14 +174,14 @@ const DogForm: React.FC = () => {
                 type="file" 
                 className="hidden"
                 {...register("imageKey",{
-                  required: "プロフィール画像は必須です。"
+                  required: "プロフィール画像は必須です。",
               })}
               />
             </label>
           </div>
           <div className="text-red-500 text-xs">{errors.imageKey?.message}</div>
         </div>
-      )}
+      {/* )} */}
 
       <div className="mb-6">
         <Label id="性別" />
@@ -169,7 +208,11 @@ const DogForm: React.FC = () => {
       <div className="mb-6">
         <Label id="犬種" />
         <div className="inline-block relative w-64">
-          <select className="block appearance-none border border-primary w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+          <select 
+            className="block appearance-none border border-primary w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+            {...register("breedId",{
+              validate: value => value !== "" ||"犬種を選択してください。"
+            })}>
             <option value="">犬種を選択してください</option>
             {breeds.map((breed) => {
               return (
