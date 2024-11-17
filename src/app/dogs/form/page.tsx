@@ -74,20 +74,19 @@ const DogForm: React.FC = () => {
 
   // 画像表示を行う処理
   useEffect(() => {
-    if (!imageKey) return;
+    if (!uploadedKey) return;
 
     const fetchImage = async() => {
       const { data: { publicUrl}, } = await supabase.storage
         .from("profile_img")
-        .getPublicUrl(imageKey)
+        .getPublicUrl(uploadedKey)
       setThumbnailImageUrl(publicUrl)  
     }
 
     fetchImage()
-  }, [thumbnailImageUrl,imageKey])
+  }, [thumbnailImageUrl,uploadedKey])
 
   const onsubmit: SubmitHandler<Dog> = async(data) => {
-    console.log(data)
     const req = {
       ...data,
       imageKey: uploadedKey
@@ -117,27 +116,26 @@ const DogForm: React.FC = () => {
     <form onSubmit={handleSubmit(onsubmit)} className="w-80 px-8 pt-6 pb-8 mb-4">
       <h2 className="text-primary text-center text-2xl font-bold m-14">ペット登録</h2>
       
-      {/* {thumbnailImageUrl ? (
+      {thumbnailImageUrl ? (
         <div className="mb-6">
-          <div className="rounded-full w-28 h-28 flex items-center justify-center overflow-hidden relative">
+          <div className="border rounded-full w-28 h-28 flex items-center justify-center overflow-hidden relative">
             <label className="w-full h-full flex items-center justify-center">
               <input 
                 type="file" 
                 className="absolute inset-0 opacity-0 cursor-pointer"
                 {...register("imageKey",{
                   required: "プロフィール画像は必須です。",
-                  onChange: (e) => handleChangeImage(e)
               })}
               />
             </label>
             <div 
               className="absolute inset-0 bg-cover bg-center pointer-events-none" 
-              style={{ backgroundImage: `url(${thumbnailImageUrl})` }}>
+              style={{ backgroundImage: `url(${thumbnailImageUrl })` }}>
             </div>
           </div>
           <div className="text-red-500 text-xs">{errors.imageKey?.message}</div>
         </div>
-      ) : ( */}
+      ) : (
         <div className="mb-6">
           <div className="bg-green-400 border rounded-full w-28 h-28 flex items-center justify-center">
             <label className="w-full h-full flex items-center justify-center">
@@ -153,7 +151,7 @@ const DogForm: React.FC = () => {
           </div>
           <div className="text-red-500 text-xs">{errors.imageKey?.message}</div>
         </div>
-      {/* )} */}
+      )}
 
       <div className="mb-6">
         <Label id="性別" />
