@@ -27,7 +27,8 @@ const DogForm: React.FC = () => {
   const [breeds, setBreeds] = useState<Breed[]>([]);
   const imageKey = watch("imageKey");
   const [uploadedKey, setUploadedKey] = useState<string | null>(null);
-  const [thumbnailImageUrl, setThumbnailImageUrl] = useState<null | string>(null);
+  const [thumbnailImageUrl, setThumbnailImageUrl] = useState<string | null>(null);
+  const [isUploading, setUploading] = useState<boolean>(false);
 
   useEffect(()=>{
     if(!token) return
@@ -49,12 +50,14 @@ const DogForm: React.FC = () => {
     fetchBreeds();
   },[token]);
 
-  //画像が選択された時の処理(画像を変更するたびに発火)
+  // 画像が選択された時の処理(画像を変更するたびに発火)
   useEffect(() => {
     const uploadImage = async () => {
-      if (!imageKey || (Array.isArray(imageKey) && imageKey.length === 0)) return;
-  
+      if (!imageKey || imageKey.length === 0) return;
+
+      setUploading(true);
       const file = imageKey[0];
+                         
       const filePath = `private/${uuidv4()}`;
       const { data, error } = await supabase.storage
         .from("profile_img")
@@ -64,9 +67,11 @@ const DogForm: React.FC = () => {
         });
       if (error) {
         alert(error.message);
+        setUploading(false);
         return;
       }
       setUploadedKey(data.path);
+      setUploading(false);
     };
   
     uploadImage();
@@ -74,17 +79,18 @@ const DogForm: React.FC = () => {
 
   // 画像表示を行う処理
   useEffect(() => {
-    if (!uploadedKey) return;
-
+    if (!uploadedKey) return;    
     const fetchImage = async() => {
+
       const { data: { publicUrl}, } = await supabase.storage
         .from("profile_img")
         .getPublicUrl(uploadedKey)
-      setThumbnailImageUrl(publicUrl)  
+      
+      setThumbnailImageUrl(publicUrl)
     }
 
     fetchImage()
-  }, [thumbnailImageUrl,uploadedKey])
+  }, [uploadedKey])
 
   const onsubmit: SubmitHandler<Dog> = async(data) => {
     const req = {
@@ -116,10 +122,21 @@ const DogForm: React.FC = () => {
     <form onSubmit={handleSubmit(onsubmit)} className="w-80 px-8 pt-6 pb-8 mb-4">
       <h2 className="text-primary text-center text-2xl font-bold m-14">ペット登録</h2>
       
-      {thumbnailImageUrl ? (
         <div className="mb-6">
-          <div className="border rounded-full w-28 h-28 flex items-center justify-center overflow-hidden relative">
+          <div className="rounded-full border border-primary m-auto w-28 h-28 flex items-center justify-center overflow-hidden relative">
             <label className="w-full h-full flex items-center justify-center">
+            {thumbnailImageUrl ? (
+                <div 
+                  className="absolute inset-0 bg-cover bg-center pointer-events-none" 
+                  style={{ backgroundImage: `url(${thumbnailImageUrl })` }}>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center">
+                  <span className="i-material-symbols-add-a-photo-outline-rounded text-5xl p-3 text-primary"></span>
+                  <span className="text-xs text-primary font-bold">{isUploading ? "uploading..." : "add image"}</span>
+                </div>
+              )
+            }
               <input 
                 type="file" 
                 className="absolute inset-0 opacity-0 cursor-pointer"
@@ -128,30 +145,10 @@ const DogForm: React.FC = () => {
               })}
               />
             </label>
-            <div 
-              className="absolute inset-0 bg-cover bg-center pointer-events-none" 
-              style={{ backgroundImage: `url(${thumbnailImageUrl })` }}>
-            </div>
           </div>
           <div className="text-red-500 text-xs">{errors.imageKey?.message}</div>
         </div>
-      ) : (
-        <div className="mb-6">
-          <div className="bg-green-400 border rounded-full w-28 h-28 flex items-center justify-center">
-            <label className="w-full h-full flex items-center justify-center">
-              <span className="i-material-symbols-add-a-photo-outline-rounded text-6xl p-3"></span>
-              <input 
-                type="file" 
-                className="hidden"
-                {...register("imageKey",{
-                  required: "プロフィール画像は必須です。",
-              })}
-              />
-            </label>
-          </div>
-          <div className="text-red-500 text-xs">{errors.imageKey?.message}</div>
-        </div>
-      )}
+
 
       <div className="mb-6">
         <Label id="性別" />
