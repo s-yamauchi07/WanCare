@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import { breedSeed }from "./breedSeed";
 import { careSeed } from "./careSeed";
-
-const prisma = new PrismaClient();
+import prisma from "@/libs/prisma";
 
 async function main() {
   try {

@@ -1,11 +1,9 @@
-import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { userAuthentication } from "@/app/utils/userAuthentication";
 import { handleError } from "@/app/utils/errorHandler";
 import { formatDate } from "@/app/utils/dateFormat";
 import { Care } from "@/_types/care";
-
-const prisma = new PrismaClient();
+import prisma from "@/libs/prisma";
 
 // 新規登録
 export const POST = async(request: NextRequest) => {

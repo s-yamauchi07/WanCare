@@ -1,11 +1,8 @@
 import { handleError } from "@/app/utils/errorHandler";
 import { userAuthentication } from "@/app/utils/userAuthentication";
 import { verifyUser } from "@/app/utils/verifyUser";
-import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { Comment } from "@/_types/comment";
-
-const prisma = new PrismaClient();
 
 // コメント削除
 export const DELETE = async(request: NextRequest, { params } : { params: { commentId: string }} ) => {
