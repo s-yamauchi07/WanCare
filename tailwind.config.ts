@@ -26,7 +26,7 @@ const config: Config = {
   },
   plugins: [
     iconsPlugin({
-      collections: getIconCollections(["tabler","mdi"])
+      collections: getIconCollections(["tabler","mdi", "material-symbols"])
     })
   ],
 };

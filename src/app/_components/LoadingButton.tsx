@@ -20,7 +20,7 @@ const LoadingButton: React.FC<LoadingButtonProps> = ({isSubmitting, buttonText})
         </button>
       ) : (
         <button 
-          className="bg-primary hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
+          className="bg-primary hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline min-w-[130px]"
           type="submit"
           disabled={isSubmitting}>
             {buttonText}

@@ -3,7 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { formatDate } from "../../utils/dateFormat";
 import { userAuthentication } from "../../utils/userAuthentication";
 import { handleError } from "../../utils/errorHandler";
-import { Dog } from "@/_types/dog";
+import { DogRequest } from "@/_types/dog";
+import { DogResponse } from "@/_types/dog";
 
 const prisma = new PrismaClient();
 
@@ -14,9 +15,9 @@ export const POST = async(request: NextRequest) => {
 
   try {
     const body = await request.json();
-    const { imageKey, name, sex, birthDate, adoptionDate, breedId }:Dog = body;
+    const { imageKey, name, sex, birthDate, adoptionDate, breedId }:DogRequest = body;
     const currentUserId = data.user.id;
-    const dog = await prisma.dog.findUnique({
+    const dog: DogResponse | null = await prisma.dog.findUnique({
       where: {
         ownerId: currentUserId
       },
@@ -50,7 +51,7 @@ export const GET = async(request: NextRequest) => {
 
   try {
     const currentUserId = data.user.id;
-    const dog = await prisma.dog.findUnique({
+    const dog: DogResponse | null  = await prisma.dog.findUnique({
       where: {
         ownerId: currentUserId,
       },
@@ -70,11 +71,11 @@ export const PUT = async (request: NextRequest) => {
 
   try {
     const body = await request.json();
-    const { imageKey, name, sex, birthDate, adoptionDate, breedId }:Dog = body;
+    const { imageKey, name, sex, birthDate, adoptionDate, breedId }:DogRequest = body;
 
     const currentUserId = data.user.id;
 
-    const dog = await prisma.dog.update({
+    const dog: DogResponse | null = await prisma.dog.update({
       where: {
         ownerId: currentUserId,
       },

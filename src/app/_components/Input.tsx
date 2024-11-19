@@ -24,7 +24,7 @@ const Input: React.FC<InputProps> = ({ id, labelName, type, placeholder, registe
         placeholder={placeholder}
         {...register} 
       />
-      {error && <p className="text-red-500 text-xs">{error}</p>}
+      {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
     </div>
   )
 }
