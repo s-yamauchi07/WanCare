@@ -1,9 +1,7 @@
 import { handleError } from "@/app/utils/errorHandler";
-import { PrismaClient } from "@prisma/client";
 import { NextResponse, NextRequest } from "next/server";
 import { DogResponse } from "@/_types/dog";
-
-const prisma = new PrismaClient();
+import prisma from "@/libs/prisma";
 
 export const POST = async(request: NextRequest) => {
   const body = await request.json();

@@ -1,11 +1,10 @@
 import { userAuthentication } from "@/app/utils/userAuthentication";
-import { PrismaClient } from "@prisma/client"
+import prisma from "@/libs/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { handleError } from "@/app/utils/errorHandler";
 import { Diary } from "@/_types/diary";
 import { findOrCreateTag } from "@/app/utils/findOrCreateTag";
 
-const prisma = new PrismaClient();
 
 // 一覧(全ユーザーの投稿)
 export const GET = async(request: NextRequest) => {

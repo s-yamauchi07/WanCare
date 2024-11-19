@@ -1,9 +1,7 @@
 import { userAuthentication } from "@/app/utils/userAuthentication";
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/libs/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { handleError } from "@/app/utils/errorHandler";
-
-const prisma = new PrismaClient();
 
 // mypage表示
 export const GET = async(request: NextRequest) => {

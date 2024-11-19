@@ -1,12 +1,10 @@
 import { handleError } from "@/app/utils/errorHandler";
 import { userAuthentication } from "@/app/utils/userAuthentication";
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/libs/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { Summary } from "@/_types/summary";
 import { verifyUser } from "@/app/utils/verifyUser";
 import { findOrCreateTag } from "@/app/utils/findOrCreateTag";
-
-const prisma = new PrismaClient();
 
 // 詳細
 export const GET = async(request: NextRequest, {params} : { params: { id: string }} )=> {

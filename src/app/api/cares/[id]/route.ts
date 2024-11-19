@@ -1,12 +1,10 @@
-import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { userAuthentication } from "@/app/utils/userAuthentication";
 import { handleError } from "@/app/utils/errorHandler";
 import { Care } from "@/_types/care";
 import { formatDate } from "@/app/utils/dateFormat";
 import { verifyUser } from "@/app/utils/verifyUser";
-
-const prisma = new PrismaClient();
+import prisma from "@/libs/prisma";
 
 // 詳細
 export const GET = async (request: NextRequest, { params } : { params : { id: string }} ) => {

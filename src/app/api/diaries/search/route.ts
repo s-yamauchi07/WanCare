@@ -1,8 +1,6 @@
 import { handleError } from "@/app/utils/errorHandler";
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/libs/prisma";
 import { NextRequest, NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
 
 export const GET = async(request: NextRequest) => {
   const { searchParams  }  = request.nextUrl;

@@ -1,9 +1,7 @@
 import { userAuthentication } from "@/app/utils/userAuthentication";
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/libs/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { handleError } from "@/app/utils/errorHandler";
-
-const prisma = new PrismaClient();
 
 export const POST = async(request: NextRequest, { params } : { params: { id: string }}) => {
   const { id } = params;

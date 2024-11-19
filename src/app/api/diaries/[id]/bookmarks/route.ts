@@ -1,9 +1,7 @@
 import { handleError } from "@/app/utils/errorHandler";
 import { userAuthentication } from "@/app/utils/userAuthentication";
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/libs/prisma";
 import { NextRequest, NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
 
 // ブックマーク登録
 export const POST = async(request: NextRequest, { params } : { params : { id: string }}) => {
