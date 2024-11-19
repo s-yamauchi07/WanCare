@@ -114,8 +114,8 @@ const DogForm: React.FC = () => {
       });
   
       if(response.status === 200) {
+        router.push("/home");
         toast.success("登録が完了しました");
-        router.push("/");
       }
       reset(data);
     } catch(error) {
