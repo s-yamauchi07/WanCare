@@ -3,6 +3,7 @@ import { userAuthentication } from "@/app/utils/userAuthentication";
 import { verifyUser } from "@/app/utils/verifyUser";
 import { NextRequest, NextResponse } from "next/server";
 import { Comment } from "@/_types/comment";
+import prisma from "@/libs/prisma";
 
 // コメント削除
 export const DELETE = async(request: NextRequest, { params } : { params: { commentId: string }} ) => {
