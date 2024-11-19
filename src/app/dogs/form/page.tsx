@@ -1,7 +1,7 @@
 "use client"
 
 import Input from "@/app/_components/Input";
-import { Dog } from "@/_types/dog";
+import { DogRequest } from "@/_types/dog";
 import { Breed } from "@/_types/breed";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Label from "@/app/_components/Label";
@@ -24,7 +24,7 @@ const sexSelection = [
 const DogForm: React.FC = () => {
   useRouteGuard();
 
-  const { register, handleSubmit, reset, watch, formState: { errors, isSubmitting}} = useForm<Dog>();
+  const { register, handleSubmit, reset, watch, formState: { errors, isSubmitting}} = useForm<DogRequest>();
   const { token } = useSupabaseSession();
   const router = useRouter();
   const [breeds, setBreeds] = useState<Breed[]>([]);
@@ -96,7 +96,7 @@ const DogForm: React.FC = () => {
   }, [uploadedKey])
 
   // 新規登録
-  const onsubmit: SubmitHandler<Dog> = async(data) => {
+  const onsubmit: SubmitHandler<DogRequest> = async(data) => {
     const req = {
       ...data,
       imageKey: uploadedKey
