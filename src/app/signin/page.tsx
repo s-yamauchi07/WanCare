@@ -16,19 +16,36 @@ const SignIn = () =>  {
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<Owner>()
   const router = useRouter()
 
-  const onSubmit: SubmitHandler<Owner> = async(data) => {
-    const { email, password } = data
-    const { error } = await supabase.auth.signInWithPassword({
+  const onSubmit: SubmitHandler<Owner> = async(user) => {
+    const { email, password } = user;
+    const { error, data } = await supabase.auth.signInWithPassword({
       email,
       password
-    })
+    });
     
     if (error) {
       toast.error("ログインに失敗しました")
     } else {
-      reset()
-      toast.success("ログインが成功しました")
-      router.push("/home")
+      reset();
+      // userがすでにアカウント登録済みならhome, 新規ユーザーならdogs/newに遷移
+      const userId = data.user.id;
+
+      const response = await fetch("/api/dogs/checkDog", {
+        method: 'POST',
+        headers: {
+          "Content-Type" : "application/json",
+        },
+        body: JSON.stringify({userId})
+      })
+      
+      const { dog } = await response.json();
+
+      if(dog) {
+        toast.success("ログインが成功しました")
+        router.push("/home")
+      } else {
+        router.push("/dogs/new")
+      }
     }
   }
 
