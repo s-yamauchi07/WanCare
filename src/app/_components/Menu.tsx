@@ -1,24 +1,27 @@
 "use client"
 
 import React from "react";
+import Link from "next/link";
 
 const menuList = [
-  { name: "home", icon: "i-material-symbols-other-houses-outline-rounded"},
-  { name: "記録", icon: "i-material-symbols-add-notes-outline"},
-  { name: "カレンダー", icon: "i-material-symbols-calendar-month"},
-  { name: "日記", icon: "i-material-symbols-book-2-outline"},
-  { name: "マイページ", icon: "i-material-symbols-sound-detection-dog-barking-outline"},
+  { name: "home", icon: "i-material-symbols-other-houses-outline-rounded", path:"/"},
+  { name: "記録", icon: "i-material-symbols-add-notes-outline", path: "/cares/new"},
+  { name: "カレンダー", icon: "i-material-symbols-calendar-month", path:"/cares" },
+  { name: "日記", icon: "i-material-symbols-book-2-outline", path: "/diaries"},
+  { name: "マイページ", icon: "i-material-symbols-sound-detection-dog-barking-outline", path: "/mypages"},
 ]
 
 const Menu: React.FC = () => {
   return(
-    <div className="w-full">
-      <ul className="text-center flex">
+    <div className="w-full fixed bottom-0">
+      <ul className="text-center flex py-2 text-primary">
         {menuList.map((menu)=> {
           return(
             <li key={menu.name} className="w-full focus-within:z-10">
-              <span className={menu.icon}></span>
-              <p>{menu.name}</p>
+              <Link href={menu.path}>
+                <span className={`${menu.icon} w-6 h-6`}></span>
+              </Link>
+              <p className="text-xs">{menu.name}</p>
             </li>
           )
         })}

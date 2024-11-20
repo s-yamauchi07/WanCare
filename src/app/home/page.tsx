@@ -1,6 +1,10 @@
+import Menu from "@/app/_components/Menu";
+
 const Home = () => {
   return(
-    <h1>Home</h1>
+    <>
+      <Menu />
+    </>
   )
 }
 
