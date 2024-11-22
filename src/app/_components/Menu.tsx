@@ -13,7 +13,7 @@ const menuList = [
 
 const Menu: React.FC = () => {
   return(
-    <div className="w-full fixed bottom-0">
+    <div className="w-main fixed bottom-0">
       <ul className="text-center flex py-2 text-primary">
         {menuList.map((menu)=> {
           return(
