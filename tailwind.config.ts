@@ -26,7 +26,7 @@ const config: Config = {
   },
   plugins: [
     iconsPlugin({
-      collections: getIconCollections(["tabler","mdi", "material-symbols"])
+      collections: getIconCollections(["tabler","mdi", "material-symbols", "icon-park-outline"])
     })
   ],
 };

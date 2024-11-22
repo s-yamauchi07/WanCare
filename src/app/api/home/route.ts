@@ -56,6 +56,14 @@ export const GET = async(request: NextRequest) => {
             lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
           },
         },
+        include: {
+          careList: {
+            select: {
+              name: true,
+              icon: true,
+            }
+          }
+        }
       }),
       
       prisma.care.findMany({
