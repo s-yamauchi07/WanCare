@@ -3,11 +3,12 @@
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import React, { useState } from "react";
-import Menu from "@/app/_components/Menu";
 import { useEffect } from "react";
 import { toast, Toaster } from "react-hot-toast"
 import Image from "next/image";
 import { supabase } from "../utils/supabase";
+import { WeightInfo } from "@/_types/weight";
+import  Graph from "../_components/Graph"
 
 interface DogInfo {
   id: string;
@@ -37,15 +38,10 @@ interface TodayCareInfo {
   memo: string;
   imageKey: string;
   ownerId: string;
-  careListId: string;
+  careList: { name: string, icon: string };
   createdAt: string;
   updatedAt: string;
 }
-
-interface WeightInfo {
-  careDate: string;
-  amount: number;
-} 
 
 const Home: React.FC = () => {
   useRouteGuard();
@@ -55,7 +51,7 @@ const Home: React.FC = () => {
   const [tadayCare, setTodayCare] = useState<TodayCareInfo[]>([]);
   const [dogWeight, setDogWeignt] = useState<WeightInfo[]>([]);
   const [dogImage, setDogImage] = useState("");
-  
+  console.log(token)
   useEffect(() => {  
     if(!token) return;
 
@@ -75,6 +71,7 @@ const Home: React.FC = () => {
 
         const {dogInfo, todayCare, dogWeight} = await response.json();
 
+        console.log(todayCare)
         setDogInfo(dogInfo);
         setTodayCare(todayCare);
         setDogWeignt(dogWeight);
@@ -109,11 +106,32 @@ const Home: React.FC = () => {
           <span>おうち記念日：{dogInfo.dog.adoptionDate}</span>
           <span>犬種: {dogInfo.dog.breed.name}</span>
         </div>
+
+        {/* 日付のエリア */}
+        <div>
+          <h1>今日の予定</h1>
+          <ul>
+            {tadayCare.map((care) => {
+              return(
+                <li key={care.id}>
+                  <span className={`i-${care.careList.icon} w-5 h-5`}></span>
+                  <span>{care.careList.name}</span>
+                  <span>{care.careDate}</span>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+
+        {/* 体重表示 */}
+        <div>
+          <Graph dogWeight={dogWeight}/>
+          {/* <Graph /> */}
+        </div>
       </div>
      )}
 
       <Toaster />
-      <Menu />
     </>
   )
 }
