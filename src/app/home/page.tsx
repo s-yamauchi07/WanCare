@@ -8,7 +8,7 @@ import { toast, Toaster } from "react-hot-toast"
 import Image from "next/image";
 import { supabase } from "../utils/supabase";
 import { WeightInfo } from "@/_types/weight";
-import  Graph from "../_components/Graph"
+import  Graph from "../_components/Chart"
 
 interface DogInfo {
   id: string;
