@@ -9,6 +9,7 @@ import Image from "next/image";
 import { supabase } from "../utils/supabase";
 import { WeightInfo } from "@/_types/weight";
 import  Graph from "../_components/Chart"
+import { changeTimeFormat } from "../utils/changeTimeFormat";
 
 interface DogInfo {
   id: string;
@@ -116,7 +117,7 @@ const Home: React.FC = () => {
                 <li key={care.id}>
                   <span className={`i-${care.careList.icon} w-5 h-5`}></span>
                   <span>{care.careList.name}</span>
-                  <span>{care.careDate}</span>
+                  <span>{changeTimeFormat(care.careDate)}</span>
                 </li>
               )
             })}
