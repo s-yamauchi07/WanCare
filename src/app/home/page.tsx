@@ -9,6 +9,7 @@ import Image from "next/image";
 import { supabase } from "../utils/supabase";
 import { WeightInfo } from "@/_types/weight";
 import  Graph from "../_components/Chart"
+import { changeDateFormat } from "../utils/changeDateFormat";
 import { changeTimeFormat } from "../utils/changeTimeFormat";
 
 interface DogInfo {
@@ -103,8 +104,8 @@ const Home: React.FC = () => {
         <div>
           <span>お名前：{dogInfo.dog.name}</span>
           <Image src={dogImage} alt="profile_image" width={200} height={200}/>
-          <span>誕生日：{dogInfo.dog.birthDate}</span>
-          <span>おうち記念日：{dogInfo.dog.adoptionDate}</span>
+          <span>誕生日：{changeDateFormat(dogInfo.dog.birthDate)}</span>
+          <span>おうち記念日：{changeDateFormat(dogInfo.dog.adoptionDate)}</span>
           <span>犬種: {dogInfo.dog.breed.name}</span>
         </div>
 
