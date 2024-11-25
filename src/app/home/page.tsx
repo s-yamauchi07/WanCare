@@ -126,7 +126,6 @@ const Home: React.FC = () => {
         {/* 体重表示 */}
         <div>
           <Graph dogWeight={dogWeight}/>
-          {/* <Graph /> */}
         </div>
       </div>
      )}

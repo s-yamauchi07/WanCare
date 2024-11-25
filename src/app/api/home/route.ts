@@ -78,7 +78,7 @@ export const GET = async(request: NextRequest) => {
           amount: true,
         },
         orderBy: {
-          createdAt: "asc",
+          careDate: "asc",
         },
       }),
     ]);
