@@ -7,11 +7,11 @@ import { changeDateFormat } from "@/app/utils/changeDateFormat";
 import { filterLastWeek, filterLastMonth, filterLastThreeMonths } from "../utils/filterWeightData";
 
 
-interface GraphProps {
+interface ChartProps {
   dogWeight: WeightInfo[]
 }
 
-const Graph: React.FC<GraphProps> = ({ dogWeight }) => {
+const Chart: React.FC<ChartProps> = ({ dogWeight }) => {
   const [period, setPeriod] = useState('week');
 
   const getFilterData = () => {
@@ -32,21 +32,28 @@ const Graph: React.FC<GraphProps> = ({ dogWeight }) => {
 
   return(
     <>
-      <LineChart width={450} height={250} data={filteredDate}
-        margin={{ top:20, right: 30, left:0, bottom: 0}}>
+      <LineChart width={400} height={250} data={filteredDate}
+        margin={{ top:20, right: 10, left:-40, bottom: 0}}>
           <XAxis dataKey="careDate" />
           <YAxis dataKey="amount" />
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
           <Line type="monotone" dataKey="amount" strokeWidth={3} stroke="#15A083" fill="#15A083" />
       </LineChart>
-      <div>
-        <button onClick={ () => setPeriod('week')}>1週間</button>
-        <button onClick={ () => setPeriod('month')}>1ヶ月</button>
-        <button onClick={ () => setPeriod('3month')}>3ヶ月</button>
-      </div>
+      <ul className="flex justify-center">
+        <li className="w-1/3 border text-main bg-primary p-1 text-center">
+          <button onClick={ () => setPeriod('week')}>1週間</button>
+        </li>
+        <li className="w-1/3 border bg-primary text-main p-1 text-center">
+          <button onClick={ () => setPeriod('month')}>1ヶ月</button>
+        </li>
+        <li className="w-1/3 border bg-primary text-main p-1 text-center">
+          <button onClick={ () => setPeriod('3month')}>3ヶ月</button>
+        </li>
+      </ul>
+
     </>
   )
 }
 
-export default Graph;
+export default Chart;
