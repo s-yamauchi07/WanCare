@@ -9,7 +9,7 @@ export async function careSeed(prisma: PrismaClient) {
     { name: "おしっこ", icon: "mdi-toilet" },
     { name: "うんち", icon: "tabler-toilet-paper" },
     { name: "体重", icon: "icon-park-outline-weight" },
-    { name: "くすり", icon: "cuida-medicine-outline" },
+    { name: "くすり", icon: "hugeicons-medicine-02" },
     { name: "ワクチン", icon: "icon-park-outline-injection" },
     { name: "通院", icon: "ri-hospital-line" },
     { name: "トリミング", icon: "ri-scissors-2-fill"},
