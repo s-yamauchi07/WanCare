@@ -9,6 +9,7 @@ import Image from "next/image";
 import { supabase } from "../utils/supabase";
 import { WeightInfo } from "@/_types/weight";
 import  Graph from "../_components/Chart"
+import IconButton from "../_components/IconButton";
 import { changeDateFormat } from "../utils/changeDateFormat";
 import { changeTimeFormat } from "../utils/changeTimeFormat";
 
@@ -50,14 +51,15 @@ const Home: React.FC = () => {
   
   const { token } = useSupabaseSession();
   const [dogInfo, setDogInfo] = useState<DogInfo | null>(null);
-  const [tadayCare, setTodayCare] = useState<TodayCareInfo[]>([]);
-  const [dogWeight, setDogWeignt] = useState<WeightInfo[]>([]);
+  const [todayCare, setTodayCare] = useState<TodayCareInfo[]>([]);
+  const [dogWeight, setDogWeight] = useState<WeightInfo[]>([]);
   const [dogImage, setDogImage] = useState("");
   console.log(token)
+
   useEffect(() => {  
     if(!token) return;
 
-    const fecthDogInfo = async() => {
+    const fetchDogInfo = async() => {
       try {
         const response = await fetch("api/home", {
           headers: {
@@ -73,47 +75,82 @@ const Home: React.FC = () => {
 
         const {dogInfo, todayCare, dogWeight} = await response.json();
 
-        console.log(todayCare)
         setDogInfo(dogInfo);
         setTodayCare(todayCare);
-        setDogWeignt(dogWeight);
+        setDogWeight(dogWeight);
       } catch(error) {
         console.log(error);
       }
     }
-    fecthDogInfo();
+    fetchDogInfo();
   }, [token]);
 
   useEffect(()=>{
     const dogImg = dogInfo?.dog.imageKey;
     if(!dogImg) return;
 
-    const fecthImage = async() => {
+    const fetchImage = async() => {
       const { data: { publicUrl}, } = await supabase.storage.from("profile_img").getPublicUrl(dogImg)
       setDogImage(publicUrl);
     }
-    fecthImage();
+    fetchImage();
 
   }, [dogInfo]);
+
+  const getAgeInMonths = (birthday: string) => {
+    const today = new Date();
+    const birthDate = new Date(birthday);
+    const years = today.getFullYear() - birthDate.getFullYear();
+    const months = today.getMonth() - birthDate.getMonth();
+
+    return `${years}歳${months}ヶ月`
+  }
   
   return(
-    <>
+    <div className="mt-20 mx-10">
     {/* 犬の情報 */}
      {(dogInfo && dogImage) &&(
       <div>
-        <div>
-          <span>お名前：{dogInfo.dog.name}</span>
-          <Image src={dogImage} alt="profile_image" width={200} height={200}/>
-          <span>誕生日：{changeDateFormat(dogInfo.dog.birthDate)}</span>
-          <span>おうち記念日：{changeDateFormat(dogInfo.dog.adoptionDate)}</span>
-          <span>犬種: {dogInfo.dog.breed.name}</span>
-        </div>
+        <div className="flex items-center gap-8 mx-10">
+          <div className="flex flex-col justify-center items-center gap-2">
+            <Image 
+              className="w-32 h-32 rounded-full border"
+              src={dogImage} 
+              alt="profile_image" 
+              width={100} 
+              height={100}
+            />
+            <IconButton 
+              iconName="i-material-symbols-edit-square-outline"
+              buttonText="編集"
+            />
+          </div>
+          <div className="font-medium">
+              <h2 className="text-2xl mb-4">
+                {dogInfo.dog.name}/{dogInfo.dog.sex}
+              </h2>
+              <div className="flex flex-col gap-1 text-sm text-gray-600">
+                <div className="flex items-center gap-2">
+                  <span className="i-material-symbols-sound-detection-dog-barking-outline w-5 h-5"></span>
+                  <span className="text-base">{getAgeInMonths(changeDateFormat(dogInfo.dog.birthDate))}/{dogInfo.dog.breed.name}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="i-mdi-cake w-5 h-5"></span>
+                  <span className="text-base">{changeDateFormat(dogInfo.dog.birthDate)}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="i-mdi-home w-5 h-5"></span>
+                  <span className="text-base">{changeDateFormat(dogInfo.dog.adoptionDate)}</span>
+                </div>
+              </div>
+          </div>
+      </div>
 
         {/* 日付のエリア */}
         <div>
           <h1>今日の予定</h1>
           <ul>
-            {tadayCare.map((care) => {
+            {todayCare.map((care) => {
               return(
                 <li key={care.id}>
                   <span className={`i-${care.careList.icon} w-5 h-5`}></span>
@@ -133,7 +170,7 @@ const Home: React.FC = () => {
      )}
 
       <Toaster />
-    </>
+    </div>
   )
 }
 
