@@ -171,7 +171,7 @@ const Home: React.FC = () => {
         </div>
 
         {/* 体重表示 */}
-        <div className="mx-10">
+        <div className="px-10">
           <h2 className="text-primary font-bold text-2xl mb-4">体重記録</h2>
           <Chart dogWeight={dogWeight}/>
         </div>

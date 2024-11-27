@@ -32,15 +32,15 @@ const Chart: React.FC<ChartProps> = ({ dogWeight }) => {
 
   return(
     <>
-      <LineChart width={400} height={250} data={filteredDate}
-        margin={{ top:20, right: 10, left:-40, bottom: 0}}>
+      <LineChart width={384} height={250} data={filteredDate}
+        margin={{ top:10, right: 10, left:-40, bottom: 0}}>
           <XAxis dataKey="careDate" />
           <YAxis dataKey="amount" />
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
           <Line type="monotone" dataKey="amount" strokeWidth={3} stroke="#15A083" fill="#15A083" />
       </LineChart>
-      <ul className="flex justify-center">
+      <ul className="flex justify-center w-96">
         <li className="w-1/3 border text-main bg-primary p-1 text-center">
           <button onClick={ () => setPeriod('week')}>1週間</button>
         </li>
