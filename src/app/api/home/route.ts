@@ -33,18 +33,18 @@ export const GET = async(request: NextRequest) => {
               },
             },
           },
-          cares: {
-            select: {
-              careDate: true,
-              amount: true,
-              memo: true,
-              careList: {
-                select: {
-                  name: true,
-                },
-              },
-            },
-          },
+          // cares: {
+          //   select: {
+          //     careDate: true,
+          //     amount: true,
+          //     memo: true,
+          //     careList: {
+          //       select: {
+          //         name: true,
+          //       },
+          //     },
+          //   },
+          // },
         },
       }),
       

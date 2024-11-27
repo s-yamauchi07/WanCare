@@ -12,38 +12,15 @@ import  Chart from "../_components/Chart"
 import IconButton from "../_components/IconButton";
 import { changeDateFormat } from "../utils/changeDateFormat";
 import { changeTimeFormat } from "../utils/changeTimeFormat";
+import { TodayCareInfo } from "@/_types/care";
+import { DogProfile } from "@/_types/dog";
 
 interface DogInfo {
   id: string;
   nickname: string;
   createdAt: string;
   updatedAt: string;
-  dog: {
-    name: string;
-    sex: string;
-    birthDate: string;
-    adoptionDate: string;
-    imageKey: string;
-    breed: { name: string }
-  };
-  cares: {
-    careDate: string;
-    amount: number;
-    memo: string;
-    careList: { name: string }
-  }[]
-}
-
-interface TodayCareInfo {
-  id: string;
-  careDate: string;
-  amount: number;
-  memo: string;
-  imageKey: string;
-  ownerId: string;
-  careList: { name: string, icon: string };
-  createdAt: string;
-  updatedAt: string;
+  dog: DogProfile;
 }
 
 const Home: React.FC = () => {
