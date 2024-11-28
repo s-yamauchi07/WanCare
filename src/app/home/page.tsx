@@ -6,12 +6,13 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { toast, Toaster } from "react-hot-toast"
 import Image from "next/image";
-import { supabase } from "../utils/supabase";
-import { WeightInfo } from "@/_types/weight";
 import  Chart from "../_components/Chart"
 import IconButton from "../_components/IconButton";
+import  PageLoading  from "@/app/_components/PageLoading";
+import { supabase } from "../utils/supabase";
 import { changeDateFormat } from "../utils/changeDateFormat";
 import { changeTimeFormat } from "../utils/changeTimeFormat";
+import { WeightInfo } from "@/_types/weight";
 import { TodayCareInfo } from "@/_types/care";
 import { DogProfile } from "@/_types/dog";
 
@@ -86,7 +87,7 @@ const Home: React.FC = () => {
   return(
     <div className="mt-20 max-h-screen overflow-y: auto">
       {/* 犬の情報 */}
-     {(dogInfo && dogImage) &&(
+     {(dogInfo && dogImage) ? (
       <div className=" flex flex-col gap-10">
         <div className="flex items-center justify-between px-10">
           <div className="flex flex-col justify-center items-center gap-2">
@@ -153,7 +154,9 @@ const Home: React.FC = () => {
           <Chart dogWeight={dogWeight}/>
         </div>
       </div>
-     )}
+     ) : (
+      <PageLoading />
+     )} 
 
       <Toaster />
     </div>
