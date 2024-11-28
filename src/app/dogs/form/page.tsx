@@ -7,7 +7,6 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import Label from "@/app/_components/Label";
 import { useEffect, useState } from "react";
 import LoadingButton from "@/app/_components/LoadingButton";
-import { handleError } from "@/app/utils/errorHandler";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { supabase } from "@/app/utils/supabase";
 import { v4 as uuidv4 } from "uuid";
@@ -119,7 +118,7 @@ const DogForm: React.FC = () => {
       }
       reset(data);
     } catch(error) {
-      handleError(error);
+      console.log(error);
       toast.error("登録に失敗しました");
     }
   }

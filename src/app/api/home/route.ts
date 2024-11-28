@@ -33,18 +33,18 @@ export const GET = async(request: NextRequest) => {
               },
             },
           },
-          cares: {
-            select: {
-              careDate: true,
-              amount: true,
-              memo: true,
-              careList: {
-                select: {
-                  name: true,
-                },
-              },
-            },
-          },
+          // cares: {
+          //   select: {
+          //     careDate: true,
+          //     amount: true,
+          //     memo: true,
+          //     careList: {
+          //       select: {
+          //         name: true,
+          //       },
+          //     },
+          //   },
+          // },
         },
       }),
       
@@ -56,6 +56,14 @@ export const GET = async(request: NextRequest) => {
             lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
           },
         },
+        include: {
+          careList: {
+            select: {
+              name: true,
+              icon: true,
+            }
+          }
+        }
       }),
       
       prisma.care.findMany({
@@ -70,7 +78,7 @@ export const GET = async(request: NextRequest) => {
           amount: true,
         },
         orderBy: {
-          createdAt: "asc",
+          careDate: "asc",
         },
       }),
     ]);
