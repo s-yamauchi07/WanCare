@@ -124,9 +124,9 @@ const DogForm: React.FC = () => {
   }
 
   return(
-    <>
-      <form onSubmit={handleSubmit(onsubmit)} className="w-80 px-8 pt-6 pb-8 mb-4">
-        <h2 className="text-primary text-center text-2xl font-bold m-14">ペット登録</h2>
+    <div className="flex justify-center">
+      <form onSubmit={handleSubmit(onsubmit)} className="min-w-64 my-20 pb-20">
+        <h2 className="text-primary text-center text-2xl font-bold mb-10">ペット登録</h2>
         
           <div className="mb-6">
             <div className="rounded-full border border-primary m-auto w-28 h-28 flex items-center justify-center overflow-hidden relative">
@@ -170,7 +170,7 @@ const DogForm: React.FC = () => {
                 )
               })}
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
               <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
             </div>
           </div>
@@ -192,7 +192,7 @@ const DogForm: React.FC = () => {
                 )
               })}
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
               <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
             </div>
           </div>
@@ -237,7 +237,7 @@ const DogForm: React.FC = () => {
         />
       </form>
       <Toaster />
-    </>
+    </div>
   )
 }
 
