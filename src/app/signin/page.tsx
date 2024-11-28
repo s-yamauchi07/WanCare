@@ -50,11 +50,12 @@ const SignIn = () =>  {
   }
 
   return(
-    <div className="w-main bg-main flex justify-center">
+    <div className="flex justify-center">
       <form 
         onSubmit={handleSubmit(onSubmit)}
-        className="w-80 px-8 pt-6 pb-8 mb-4">
-        <h2 className="text-primary text-center text-2xl font-bold m-14">ログイン</h2>
+        className="min-w-64 my-20">
+        
+        <h2 className="text-primary text-center text-2xl font-bold mb-10">ログイン</h2>
 
         <Input
           id="email"
@@ -89,6 +90,7 @@ const SignIn = () =>  {
           })}}
           error={errors.password?.message}
         />
+
         <LoadingButton 
           isSubmitting={isSubmitting}
           buttonText="新規登録"
