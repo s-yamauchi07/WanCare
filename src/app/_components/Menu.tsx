@@ -17,9 +17,9 @@ const Menu: React.FC = () => {
         <ul className="grid h-full max-w-md grid-cols-5 mx-auto">
           {menuList.map((menu) => {
             return(
-              <li key={menu.name} className="inline-flex flex-col items-center justify-center px-5 rounded-full hover:bg-main group">
-                <Link href={menu.path}>
-                  <span className={`${menu.icon} w-5 h-5 group-hover:text-primary`}></span>
+              <li key={menu.name} className="inline-flex flex-col items-center justify-center px-4 rounded-full hover:bg-main group">
+                <Link href={menu.path} className="inline-flex items-center">
+                  <span className={`${menu.icon} w-6 h-6 group-hover:text-primary`}></span>
                 </Link>
                 <p className="text-xs group-hover:text-primary">{menu.name}</p>
               </li>
