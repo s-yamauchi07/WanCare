@@ -28,7 +28,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex justify-center`}>
-          <div className="w-main min-h-screen bg-main">
+          <div className="w-main min-h-full bg-main">
             {children}
           </div>
           <Menu />
