@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { WeightInfo } from "@/_types/weight";
 import { LineChart, XAxis, YAxis, Tooltip,  CartesianGrid, Line } from "recharts";
-import { changeDateFormat } from "@/app/utils/changeDateFormat";
 import { filterLastWeek, filterLastMonth, filterLastThreeMonths } from "../utils/filterWeightData";
 
 
@@ -25,16 +24,24 @@ const Chart: React.FC<ChartProps> = ({ dogWeight }) => {
     }
   }
 
+  // 日付をmm/dd形式に変換
+  const careDateFormat = (date: string) => {
+    const changeDate = new Date(date);
+    const month = (`0${changeDate.getMonth() + 1}`).slice(-2);
+    const day = (`0${changeDate.getDate()}`).slice(-2);
+    return `${month}/${day}`
+  }
+
   const filteredDate = getFilterData().map(d => ({
     ...d,
-    careDate: changeDateFormat(d.careDate),
+    careDate: careDateFormat(d.careDate),
   }));
 
   return(
     <>
       <LineChart width={384} height={250} data={filteredDate}
         margin={{ top:10, right: 10, left:-40, bottom: 0}}>
-          <XAxis dataKey="careDate" />
+          <XAxis dataKey="careDate" interval={0} tick={{fontSize:10}} angle={-30}/>
           <YAxis dataKey="amount" />
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
