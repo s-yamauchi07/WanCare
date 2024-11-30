@@ -16,7 +16,7 @@ const addDog: React.FC = () => {
         <p className="text-xl mb-4">
           ペットを登録しましょう
         </p>
-        <Link href="/dogs/form">
+        <Link href="/dogs/registration">
           <IconButton 
             iconName="i-material-symbols-add-rounded"
             buttonText="ペットを登録する"
