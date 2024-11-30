@@ -3,8 +3,8 @@ import { userAuthentication } from "@/app/utils/userAuthentication";
 import prisma from "@/libs/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-export const GET = async(request: NextRequest, { params } : { params : { id: string }}) => {
-  const { id } = params;
+export const GET = async(request: NextRequest, { params } : { params : Promise<{ id: string }>}) => {
+  const { id } = await params;
   const {data, error } = await userAuthentication(request);
   if (error) return handleError(request);
 

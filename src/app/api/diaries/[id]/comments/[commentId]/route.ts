@@ -6,8 +6,8 @@ import { Comment } from "@/_types/comment";
 import prisma from "@/libs/prisma";
 
 // コメント削除
-export const DELETE = async(request: NextRequest, { params } : { params: { commentId: string }} ) => {
-  const { commentId } = params
+export const DELETE = async(request: NextRequest, { params } : { params: Promise<{ commentId: string }>} ) => {
+  const { commentId } = await params
   const { data, error } = await userAuthentication(request);
   if (error) return handleError(request)
 
@@ -28,8 +28,8 @@ export const DELETE = async(request: NextRequest, { params } : { params: { comme
 }
 
 // コメント編集
-export const PUT = async(request: NextRequest, {params}: { params: { commentId: string }} ) => {
-  const { commentId } = params
+export const PUT = async(request: NextRequest, {params}: { params: Promise<{ commentId: string }>} ) => {
+  const { commentId } = await params
   const { data, error } = await userAuthentication(request);
   if (error) return handleError(request);
   

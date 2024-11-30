@@ -3,8 +3,8 @@ import prisma from "@/libs/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { handleError } from "@/app/utils/errorHandler";
 
-export const POST = async(request: NextRequest, { params } : { params: { id: string }}) => {
-  const { id } = params;
+export const POST = async(request: NextRequest, { params } : { params : Promise<{ id: string }>}) => {
+  const { id } = await params;
   const { data, error } = await userAuthentication(request);
   if (error) return handleError(error);
 
@@ -24,8 +24,8 @@ export const POST = async(request: NextRequest, { params } : { params: { id: str
   }
 }
 
-export const DELETE = async(request: NextRequest, { params} : { params: { id: string }}) => {
-  const { id } = params;
+export const DELETE = async(request: NextRequest, { params} : { params : Promise<{ id: string }>}) => {
+  const { id } = await params;
   const { data, error } = await userAuthentication(request);
   if (error) return handleError(error);
 

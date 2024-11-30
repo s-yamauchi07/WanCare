@@ -7,8 +7,8 @@ import { verifyUser } from "@/app/utils/verifyUser";
 import { findOrCreateTag } from "@/app/utils/findOrCreateTag";
 
 // 詳細
-export const GET = async(request: NextRequest, {params} : { params: { id: string }} )=> {
-  const { id } = params
+export const GET = async(request: NextRequest, {params} : { params : Promise<{ id: string }>} )=> {
+  const { id } = await params
   const { error } = await userAuthentication(request);
   if (error) return handleError(error);
 
@@ -47,8 +47,8 @@ export const GET = async(request: NextRequest, {params} : { params: { id: string
 }
 
 // 編集
-export const PUT = async(request: NextRequest, { params } : { params : { id: string }} ) => {
-  const { id } = params
+export const PUT = async(request: NextRequest, { params } : { params : Promise<{ id: string }>} ) => {
+  const { id } = await params
   const { data, error } = await userAuthentication(request);
   if ( error ) return handleError(error);
 
@@ -125,8 +125,8 @@ export const PUT = async(request: NextRequest, { params } : { params : { id: str
 }
 
 // 削除
-export const DELETE = async(request: NextRequest, { params } : { params : { id: string }} ) => {
-  const { id } = params
+export const DELETE = async(request: NextRequest, { params } : { params : Promise<{ id: string }>} ) => {
+  const { id } = await params
   const { data, error } = await userAuthentication(request)
   if (error) return handleError(request)
 

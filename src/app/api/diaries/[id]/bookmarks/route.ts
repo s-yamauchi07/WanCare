@@ -4,8 +4,8 @@ import prisma from "@/libs/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 // ブックマーク登録
-export const POST = async(request: NextRequest, { params } : { params : { id: string }}) => {
-  const { id } = params
+export const POST = async(request: NextRequest, { params } : { params : Promise<{ id: string }>}) => {
+  const { id } = await params
   const { data, error } = await userAuthentication(request);
   if (error) return handleError(request);
 
@@ -26,8 +26,8 @@ export const POST = async(request: NextRequest, { params } : { params : { id: st
 }; 
 
 // ブックマーク削除
-export const DELETE = async(request: NextRequest, { params } : { params : { id: string} }) => {
-  const { id } = params
+export const DELETE = async(request: NextRequest, { params } : { params : Promise<{ id: string }>}) => {
+  const { id } = await params
   const { data, error } = await userAuthentication(request);
   if (error) return handleError(request);
 
