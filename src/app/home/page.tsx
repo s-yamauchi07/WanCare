@@ -86,15 +86,15 @@ const Home: React.FC = () => {
   
   return(
     <div className="flex justify-center">
-      <div className="w-64 my-20 flex flex-col max-h-screen overflow-y: auto">
+      <div className="w-64 my-20 pb-20 flex flex-col gap-10 overflow-y: auto">
         {/* 犬の情報 */}
       {(dogInfo && dogImage) ? (
         <>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-6">
             <div className="flex justify-between">
               <div>
                 <Image 
-                  className="w-32 h-32 rounded-full border border-primary"
+                  className="w-28 h-28 rounded-full border border-primary ring-primary ring-offset-2 ring"
                   src={dogImage} 
                   alt="profile_image" 
                   width={100} 
@@ -107,7 +107,7 @@ const Home: React.FC = () => {
               </div>
             </div>
 
-            <div className="font-medium text-gray-800 flex justify-between p-2 border rounded-lg">
+            <div className="font-medium text-gray-800 flex justify-between p-2 border rounded-lg shadow-md">
               <div className="flex flex-col gap-1 text-sm text-gray-800">
                 <div className="flex items-center gap-2">
                   <span className="i-material-symbols-sound-detection-dog-barking-outline w-5 h-5"></span>
@@ -126,14 +126,14 @@ const Home: React.FC = () => {
               <div>
                 <IconButton 
                 iconName="i-material-symbols-light-edit-square-outline"
-                buttonText="編集"
+                buttonText="Edit"
                 />
               </div>
             </div>
           </div>
 
           {/* 予定のエリア */}
-          <div className="px-10">
+          <div>
             <h2 className="text-primary font-bold text-2xl mb-4">今日の予定</h2>
             <ul className="flex flex-col gap-1">
               {todayCare.length === 0 ? (
@@ -141,7 +141,7 @@ const Home: React.FC = () => {
               ) : (
                 todayCare.map((care) => {
                   return(
-                    <li key={care.id} className="border rounded-full p-2">
+                    <li key={care.id} className="border rounded-full py-2 px-4 shadow-md">
                       <div className="flex gap-2">
                         <span className={`i-${care.careList.icon} w-5 h-5`}></span>
                         <span className="w-24">{care.careList.name}</span>
@@ -155,7 +155,7 @@ const Home: React.FC = () => {
           </div>
 
           {/* 体重表示 */}
-          <div className="px-10">
+          <div>
             <h2 className="text-primary font-bold text-2xl mb-4">体重記録</h2>
             <Chart dogWeight={dogWeight}/>
           </div>

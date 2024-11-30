@@ -129,7 +129,7 @@ const DogForm: React.FC = () => {
         <h2 className="text-primary text-center text-2xl font-bold mb-10">ペット登録</h2>
         
           <div className="mb-6">
-            <div className="rounded-full border border-primary m-auto w-28 h-28 flex items-center justify-center overflow-hidden relative">
+            <div className="rounded-full border border-primary ring-primary ring-offset-2 ring m-auto w-28 h-28 flex items-center justify-center overflow-hidden relative">
               <label className="w-full h-full flex items-center justify-center">
               {thumbnailImageUrl ? (
                   <div 
