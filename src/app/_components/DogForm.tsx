@@ -139,18 +139,18 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
             "Content-Type" : "application/json",
             Authorization: token,
           },
-          method: "POST",
+          method: isEdit ? "PUT":"POST",
           body: JSON.stringify(req),
         });
     
         if(response.status === 200) {
           router.push("/home");
-          toast.success("登録が完了しました");
+          toast.success(isEdit ? "更新しました" :"登録が完了しました");
         }
         reset(data);
       } catch(error) {
         console.log(error);
-        toast.error("登録に失敗しました");
+        toast.error(isEdit ? "更新に失敗しました" : "登録に失敗しました");
       }
   }
 
@@ -266,7 +266,7 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
         />
         <LoadingButton 
           isSubmitting={isSubmitting}
-          buttonText="登録"
+          buttonText={isEdit ? "更新" : "登録"}
         />
       </form>
       <Toaster />
