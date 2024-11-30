@@ -85,81 +85,88 @@ const Home: React.FC = () => {
   }
   
   return(
-    <div className="mt-20 max-h-screen overflow-y: auto">
-      {/* 犬の情報 */}
-     {(dogInfo && dogImage) ? (
-      <div className=" flex flex-col gap-10">
-        <div className="flex items-center justify-between px-10">
-          <div className="flex flex-col justify-center items-center gap-2">
-            <Image 
-              className="w-32 h-32 rounded-full border border-primary"
-              src={dogImage} 
-              alt="profile_image" 
-              width={100} 
-              height={100}
-            />
-          </div>
-          <div className="font-medium">
-            <div className="flex justify-between mb-2">
-              <h2 className="text-2xl font-bold">
-                {dogInfo.dog.name}
-              </h2>
-              <IconButton 
-              iconName="i-material-symbols-light-edit-square-outline"
-              buttonText="編集"
-              />
-            </div>
-            <div className="flex flex-col gap-1 text-sm text-gray-600">
-              <div className="flex items-center gap-2">
-                <span className="i-material-symbols-sound-detection-dog-barking-outline w-5 h-5"></span>
-                <span className="text-base">{dogInfo.dog.breed.name}/{dogInfo.dog.sex}</span>
+    <div className="flex justify-center">
+      <div className="w-64 my-20 pb-20 flex flex-col gap-10 overflow-y: auto">
+        {/* 犬の情報 */}
+      {(dogInfo && dogImage) ? (
+        <>
+          <div className="flex flex-col gap-6">
+            <div className="flex justify-between">
+              <div>
+                <Image 
+                  className="w-28 h-28 rounded-full border border-primary ring-primary ring-offset-2 ring"
+                  src={dogImage} 
+                  alt="profile_image" 
+                  width={100} 
+                  height={100}
+                />
               </div>
-              <div className="flex items-center gap-2">
-                <span className="i-mdi-cake w-5 h-5"></span>
-                <span className="text-base">{changeDateFormat(dogInfo.dog.birthDate)}({getAgeInMonths(dogInfo.dog.birthDate)})</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="i-mdi-home w-5 h-5"></span>
-                <span className="text-base">{changeDateFormat(dogInfo.dog.adoptionDate)}</span>
+              <div className="flex flex-col justify-center">
+                <h2 className="text-2xl font-bold">{dogInfo.dog.name}</h2>
+                <p>{getAgeInMonths(dogInfo.dog.birthDate)}/{dogInfo.dog.sex}</p>
               </div>
             </div>
+
+            <div className="font-medium text-gray-800 flex justify-between py-2 px-4 border rounded-lg shadow-md">
+              <div className="flex flex-col gap-1 text-sm text-gray-800">
+                <div className="flex items-center gap-2">
+                  <span className="i-material-symbols-sound-detection-dog-barking-outline w-5 h-5"></span>
+                  <span className="text-base">{dogInfo.dog.breed.name}/{dogInfo.dog.sex}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="i-mdi-cake w-5 h-5"></span>
+                  <span className="text-base">{changeDateFormat(dogInfo.dog.birthDate)}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="i-mdi-home w-5 h-5"></span>
+                  <span className="text-base">{changeDateFormat(dogInfo.dog.adoptionDate)}</span>
+                </div>
+              </div>
+
+              <div>
+                <IconButton 
+                iconName="i-material-symbols-light-edit-square-outline"
+                buttonText="Edit"
+                />
+              </div>
+            </div>
           </div>
-        </div>
 
-        {/* 予定のエリア */}
-        <div className="px-10">
-          <h2 className="text-primary font-bold text-2xl mb-4">今日の予定</h2>
-          <ul className="flex flex-col gap-1">
-            {todayCare.length === 0 ? (
-              <p>今日の予定はありません</p>
-            ) : (
-              todayCare.map((care) => {
-                return(
-                  <li key={care.id} className="border rounded-full p-2">
-                    <div className="flex gap-2">
-                      <span className={`i-${care.careList.icon} w-5 h-5`}></span>
-                      <span className="w-24">{care.careList.name}</span>
-                      <span>{changeTimeFormat(care.careDate)}</span>
-                    </div>
-                  </li>
-                )
-              })
-            )}
-          </ul>
-        </div>
+          {/* 予定のエリア */}
+          <div>
+            <h2 className="text-primary font-bold text-2xl mb-4">今日の予定</h2>
+            <ul className="flex flex-col gap-1">
+              {todayCare.length === 0 ? (
+                <p>今日の予定はありません</p>
+              ) : (
+                todayCare.map((care) => {
+                  return(
+                    <li key={care.id} className="border rounded-full py-2 px-4 shadow-md">
+                      <div className="flex gap-2">
+                        <span className={`i-${care.careList.icon} w-5 h-5`}></span>
+                        <span className="w-24">{care.careList.name}</span>
+                        <span>{changeTimeFormat(care.careDate)}</span>
+                      </div>
+                    </li>
+                  )
+                })
+              )}
+            </ul>
+          </div>
 
-        {/* 体重表示 */}
-        <div className="px-10">
-          <h2 className="text-primary font-bold text-2xl mb-4">体重記録</h2>
-          <Chart dogWeight={dogWeight}/>
-        </div>
+          {/* 体重表示 */}
+          <div>
+            <h2 className="text-primary font-bold text-2xl mb-4">体重記録</h2>
+            <Chart dogWeight={dogWeight}/>
+          </div>
+        </>
+      ) : (
+        <PageLoading />
+      )} 
+
+        <Toaster />
       </div>
-     ) : (
-      <PageLoading />
-     )} 
-
-      <Toaster />
-    </div>
+  </div>
   )
 }
 

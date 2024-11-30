@@ -37,11 +37,13 @@ const SignUp = () => {
   }
 
   return(
-    <div className="w-main bg-main flex justify-center">
+    <div className="flex justify-center">
       <form 
         onSubmit={handleSubmit(onSubmit)}
-        className="w-80 px-8 pt-6 pb-8 mb-4">
-        <h2 className="text-primary text-center text-2xl font-bold m-14">新規登録</h2>
+        className="min-w-64 my-20">
+
+        <h2 className="text-primary text-center text-2xl font-bold mb-10">新規登録</h2>
+
         <Input
           id="nickname"
           labelName="nickname"
@@ -52,6 +54,7 @@ const SignUp = () => {
           })}} 
           error={errors.nickname?.message}
         />
+
         <Input
           id="email"
           labelName="email"
@@ -66,6 +69,7 @@ const SignUp = () => {
           })}} 
           error={errors.email?.message}
         />
+        
         <Input
           id="password"
           labelName="password"

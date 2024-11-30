@@ -7,8 +7,8 @@ import { verifyUser } from "@/app/utils/verifyUser";
 import prisma from "@/libs/prisma";
 
 // 詳細
-export const GET = async(request:NextRequest, { params } : { params: {id: string }} ) => {
-  const { id } = params
+export const GET = async(request:NextRequest, { params } : { params: Promise<{id: string }>} ) => {
+  const { id } = await params
   const { error } = await userAuthentication(request);
   if (error) return handleError(request);
 
@@ -51,8 +51,8 @@ export const GET = async(request:NextRequest, { params } : { params: {id: string
 }
 
 // 編集
-export const PUT = async(request: NextRequest,  { params } : { params: {id: string }} ) => {
-  const { id } = params
+export const PUT = async(request: NextRequest,  { params } : { params : Promise<{ id: string }>} ) => {
+  const { id } = await params
   const body = await request.json();
   const { data, error } = await userAuthentication(request);
   if (error) return handleError(request);
@@ -108,8 +108,8 @@ export const PUT = async(request: NextRequest,  { params } : { params: {id: stri
 }
 
 // 削除
-export const DELETE = async(request: NextRequest, { params } : { params: { id: string}}) => {
-  const { id } = params
+export const DELETE = async(request: NextRequest, { params } : { params : Promise<{ id: string }>}) => {
+  const { id } = await params
   const { data, error } = await userAuthentication(request)
   if (error) return handleError(request)
 

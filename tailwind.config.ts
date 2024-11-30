@@ -10,6 +10,20 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  safelist: [
+    "i-tabler-dog-bowl", 
+    "i-mdi-water",
+    "i-mdi-dog-side",
+    "i-mdi-toilet",
+    "i-tabler-toilet-paper",
+    "i-icon-park-outline-weight",
+    "i-hugeicons-medicine-02",
+    "i-icon-park-outline-injection",
+    "i-ri-hospital-line",
+    "i-ri-scissors-2-fill",
+    "i-tabler-bath",
+    "i-material-symbols-light-tools-pliers-wire-stripper"
+  ],
   theme: {
     extend: {
       colors: {
@@ -17,7 +31,7 @@ const config: Config = {
         foreground: "var(--foreground)",
         main: "#FDF9F2",
         primary: "#15A083",
-        secondary: "F3CF3E"
+        secondary: "#fDCf3E",
       },
       width: {
         'main': '450px',

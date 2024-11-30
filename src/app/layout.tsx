@@ -1,18 +1,12 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
+import { Sawarabi_Gothic } from "next/font/google";
 import Menu from "@/app/_components/Menu";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+const SawarabiGothic = Sawarabi_Gothic({
+  weight: "400",
+  subsets: ["latin"]
+}) 
 
 export const metadata: Metadata = {
   title: "WanCare",
@@ -25,10 +19,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ja">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex justify-center min-h-screen`}>
-          <div className="w-main min-h-screen bg-main">
+        className={`${SawarabiGothic.className} antialiased min-h-screen flex justify-center`}>
+          <div className="w-main min-h-full bg-main">
             {children}
           </div>
           <Menu />
