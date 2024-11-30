@@ -1,5 +1,5 @@
 export interface Care{
-  careDate: Date
+  careDate: string
   amount?: number
   memo?: string
   imageKey?: string
