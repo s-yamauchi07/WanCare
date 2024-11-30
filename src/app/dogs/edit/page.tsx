@@ -1,7 +1,3 @@
-// import Image from "next/image";
-// import Link from "next/link";
-// import dog_registration from "@/public/dog_registration.png";
-// import IconButton from "@/app/_components/IconButton";
 "use client"
 
 import DogForm from "@/app/_components/DogForm";
