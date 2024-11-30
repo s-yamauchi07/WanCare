@@ -15,7 +15,7 @@ export const POST = async(request: NextRequest) => {
     const body = await request.json();
     const { imageKey, name, sex, birthDate, adoptionDate, breedId }:DogRequest = body;
     const currentUserId = data.user.id;
-    const dog: DogResponse | null = await prisma.dog.findUnique({
+    const dog = await prisma.dog.findUnique({
       where: {
         ownerId: currentUserId
       },
@@ -49,13 +49,21 @@ export const GET = async(request: NextRequest) => {
 
   try {
     const currentUserId = data.user.id;
-    const dog: DogResponse | null  = await prisma.dog.findUnique({
+    const dog = await prisma.dog.findUnique({
       where: {
         ownerId: currentUserId,
       },
     });
 
-    return NextResponse.json({ status: "OK", dog: dog }, { status: 200 });
+    if (dog) {
+      const dogResponse: DogResponse = {
+        ...dog,
+        birthDate: dog.birthDate.toISOString(),
+        adoptionDate: dog.adoptionDate.toISOString(),
+      }
+      return NextResponse.json({ status: "OK", dog: dogResponse }, { status: 200 });
+    }
+
   } catch (error) {
     return handleError(error);
   }
@@ -73,7 +81,7 @@ export const PUT = async (request: NextRequest) => {
 
     const currentUserId = data.user.id;
 
-    const dog: DogResponse | null = await prisma.dog.update({
+    const dog = await prisma.dog.update({
       where: {
         ownerId: currentUserId,
       },

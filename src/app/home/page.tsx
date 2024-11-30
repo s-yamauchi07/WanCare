@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { toast, Toaster } from "react-hot-toast"
 import Image from "next/image";
+import Link from "next/link";
 import  Chart from "../_components/Chart"
 import IconButton from "../_components/IconButton";
 import  PageLoading  from "@/app/_components/PageLoading";
@@ -27,15 +28,21 @@ interface DogInfo {
 const Home: React.FC = () => {
   useRouteGuard();
   
-  const { token } = useSupabaseSession();
+  const { token, session } = useSupabaseSession();
   const [dogInfo, setDogInfo] = useState<DogInfo | null>(null);
   const [todayCare, setTodayCare] = useState<TodayCareInfo[]>([]);
   const [dogWeight, setDogWeight] = useState<WeightInfo[]>([]);
   const [dogImage, setDogImage] = useState("");
-  console.log(token)
+  const userId = session?.user.id
+
+  useEffect(() => {
+    if (userId) {
+      localStorage.setItem("userId", userId);
+    }
+  }, [userId]);
 
   useEffect(() => {  
-    if(!token) return;
+    if(!token || !session) return;
 
     const fetchDogInfo = async() => {
       try {
@@ -83,9 +90,9 @@ const Home: React.FC = () => {
 
     return `${years}歳${months}ヶ月`
   }
-  
+
   return(
-    <div className="flex justify-center">
+    <div className="flex justify-center text-gray-800">
       <div className="w-64 my-20 pb-20 flex flex-col gap-10 overflow-y: auto">
         {/* 犬の情報 */}
       {(dogInfo && dogImage) ? (
@@ -99,6 +106,7 @@ const Home: React.FC = () => {
                   alt="profile_image" 
                   width={100} 
                   height={100}
+                  priority={true}
                 />
               </div>
               <div className="flex flex-col justify-center">
@@ -111,7 +119,7 @@ const Home: React.FC = () => {
               <div className="flex flex-col gap-1 text-sm text-gray-800">
                 <div className="flex items-center gap-2">
                   <span className="i-material-symbols-sound-detection-dog-barking-outline w-5 h-5"></span>
-                  <span className="text-base">{dogInfo.dog.breed.name}/{dogInfo.dog.sex}</span>
+                  <span className="text-base">{dogInfo.dog.breed.name}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="i-mdi-cake w-5 h-5"></span>
@@ -124,10 +132,12 @@ const Home: React.FC = () => {
               </div>
 
               <div>
-                <IconButton 
-                iconName="i-material-symbols-light-edit-square-outline"
-                buttonText="Edit"
-                />
+                <Link href="/dogs/edit">
+                  <IconButton 
+                  iconName="i-material-symbols-light-edit-square-outline"
+                  buttonText="Edit"
+                  />
+                </Link>
               </div>
             </div>
           </div>

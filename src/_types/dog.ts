@@ -2,8 +2,8 @@ export interface DogRequest {
   imageKey: string;
   name: string;
   sex: string;
-  birthDate: Date;
-  adoptionDate: Date;
+  birthDate: string;
+  adoptionDate: string;
   breedId: string;
 }
 
@@ -12,8 +12,8 @@ export interface DogResponse {
   imageKey: string;
   name: string;
   sex: string;
-  birthDate: Date;
-  adoptionDate: Date;
+  birthDate: string;
+  adoptionDate: string;
   breedId: string;
   ownerId: string;
   createdAt: Date;
