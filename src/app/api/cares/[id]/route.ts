@@ -75,8 +75,8 @@ export const PUT = async(request: NextRequest, { params } : { params: Promise<{ 
  
 
 // 削除
-export const DELETE = async(request: NextRequest, { params } : { params: { id: string } }) => {
-  const { id } = params
+export const DELETE = async(request: NextRequest, { params } : { params : Promise<{ id: string }>}) => {
+  const { id } =await params
   const { data, error } = await userAuthentication(request);
   if (error) return handleError(error);
 
