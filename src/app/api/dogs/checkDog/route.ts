@@ -8,13 +8,20 @@ export const POST = async(request: NextRequest) => {
   const { userId } = body;
 
   try {
-    const dogRecord: DogResponse | null  = await prisma.dog.findUnique({
+    const dogRecord  = await prisma.dog.findUnique({
       where: {
         ownerId: userId,
       },
     });
 
-    return NextResponse.json({ status: "OK", dog: dogRecord }, { status: 200 });
+    if (dogRecord) {
+      const dogResponse: DogResponse = {
+        ...dogRecord,
+        birthDate: dogRecord.birthDate.toISOString(), 
+        adoptionDate: dogRecord.adoptionDate.toISOString(),
+      };
+      return NextResponse.json({ status: "OK", dog: dogResponse }, { status: 200 });
+    }
   } catch (error) {
     return handleError(error);
   }

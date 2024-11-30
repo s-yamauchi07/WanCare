@@ -13,6 +13,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
 import { toast, Toaster } from "react-hot-toast"
 import { useRouter } from "next/navigation"
+import { DogResponse } from "@/_types/dog";
 
 const sexSelection = [
   {id: 1, name: "男の子"},
@@ -20,10 +21,15 @@ const sexSelection = [
   {id: 3, name: "不明"}
 ]
 
-const DogForm: React.FC = () => {
+interface DogFormProps {
+  isEdit?: boolean;
+  dogInfo?: DogResponse;
+}
+
+const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
   useRouteGuard();
 
-  const { register, handleSubmit, reset, watch, formState: { errors, isSubmitting}} = useForm<DogRequest>();
+  const { register, handleSubmit, reset, watch, setValue, formState: { errors, isSubmitting}} = useForm<DogRequest>();
   const { token } = useSupabaseSession();
   const router = useRouter();
   const [breeds, setBreeds] = useState<Breed[]>([]);
@@ -94,39 +100,51 @@ const DogForm: React.FC = () => {
     fetchImage()
   }, [uploadedKey])
 
+  // 編集の場合の初期値設定
+  useEffect(() => { 
+    if (dogInfo && isEdit && breeds.length > 0) { 
+      setValue("imageKey", dogInfo.imageKey); 
+      setValue("breedId", dogInfo.breedId); 
+      setValue("sex", dogInfo.sex); 
+      setValue("name", dogInfo.name); 
+      setValue("birthDate", dogInfo.birthDate.split('T')[0]); 
+      setValue("adoptionDate", dogInfo.adoptionDate.split('T')[0]);
+    }}, [dogInfo, isEdit, setValue, breeds]);
+
   // 新規登録
   const onsubmit: SubmitHandler<DogRequest> = async(data) => {
+    console.log(data)
     const req = {
       ...data,
       imageKey: uploadedKey
     }
 
     if(!token) return;
-    try {
-      const response = await fetch("/api/dogs", {
-        headers: {
-          "Content-Type" : "application/json",
-          Authorization: token,
-        },
-        method: "POST",
-        body: JSON.stringify(req),
-      });
-  
-      if(response.status === 200) {
-        router.push("/home");
-        toast.success("登録が完了しました");
+      try {
+        const response = await fetch("/api/dogs", {
+          headers: {
+            "Content-Type" : "application/json",
+            Authorization: token,
+          },
+          method: "POST",
+          body: JSON.stringify(req),
+        });
+    
+        if(response.status === 200) {
+          router.push("/home");
+          toast.success("登録が完了しました");
+        }
+        reset(data);
+      } catch(error) {
+        console.log(error);
+        toast.error("登録に失敗しました");
       }
-      reset(data);
-    } catch(error) {
-      console.log(error);
-      toast.error("登録に失敗しました");
-    }
   }
 
   return(
     <div className="flex justify-center">
       <form onSubmit={handleSubmit(onsubmit)} className="min-w-64 my-20 pb-20">
-        <h2 className="text-primary text-center text-2xl font-bold mb-10">ペット登録</h2>
+        <h2 className="text-primary text-center text-2xl font-bold mb-10">{isEdit ? "ペット編集": "ペット登録"}</h2>
         
           <div className="mb-6">
             <div className="rounded-full border border-primary ring-primary ring-offset-2 ring m-auto w-28 h-28 flex items-center justify-center overflow-hidden relative">
@@ -158,7 +176,7 @@ const DogForm: React.FC = () => {
         <div className="mb-6">
           <Label id="性別" />
           <div className="inline-block relative w-64">
-            <select 
+            <select
               className="block appearance-none border border-primary w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
               {...register("sex",{
                 validate: value => value !== "" ||"性別を選択してください。"
