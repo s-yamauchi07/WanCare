@@ -37,28 +37,40 @@ const Chart: React.FC<ChartProps> = ({ dogWeight }) => {
     careDate: careDateFormat(d.careDate),
   }));
 
+  // クリックごとに表示する日付を切り替える
+  const intervalValue = () => {
+    switch(period) {
+      case 'month':
+        return 7;
+      case '3month':
+        return 30;
+      default:
+        return 0; 
+    }
+  }
+
+
   return(
     <>
-      <LineChart width={384} height={250} data={filteredDate}
-        margin={{ top:10, right: 10, left:-40, bottom: 0}}>
-          <XAxis dataKey="careDate" interval={0} tick={{fontSize:10}} angle={-30}/>
+      <LineChart width={256} height={200} data={filteredDate}
+        margin={{ top:10, right:20, left:-40, bottom: 0}}>
+          <XAxis dataKey="careDate" interval={intervalValue()} tick={{fontSize:10}} angle={-30}/>
           <YAxis dataKey="amount" />
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
           <Line type="monotone" dataKey="amount" strokeWidth={3} stroke="#15A083" fill="#15A083" />
       </LineChart>
-      <ul className="flex justify-center w-96">
-        <li className="w-1/3 border text-main bg-primary p-1 text-center">
+      <ul className="flex justify-center">
+        <li className="w-1/3 border rounded-lg text-main bg-primary p-1 text-center">
           <button onClick={ () => setPeriod('week')}>1週間</button>
         </li>
-        <li className="w-1/3 border bg-primary text-main p-1 text-center">
+        <li className="w-1/3 border rounded-lg bg-primary text-main p-1 text-center">
           <button onClick={ () => setPeriod('month')}>1ヶ月</button>
         </li>
-        <li className="w-1/3 border bg-primary text-main p-1 text-center">
+        <li className="w-1/3 border rounded-lg bg-primary text-main p-1 text-center">
           <button onClick={ () => setPeriod('3month')}>3ヶ月</button>
         </li>
       </ul>
-
     </>
   )
 }
