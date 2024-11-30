@@ -29,7 +29,16 @@ interface DogFormProps {
 const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
   useRouteGuard();
 
-  const { register, handleSubmit, reset, watch, setValue, formState: { errors, isSubmitting}} = useForm<DogRequest>();
+  const { register, handleSubmit, reset, watch, setValue, formState: { errors, isSubmitting}} = useForm<DogRequest>({
+    defaultValues: {
+      imageKey: dogInfo?.imageKey || "",
+      breedId: dogInfo?.breedId || "",
+      sex: dogInfo?.sex || "",
+      name: dogInfo?.name || "",
+      birthDate: dogInfo?.birthDate?.split('T')[0] || "",
+      adoptionDate: dogInfo?.adoptionDate?.split('T')[0] || "",
+    }
+  });
   const { token } = useSupabaseSession();
   const router = useRouter();
   const [breeds, setBreeds] = useState<Breed[]>([]);
@@ -62,24 +71,27 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
   useEffect(() => {
     const uploadImage = async () => {
       if (!imageKey || imageKey.length === 0) return;
-      setUploading(true);
+      
+      if(typeof imageKey[0] === "object") {
+        setUploading(true);
 
-      const file = imageKey[0];                   
-      const filePath = `private/${uuidv4()}`;
-      const { data, error } = await supabase.storage
-        .from("profile_img")
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: false,
-        });
+        const file = imageKey[0];                   
+        const filePath = `private/${uuidv4()}`;
+        const { data, error } = await supabase.storage
+          .from("profile_img")
+          .upload(filePath, file, {
+            cacheControl: "3600",
+            upsert: false,
+          });
 
-      if (error) {
-        toast.error("画像のアップロードに失敗しました");
+        if (error) {
+          toast.error("画像のアップロードに失敗しました");
+          setUploading(false);
+          return;
+        }
+        setUploadedKey(data.path);
         setUploading(false);
-        return;
       }
-      setUploadedKey(data.path);
-      setUploading(false);
     };
   
     uploadImage();
@@ -87,23 +99,25 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
 
   // 画像表示を行う処理
   useEffect(() => {
-    if (!uploadedKey) return;    
-    const fetchImage = async() => {
-
+    const fetchImage = async(img: string) => {
       const { data: { publicUrl}, } = await supabase.storage
         .from("profile_img")
-        .getPublicUrl(uploadedKey)
+        .getPublicUrl(img);
       
-      setThumbnailImageUrl(publicUrl)
-    }
+        setThumbnailImageUrl(publicUrl);
+      }
 
-    fetchImage()
-  }, [uploadedKey])
+    if (uploadedKey) {
+      fetchImage(uploadedKey);
+    } else if (dogInfo?.imageKey) {
+      fetchImage(dogInfo.imageKey);
+    }
+  }, [uploadedKey, dogInfo?.imageKey]);
 
   // 編集の場合の初期値設定
   useEffect(() => { 
     if (dogInfo && isEdit && breeds.length > 0) { 
-      setValue("imageKey", dogInfo.imageKey); 
+      setValue("imageKey", dogInfo.imageKey);
       setValue("breedId", dogInfo.breedId); 
       setValue("sex", dogInfo.sex); 
       setValue("name", dogInfo.name); 
@@ -113,10 +127,9 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
 
   // 新規登録
   const onsubmit: SubmitHandler<DogRequest> = async(data) => {
-    console.log(data)
     const req = {
       ...data,
-      imageKey: uploadedKey
+      imageKey: uploadedKey || dogInfo?.imageKey
     }
 
     if(!token) return;
@@ -165,7 +178,9 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
                   type="file" 
                   className="absolute inset-0 opacity-0 cursor-pointer"
                   {...register("imageKey",{
-                    required: "プロフィール画像は必須です。",
+                    validate: () => {
+                      return uploadedKey || dogInfo?.imageKey ? true : "プロフィール画像は必須です。";
+                    }
                 })}
                 />
               </label>

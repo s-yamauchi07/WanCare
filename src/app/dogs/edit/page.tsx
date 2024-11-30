@@ -31,7 +31,6 @@ const EditDog: React.FC = () => {
             body: JSON.stringify({userId})
           })
           const { dog } = await response.json();
-          console.log(dog)
           setDogInfo(dog);
         } catch (error) {
           console.log("ペット情報取得に失敗しました",error)
