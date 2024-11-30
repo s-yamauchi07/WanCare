@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { usePathname } from 'next/navigation'
 
 const menuList = [
   { name: "home", icon: "i-material-symbols-other-houses-outline-rounded", path:"/"},
@@ -11,9 +12,16 @@ const menuList = [
   { name: "Mypage", icon: "i-material-symbols-sound-detection-dog-barking-outline", path: "/mypages"},
 ]
 
+const excludedPaths = ["/", "/signup", "/signin", "/dogs/new", "/dogs/form"];
+
 const Menu: React.FC = () => {
+  const pathName = usePathname();
+  const showMenu = !excludedPaths.includes(pathName);
+
+  if (!showMenu) return null;
+
   return(
-    <div className="fixed z-50 w-full h-16 max-w-md -translate-x-1/2 bg-main border border-gray-200 rounded-full bottom-4 left-1/2">
+    <div className="fixed z-50 w-full h-16 max-w-md -translate-x-1/2 bg-main border border-gray-200 rounded-full bottom-0.5 left-1/2 shadow-md">
         <ul className="grid h-full max-w-md grid-cols-5 mx-auto">
           {menuList.map((menu) => {
             return(

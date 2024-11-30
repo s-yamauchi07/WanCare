@@ -107,7 +107,7 @@ const Home: React.FC = () => {
               </div>
             </div>
 
-            <div className="font-medium text-gray-800 flex justify-between p-2 border rounded-lg shadow-md">
+            <div className="font-medium text-gray-800 flex justify-between py-2 px-4 border rounded-lg shadow-md">
               <div className="flex flex-col gap-1 text-sm text-gray-800">
                 <div className="flex items-center gap-2">
                   <span className="i-material-symbols-sound-detection-dog-barking-outline w-5 h-5"></span>
