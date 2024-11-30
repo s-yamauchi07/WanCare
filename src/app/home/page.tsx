@@ -85,7 +85,7 @@ const Home: React.FC = () => {
   }
   
   return(
-    <div className="flex justify-center">
+    <div className="flex justify-center text-gray-800">
       <div className="w-64 my-20 pb-20 flex flex-col gap-10 overflow-y: auto">
         {/* 犬の情報 */}
       {(dogInfo && dogImage) ? (
