@@ -163,7 +163,7 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
     <>
       {!isLoading ? (
         <div className="flex justify-center">
-          <form onSubmit={handleSubmit(onsubmit)} className="min-w-64 my-20 pb-20">
+          <form onSubmit={handleSubmit(onsubmit)} className="max-w-64 my-20 pb-20">
             <h2 className="text-primary text-center text-2xl font-bold mb-10">{isEdit ? "ペット編集": "ペット登録"}</h2>
             
             <div className="mb-6">
@@ -252,7 +252,7 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
 
             <Input
               id="birthDate"
-              labelName="誕生日"
+              labelName="お誕生日"
               type="date"
               placeholder="2020/01/01"
               register={{...register("birthDate", {
