@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from 'next/navigation'
 
 const menuList = [
-  { name: "home", icon: "i-material-symbols-other-houses-outline-rounded", path:"/"},
+  { name: "home", icon: "i-material-symbols-other-houses-outline-rounded", path:"/home"},
   { name: "記録", icon: "i-material-symbols-add-notes-outline", path: "/cares/new"},
   { name: "Calendar", icon: "i-material-symbols-calendar-month", path:"/cares" },
   { name: "日記", icon: "i-material-symbols-book-2-outline", path: "/diaries"},
