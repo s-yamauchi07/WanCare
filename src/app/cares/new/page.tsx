@@ -1,21 +1,37 @@
-import React from "react";
+"use client"
 
-const careLists = [
-  { name: "ごはん", icon: "tabler-dog-bowl" },
-  { name: "水分", icon: "mdi-water" },
-  { name: "さんぼ", icon: "mdi-dog-side" },
-  { name: "おしっこ", icon: "mdi-toilet" },
-  { name: "うんち", icon: "tabler-toilet-paper" },
-  { name: "体重", icon: "icon-park-outline-weight" },
-  { name: "くすり", icon: "hugeicons-medicine-02" },
-  { name: "ワクチン", icon: "icon-park-outline-injection" },
-  { name: "通院", icon: "ri-hospital-line" },
-  { name: "トリミング", icon: "ri-scissors-2-fill"},
-  { name: "シャンプー", icon: "tabler-bath" },
-  { name: "爪切り", icon: "material-symbols-light-tools-pliers-wire-stripper" }
-];
+import { useRouteGuard } from "@/_hooks/useRouteGuard";
+import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
+import React, { useEffect, useState } from "react";
+
+interface careList {
+  id: string;
+  name: string;
+  icon: string;
+}
 
 const SelectCare: React.FC = () => {
+  useRouteGuard();
+
+  const { token } = useSupabaseSession();
+  const [careLists, setCareList] = useState<careList[]>([]);
+
+  useEffect(()=> {
+    if (!token) return;
+
+    const fetchCareLists = async () => {
+      const response = await fetch("/api/careLists", {
+        headers: {
+          "Content-Type" : "application/json",
+          Authorization: token,
+        },
+      })
+      const { careLists } = await response.json();
+      setCareList(careLists);
+    }
+    fetchCareLists();
+  },[token]);
+
   return(
     <div className="flex justify-center">
       <div className="max-w-64 my-20 flex flex-col items-center">
@@ -26,7 +42,7 @@ const SelectCare: React.FC = () => {
               return(
                 <li key={careList.name} className="flex flex-col items-center justify-center">
                   <div className="rounded-full bg-primary text-main w-16 h-16 flex items-center justify-center">
-                    <span className={`i-${careList.icon} w-10 h-10`}></span>
+                    <span className={`${careList.icon} w-10 h-10`}></span>
                   </div>
                   <span className="text-gray-800 text-xs">{careList.name}</span>
                 </li>

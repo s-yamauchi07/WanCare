@@ -20,7 +20,7 @@ export const GET = async (request: NextRequest) => {
         order: "asc",
       },
     })
-    return NextResponse.json({ status: "OK", cares: careLists }, { status: 200 });
+    return NextResponse.json({ status: "OK", careLists: careLists }, { status: 200 });
   } catch(error) {
     return handleError(error);
   }
