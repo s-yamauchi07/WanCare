@@ -2,6 +2,7 @@
 
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
+import PageLoading from "@/app/_components/PageLoading";
 import React, { useEffect, useState } from "react";
 
 interface careList {
@@ -31,6 +32,8 @@ const SelectCare: React.FC = () => {
     }
     fetchCareLists();
   },[token]);
+
+  if (!careLists || careLists.length === 0) return <PageLoading/>;
 
   return(
     <div className="flex justify-center">
