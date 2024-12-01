@@ -29,7 +29,7 @@ interface DogFormProps {
 
 const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
   useRouteGuard();
-
+  
   const { register, handleSubmit, reset, watch, setValue, formState: { errors, isSubmitting}} = useForm<DogRequest>({
     defaultValues: {
       imageKey: dogInfo?.imageKey || "",
@@ -46,7 +46,8 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
   const imageKey = watch("imageKey");
   const [uploadedKey, setUploadedKey] = useState<string | null>(null);
   const [thumbnailImageUrl, setThumbnailImageUrl] = useState<string | null>(null);
-  const [isUploading, setUploading] = useState<boolean>(false);
+  const [isUploading, setUploading] = useState<boolean>(true);
+  const [isLoading, setLoading] = useState<boolean>(true);
 
   useEffect(()=>{
     if(!token) return
@@ -61,8 +62,10 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
         })
         const { breeds } = await res.json();
         setBreeds(breeds);
+        setLoading(false);
       } catch(error) {
         console.log(error);
+        setLoading(false);
       }
     }
     fetchBreeds();
@@ -124,6 +127,7 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
       setValue("name", dogInfo.name); 
       setValue("birthDate", dogInfo.birthDate.split('T')[0]); 
       setValue("adoptionDate", dogInfo.adoptionDate.split('T')[0]);
+      setLoading(false);
     }}, [dogInfo, isEdit, setValue, breeds]);
 
   // 新規登録
@@ -157,125 +161,126 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
 
   return(
     <>
-      {dogInfo ? (
-      <div className="flex justify-center">
-        <form onSubmit={handleSubmit(onsubmit)} className="min-w-64 my-20 pb-20">
-          <h2 className="text-primary text-center text-2xl font-bold mb-10">{isEdit ? "ペット編集": "ペット登録"}</h2>
-          
-          <div className="mb-6">
-            <div className="rounded-full border border-primary ring-primary ring-offset-2 ring m-auto w-28 h-28 flex items-center justify-center overflow-hidden relative">
-              <label className="w-full h-full flex items-center justify-center">
-              {thumbnailImageUrl ? (
-                  <div 
-                    className="absolute inset-0 bg-cover bg-center pointer-events-none" 
-                    style={{ backgroundImage: `url(${thumbnailImageUrl })` }}>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center">
-                    <span className="i-material-symbols-add-a-photo-outline-rounded text-5xl p-3 text-primary"></span>
-                    <span className="text-xs text-primary font-bold">{isUploading ? "uploading..." : "add image"}</span>
-                  </div>
-                )
-              }
-                <input 
-                  type="file" 
-                  className="absolute inset-0 opacity-0 cursor-pointer"
-                  {...register("imageKey",{
-                    validate: () => {
-                      return uploadedKey || dogInfo?.imageKey ? true : "プロフィール画像は必須です。";
-                    }
-                })}
-                />
-              </label>
-            </div>
-            <div className="text-red-500 text-xs text-center mt-2">{errors.imageKey?.message}</div>
-          </div>
-
-          <div className="mb-6">
-            <Label id="性別" />
-            <div className="inline-block relative w-64">
-              <select
-                className="block appearance-none border border-primary w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                {...register("sex",{
-                  validate: value => value !== "" ||"性別を選択してください。"
-                })}>
-                <option value="">性別を選択してください</option>
-                {sexSelection.map((s) => {
-                  return(
-                    <option value={s.name} key={s.id}>{s.name}</option>
+      {!isLoading ? (
+        <div className="flex justify-center">
+          <form onSubmit={handleSubmit(onsubmit)} className="max-w-64 my-20 pb-20">
+            <h2 className="text-primary text-center text-2xl font-bold mb-10">{isEdit ? "ペット編集": "ペット登録"}</h2>
+            
+            <div className="mb-6">
+              <div className="rounded-full border border-primary ring-primary ring-offset-2 ring m-auto w-28 h-28 flex items-center justify-center overflow-hidden relative">
+                <label className="w-full h-full flex items-center justify-center">
+                {thumbnailImageUrl ? (
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center pointer-events-none" 
+                      style={{ backgroundImage: `url(${thumbnailImageUrl })` }}>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center">
+                      <span className="i-material-symbols-add-a-photo-outline-rounded text-5xl p-3 text-primary"></span>
+                      <span className="text-xs text-primary font-bold">{isUploading ? "uploading..." : "add image"}</span>
+                    </div>
                   )
-                })}
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
-                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                }
+                  <input 
+                    type="file" 
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                    {...register("imageKey",{
+                      validate: () => {
+                        return uploadedKey || dogInfo?.imageKey ? true : "プロフィール画像は必須です。";
+                      }
+                  })}
+                  />
+                </label>
               </div>
+              <div className="text-red-500 text-xs text-center mt-2">{errors.imageKey?.message}</div>
             </div>
-            <div className="text-red-500 text-xs mt-2">{errors.sex?.message}</div>
-          </div>
 
-          <div className="mb-6">
-            <Label id="犬種" />
-            <div className="inline-block relative w-64">
-              <select 
-                className="block appearance-none border border-primary w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                {...register("breedId",{
-                  validate: value => value !== "" ||"犬種を選択してください。"
-                })}>
-                <option value="">犬種を選択してください</option>
-                {breeds.map((breed) => {
-                  return (
-                    <option key={breed.id} value={breed.id}>{breed.name}</option>
-                  )
-                })}
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
-                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            <div className="mb-6">
+              <Label id="性別" />
+              <div className="inline-block relative w-64">
+                <select
+                  className="block appearance-none border border-primary bg-white text-gray-800 w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                  {...register("sex",{
+                    validate: value => value !== "" ||"性別を選択してください。"
+                  })}>
+                  <option value="">性別を選択してください</option>
+                  {sexSelection.map((s) => {
+                    return(
+                      <option value={s.name} key={s.id}>{s.name}</option>
+                    )
+                  })}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
+                  <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
               </div>
+              <div className="text-red-500 text-xs mt-2">{errors.sex?.message}</div>
             </div>
-            <div className="text-red-500 text-xs mt-2">{errors.breedId?.message}</div>
-          </div>
 
-          <Input
-            id="name"
-            labelName="お名前"
-            type="text"
-            placeholder="ぽち"
-            register={{...register("name", {
-              required: "お名前は必須です。"
-            })}}
-            error={errors.name?.message}
-          />
+            <div className="mb-6">
+              <Label id="犬種" />
+              <div className="inline-block relative w-64">
+                <select 
+                  className="block appearance-none border border-primary bg-white text-gray-800 w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                  {...register("breedId",{
+                    validate: value => value !== "" ||"犬種を選択してください。"
+                  })}>
+                  <option value="">犬種を選択してください</option>
+                  {breeds.map((breed) => {
+                    return (
+                      <option key={breed.id} value={breed.id}>{breed.name}</option>
+                    )
+                  })}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
+                  <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
+              </div>
+              <div className="text-red-500 text-xs mt-2">{errors.breedId?.message}</div>
+            </div>
 
-          <Input
-            id="birthDate"
-            labelName="誕生日"
-            type="date"
-            placeholder="2020/01/01"
-            register={{...register("birthDate", {
-              required: "誕生日は必須です。"
-            })}}
-            error={errors.birthDate?.message}
-          />
+            <Input
+              id="name"
+              labelName="お名前"
+              type="text"
+              placeholder="ぽち"
+              register={{...register("name", {
+                required: "お名前は必須です。"
+              })}}
+              error={errors.name?.message}
+            />
 
-          <Input
-            id="adoptionDate"
-            labelName="おうち記念日"
-            type="date"
-            placeholder="2020/01/01"
-            register={{...register("adoptionDate", {
-              required: "誕生日は必須です。"
-            })}}
-            error={errors.adoptionDate?.message}
-          />
-          <LoadingButton 
-            isSubmitting={isSubmitting}
-            buttonText={isEdit ? "更新" : "登録"}
-          />
-        </form>
-      </div>
-      ) : (
+            <Input
+              id="birthDate"
+              labelName="お誕生日"
+              type="date"
+              placeholder="2020/01/01"
+              register={{...register("birthDate", {
+                required: "誕生日は必須です。"
+              })}}
+              error={errors.birthDate?.message}
+            />
+
+            <Input
+              id="adoptionDate"
+              labelName="おうち記念日"
+              type="date"
+              placeholder="2020/01/01"
+              register={{...register("adoptionDate", {
+                required: "誕生日は必須です。"
+              })}}
+              error={errors.adoptionDate?.message}
+            />
+            <LoadingButton 
+              isSubmitting={isSubmitting}
+              buttonText={isEdit ? "更新" : "登録"}
+            />
+          </form>
+        </div>
+      ): (
         <PageLoading />
       )}
+
       <Toaster />
     </>
   )

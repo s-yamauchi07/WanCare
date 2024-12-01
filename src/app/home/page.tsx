@@ -104,8 +104,9 @@ const Home: React.FC = () => {
                   className="w-28 h-28 rounded-full border border-primary ring-primary ring-offset-2 ring"
                   src={dogImage} 
                   alt="profile_image" 
-                  width={100} 
-                  height={100}
+                  width={112} 
+                  height={112}
+                  style={{objectFit: "cover"}}
                   priority={true}
                 />
               </div>
