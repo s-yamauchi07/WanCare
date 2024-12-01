@@ -93,7 +93,7 @@ const SignIn = () =>  {
 
         <LoadingButton 
           isSubmitting={isSubmitting}
-          buttonText="新規登録"
+          buttonText="ログイン"
         />
       </form>
       <Toaster />
