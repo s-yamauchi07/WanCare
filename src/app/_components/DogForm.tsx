@@ -199,7 +199,7 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
               <Label id="性別" />
               <div className="inline-block relative w-64">
                 <select
-                  className="block appearance-none border border-primary w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                  className="block appearance-none border border-primary bg-white text-gray-800 w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                   {...register("sex",{
                     validate: value => value !== "" ||"性別を選択してください。"
                   })}>
@@ -221,7 +221,7 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
               <Label id="犬種" />
               <div className="inline-block relative w-64">
                 <select 
-                  className="block appearance-none border border-primary w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                  className="block appearance-none border border-primary bg-white text-gray-800 w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                   {...register("breedId",{
                     validate: value => value !== "" ||"犬種を選択してください。"
                   })}>
