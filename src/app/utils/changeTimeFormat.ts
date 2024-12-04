@@ -1,1 +1,4 @@
-export const changeTimeFormat = (date: string) => new Date(date).toLocaleTimeString("ja-JP", { hour: 'numeric', minute: '2-digit'})
+export const changeTimeFormat = (date: string) => { 
+  const timePart = date.slice(11, 16); 
+  return timePart;
+};
