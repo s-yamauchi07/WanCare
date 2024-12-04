@@ -13,12 +13,13 @@ export const POST = async(request: NextRequest) => {
   try {
     const body = await request.json();
     const { careDate, amount, memo, imageKey, careListId }:Care = body;
+    const amountFloat = amount ? parseFloat(amount) : undefined;
     const currentUserId = data.user.id;
 
     await prisma.care.create({
       data: {
         careDate: formatDate(careDate),
-        amount,
+        amount: amountFloat,
         memo,
         imageKey,
         careListId,
