@@ -20,6 +20,7 @@ const SelectCare: React.FC = () => {
   const [careLists, setCareList] = useState<careList[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [careId, setCareId] = useState<string>("");
+  const [careName, setCareName] = useState<string>("");
 
   useEffect(()=> {
     if (!token) return;
@@ -37,9 +38,10 @@ const SelectCare: React.FC = () => {
     fetchCareLists();
   },[token]);
 
-  const ModalOpen = (careListId: string) => {
+  const ModalOpen = (careListId: string, careName: string) => {
     setOpenModal(true);
     setCareId(careListId);
+    setCareName(careName)
   }
 
   const ModalClose = () => {
@@ -56,7 +58,7 @@ const SelectCare: React.FC = () => {
           <ul className="flex flex-wrap gap-x-8 gap-y-4">
             {careLists.map((careList) => {
               return(
-                <li key={careList.name} className="flex flex-col items-center justify-center" onClick={() => ModalOpen(careList.id)}>
+                <li key={careList.name} className="flex flex-col items-center justify-center" onClick={() => ModalOpen(careList.id, careList.name)}>
                   <div className="rounded-full bg-primary text-main w-16 h-16 flex items-center justify-center">
                     <span className={`${careList.icon} w-10 h-10`}></span>
                   </div>
@@ -67,7 +69,7 @@ const SelectCare: React.FC = () => {
           </ul>
         </div>
         <ModalWindow show={openModal} onClose={ModalClose} >
-          <CareForm careId={careId} token={token} onClose={ModalClose}/>
+          <CareForm careId={careId} careName={careName} token={token} onClose={ModalClose} />
         </ModalWindow>
       </div>
     </div>

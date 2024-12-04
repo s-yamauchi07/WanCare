@@ -11,11 +11,12 @@ import { toast, Toaster } from "react-hot-toast";
 
 interface Props {
   careId: string;
+  careName: string
   token: string | null;
   onClose: () => void;
 }
 
-const CareForm: React.FC<Props> = ({careId, token, onClose } ) => {
+const CareForm: React.FC<Props> = ({careId, careName, token, onClose } ) => {
 
   const { register, handleSubmit, reset, watch, formState: { errors, isSubmitting } } = useForm<Care>();
   const imageKey = watch("imageKey");
@@ -103,6 +104,7 @@ const CareForm: React.FC<Props> = ({careId, token, onClose } ) => {
   return(
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <h2 className="text-2xl font-bold text-center text-primary mb-6">{careName}の記録</h2>
         <Input 
           id="careDate"
           labelName="日付"
