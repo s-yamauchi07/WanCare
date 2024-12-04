@@ -1,6 +1,6 @@
 export interface Care{
   careDate: string
-  amount?: number
+  amount?: string
   memo?: string
   imageKey?: string
   careListId: string
