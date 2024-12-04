@@ -8,7 +8,9 @@ export const GET = async(request: NextRequest) => {
   if (error) return handleError(error);
 
   const currentUserId = data.user.id;
-  const today = new Date();
+  const now = new Date();
+  const tzOffset = now.getTimezoneOffset() * 60000; // タイムゾーンオフセットをミリ秒で計算
+  const today = new Date(now.getTime() - tzOffset);
   today.setHours(0,0,0,0);
 
   try {
@@ -33,18 +35,6 @@ export const GET = async(request: NextRequest) => {
               },
             },
           },
-          // cares: {
-          //   select: {
-          //     careDate: true,
-          //     amount: true,
-          //     memo: true,
-          //     careList: {
-          //       select: {
-          //         name: true,
-          //       },
-          //     },
-          //   },
-          // },
         },
       }),
       
