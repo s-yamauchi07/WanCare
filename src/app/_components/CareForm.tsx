@@ -12,16 +12,16 @@ import { toast, Toaster } from "react-hot-toast";
 interface Props {
   careId: string;
   token: string | null;
+  onClose: () => void;
 }
 
-const CareForm: React.FC<Props> = ({careId, token } ) => {
+const CareForm: React.FC<Props> = ({careId, token, onClose } ) => {
 
   const { register, handleSubmit, reset, watch, formState: { errors, isSubmitting } } = useForm<Care>();
   const imageKey = watch("imageKey");
   const [uploadedKey, setUploadedKey] = useState<string | null>(null);
   const [thumbnailImageUrl, setThumbnailImageUrl] = useState<string | null>(null);
   const [isUploading, setUploading] = useState<boolean>(false);
-  console.log(thumbnailImageUrl)
 
   useEffect(()=> {
     const uploadImage = async () => {
@@ -67,7 +67,6 @@ const CareForm: React.FC<Props> = ({careId, token } ) => {
 
   
   const onSubmit: SubmitHandler<Care> = async (data) => {
-    console.log(data)
     const req = {
       ...data,
       imageKey: uploadedKey,
@@ -86,8 +85,13 @@ const CareForm: React.FC<Props> = ({careId, token } ) => {
       })
       
       if(response.status === 200) {
-        toast.success("投稿が完了しました");
         reset();
+        toast.success("投稿が完了しました");
+
+        // toast表示を待ってからClose
+        setTimeout(()=> {
+          onClose();
+        }, 2000);
       }
     } catch (error) {
       console.log(error);
@@ -114,6 +118,7 @@ const CareForm: React.FC<Props> = ({careId, token } ) => {
           id="amount"
           labelName="量/距離"
           type="number"
+          step="0.01"
           placeholder=""
           register={{...register("amount", {
             pattern: { 

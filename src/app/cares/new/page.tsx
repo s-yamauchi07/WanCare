@@ -67,7 +67,7 @@ const SelectCare: React.FC = () => {
           </ul>
         </div>
         <ModalWindow show={openModal} onClose={ModalClose} >
-          <CareForm careId={careId} token={token}/>
+          <CareForm careId={careId} token={token} onClose={ModalClose}/>
         </ModalWindow>
       </div>
     </div>
