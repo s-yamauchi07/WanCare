@@ -16,14 +16,38 @@ interface Props {
   onClose: () => void;
 }
 
-const CareForm: React.FC<Props> = ({careId, careName, token, onClose } ) => {
+interface CareUnit {
+  title :string;
+  unit: string;
+}
 
+const careUnitLists : { [key: string]: CareUnit } = {
+  ごはん: { title: "食べた量", unit: "g" },
+  水分: { title: "飲んだ量", unit: "ml" },
+  さんぽ: { title: "歩いた時間", unit: "分" },
+  おしっこ: { title:"回数", unit: "回" },
+  うんち: { title: "回数", unit: "回" },
+  体重: { title: "体重", unit: "kg" },
+  くすり: { title: "1回の量", unit: "錠" },
+  // ワクチン: { title: "ワクチン", unit: "回" },
+  // 通院: { unit: "回" },
+  // トリミング: { unit: "回" },
+  // シャンプー: { unit: "回" },
+  // 爪切り: { unit: "回" }
+};
+
+const CareForm: React.FC<Props> = ({careId, careName, token, onClose } ) => {
+  console.log(careName)
+  
   const { register, handleSubmit, reset, watch, formState: { errors, isSubmitting } } = useForm<Care>();
   const imageKey = watch("imageKey");
   const [uploadedKey, setUploadedKey] = useState<string | null>(null);
   const [thumbnailImageUrl, setThumbnailImageUrl] = useState<string | null>(null);
   const [isUploading, setUploading] = useState<boolean>(false);
-
+  const unit = careUnitLists[careName]?.unit;
+  const unitTitle = careUnitLists[careName]?.title;
+  const excludeFields = ["ワクチン", "通院", "トリミング", "シャンプー", "爪切り"];
+  
   useEffect(()=> {
     const uploadImage = async () => {
       if(!imageKey || imageKey.length === 0) return;
@@ -116,20 +140,23 @@ const CareForm: React.FC<Props> = ({careId, careName, token, onClose } ) => {
           error={errors.careDate?.message}
         />
 
-        <Input 
-          id="amount"
-          labelName="量/距離"
-          type="number"
-          step="0.01"
-          placeholder=""
-          register={{...register("amount", {
-            pattern: { 
-              value: /\d+(?:\.\d+)?/,
-              message: "数字で入力してください。"
-            }
-          })}}
-          error={errors.amount?.message}
-        />
+        {!excludeFields.includes(careName) && (
+          <Input 
+            id="amount"
+            labelName={`${unitTitle}(${unit})`}
+            type="number"
+            step="0.01"
+            placeholder={`○${unit}`}
+            register={{...register("amount", {
+              pattern: { 
+                value: /\d+(?:\.\d+)?/,
+                message: "数字で入力してください。"
+              }
+            })}}
+            error={errors.amount?.message}
+          />
+        )}
+
 
         <Textarea 
           id="memo"

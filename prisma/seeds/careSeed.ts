@@ -5,7 +5,7 @@ export async function careSeed(prisma: PrismaClient) {
   const careLists = [
     { name: "ごはん", icon: "i-tabler-dog-bowl" },
     { name: "水分", icon: "i-mdi-water" },
-    { name: "さんぼ", icon: "i-mdi-dog-side" },
+    { name: "さんぽ", icon: "i-mdi-dog-side" },
     { name: "おしっこ", icon: "i-mdi-toilet" },
     { name: "うんち", icon: "i-tabler-toilet-paper" },
     { name: "体重", icon: "i-icon-park-outline-weight" },
