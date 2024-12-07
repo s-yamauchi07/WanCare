@@ -29,11 +29,6 @@ const careUnitLists : { [key: string]: CareUnit } = {
   うんち: { title: "回数", unit: "回" },
   体重: { title: "体重", unit: "kg" },
   くすり: { title: "1回の量", unit: "錠" },
-  // ワクチン: { title: "ワクチン", unit: "回" },
-  // 通院: { unit: "回" },
-  // トリミング: { unit: "回" },
-  // シャンプー: { unit: "回" },
-  // 爪切り: { unit: "回" }
 };
 
 const CareForm: React.FC<Props> = ({careId, careName, token, onClose } ) => {
