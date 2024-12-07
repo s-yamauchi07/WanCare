@@ -11,8 +11,8 @@ import  Chart from "../_components/Chart"
 import IconButton from "../_components/IconButton";
 import  PageLoading  from "@/app/_components/PageLoading";
 import { supabase } from "../utils/supabase";
-import { changeDateFormat } from "../utils/changeDateFormat";
-import { changeTimeFormat } from "../utils/changeTimeFormat";
+import { changeDateFormat } from "../utils/ChangeDateTime/changeDateFormat";
+import { changeTimeFormat } from "../utils/ChangeDateTime/changeTimeFormat";
 import { WeightInfo } from "@/_types/weight";
 import { TodayCareInfo } from "@/_types/care";
 import { DogProfile } from "@/_types/dog";
@@ -60,8 +60,7 @@ const Home: React.FC = () => {
         }
 
         const {dogInfo, todayCare, dogWeight} = await response.json();
-
-        
+        console.log(todayCare)
 
         setDogInfo(dogInfo);
         setTodayCare(todayCare);

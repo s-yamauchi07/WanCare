@@ -2,16 +2,20 @@ import { handleError } from "@/app/utils/errorHandler";
 import { userAuthentication } from "@/app/utils/userAuthentication";
 import prisma from "@/libs/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { getISODateWithMidnightInJST } from "@/app/utils/ChangeDateTime/changeISOFormat";
 
 export const GET = async(request: NextRequest) => {
   const { data, error } = await userAuthentication(request);
   if (error) return handleError(error);
 
   const currentUserId = data.user.id;
-  const now = new Date();
-  const tzOffset = now.getTimezoneOffset() * 60000; // タイムゾーンオフセットをミリ秒で計算
-  const today = new Date(now.getTime() - tzOffset);
-  today.setHours(0,0,0,0);
+
+  const today = new Date();
+  const todayJST = getISODateWithMidnightInJST(today);
+
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+  const tomorrowJST = getISODateWithMidnightInJST(tomorrow);
 
   try {
     const [dogInfo, todayCare, dogWeight] = await Promise.all([
@@ -42,8 +46,8 @@ export const GET = async(request: NextRequest) => {
         where: {
           ownerId: currentUserId,
           careDate: {
-            gte: today,
-            lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+            gte: todayJST,
+            lt: tomorrowJST,
           },
         },
         include: {
