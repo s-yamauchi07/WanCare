@@ -46,6 +46,7 @@ export const PUT = async(request: NextRequest, { params } : { params: Promise<{ 
   const { id } = await params
   const  body  = await request.json();
   const { careDate, amount, memo, imageKey, careListId }:Care = body;
+  const amountFloat = amount ? parseFloat(amount) : undefined;
   const { data, error } = await userAuthentication(request);
   if (error) return handleError(error);
 
@@ -60,7 +61,7 @@ export const PUT = async(request: NextRequest, { params } : { params: Promise<{ 
       },
       data: {
         careDate: formatDate(careDate),
-        amount,
+        amount: amountFloat,
         memo,
         imageKey,
         careListId
