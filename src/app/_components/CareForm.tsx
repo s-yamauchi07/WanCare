@@ -188,7 +188,7 @@ const CareForm: React.FC<Props> = ({careId, careName, token, onClose } ) => {
         </div>
         <LoadingButton
           isSubmitting={isSubmitting}
-          buttonText="送信" 
+          buttonText="登録" 
         />
     </form>
     <Toaster />
