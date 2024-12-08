@@ -2,14 +2,20 @@ import { handleError } from "@/app/utils/errorHandler";
 import { userAuthentication } from "@/app/utils/userAuthentication";
 import prisma from "@/libs/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { getISODateWithMidnightInJST } from "@/app/utils/ChangeDateTime/changeISOFormat";
 
 export const GET = async(request: NextRequest) => {
   const { data, error } = await userAuthentication(request);
   if (error) return handleError(error);
 
   const currentUserId = data.user.id;
+
   const today = new Date();
-  today.setHours(0,0,0,0);
+  const todayJST = getISODateWithMidnightInJST(today);
+
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+  const tomorrowJST = getISODateWithMidnightInJST(tomorrow);
 
   try {
     const [dogInfo, todayCare, dogWeight] = await Promise.all([
@@ -33,18 +39,6 @@ export const GET = async(request: NextRequest) => {
               },
             },
           },
-          // cares: {
-          //   select: {
-          //     careDate: true,
-          //     amount: true,
-          //     memo: true,
-          //     careList: {
-          //       select: {
-          //         name: true,
-          //       },
-          //     },
-          //   },
-          // },
         },
       }),
       
@@ -52,8 +46,8 @@ export const GET = async(request: NextRequest) => {
         where: {
           ownerId: currentUserId,
           careDate: {
-            gte: today,
-            lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+            gte: todayJST,
+            lt: tomorrowJST,
           },
         },
         include: {

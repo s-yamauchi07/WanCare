@@ -12,7 +12,7 @@ const PageLoading: React.FC = () => {
         wrapperStyle={{}}
         wrapperClass=""
       />
-      <h2>Loading...</h2>
+      <h2 className="text-gray-800">Loading...</h2>
     </div>
   )
 }

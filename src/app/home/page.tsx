@@ -11,8 +11,8 @@ import  Chart from "../_components/Chart"
 import IconButton from "../_components/IconButton";
 import  PageLoading  from "@/app/_components/PageLoading";
 import { supabase } from "../utils/supabase";
-import { changeDateFormat } from "../utils/changeDateFormat";
-import { changeTimeFormat } from "../utils/changeTimeFormat";
+import { changeDateFormat } from "../utils/ChangeDateTime/changeDateFormat";
+import { changeTimeFormat } from "../utils/ChangeDateTime/changeTimeFormat";
 import { WeightInfo } from "@/_types/weight";
 import { TodayCareInfo } from "@/_types/care";
 import { DogProfile } from "@/_types/dog";
@@ -43,6 +43,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {  
     if(!token || !session) return;
+    console.log(token)
 
     const fetchDogInfo = async() => {
       try {
@@ -59,6 +60,7 @@ const Home: React.FC = () => {
         }
 
         const {dogInfo, todayCare, dogWeight} = await response.json();
+        console.log(todayCare)
 
         setDogInfo(dogInfo);
         setTodayCare(todayCare);
@@ -154,7 +156,7 @@ const Home: React.FC = () => {
                   return(
                     <li key={care.id} className="border rounded-full py-2 px-4 shadow-md">
                       <div className="flex gap-2">
-                        <span className={`i-${care.careList.icon} w-5 h-5`}></span>
+                        <span className={`${care.careList.icon} w-5 h-5`}></span>
                         <span className="w-24">{care.careList.name}</span>
                         <span>{changeTimeFormat(care.careDate)}</span>
                       </div>

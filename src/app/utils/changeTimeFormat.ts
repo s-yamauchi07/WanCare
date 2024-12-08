@@ -1,1 +1,0 @@
-export const changeTimeFormat = (date: string) => new Date(date).toLocaleTimeString("ja-JP", { hour: 'numeric', minute: '2-digit'})

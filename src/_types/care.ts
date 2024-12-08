@@ -1,9 +1,9 @@
 export interface Care{
-  careDate: string
-  amount?: number
-  memo?: string
-  imageKey?: string
-  careListId: string
+  careDate: string;
+  amount?: string;
+  memo?: string;
+  imageKey?: string;
+  careListId: string;
 }
 
 export interface TodayCareInfo {

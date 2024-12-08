@@ -8,19 +8,21 @@ interface InputProps {
   id: string
   labelName: string
   type: string
+  step?: string
   placeholder: string
   register: UseFormRegisterReturn
   error?: string
 }
 
-const Input: React.FC<InputProps> = ({ id, labelName, type, placeholder, register, error }) => {
+const Input: React.FC<InputProps> = ({ id, labelName, type, placeholder, step, register, error }) => {
   return(
     <div className="mb-6">
       <Label id={labelName}/>
       <input 
-        className="border border-primary rounded w-full py-2 px-3 border-primary bg-white text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        className="appearance-none border border-primary rounded w-full h-10 py-2 px-3 border-primary bg-white text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
         id={id}
         type={type}
+        step={step}
         placeholder={placeholder}
         {...register} 
       />
