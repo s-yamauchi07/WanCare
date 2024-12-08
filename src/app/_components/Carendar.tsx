@@ -1,15 +1,49 @@
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid' 
 
-const Calendar: () => JSX.Element = () => {
+interface CareList { 
+  id: string;
+  careDate: string;
+  amount?: number | null;
+  memo?: string | null;
+  imageKey: string | null;
+  careList: {
+    name: string;
+    icon: string;
+  }
+}
+
+interface CalendarProps { 
+  cares: CareList[];
+}
+
+const Calendar: React.FC<CalendarProps> = ({ cares }) => {
+  const originalList = cares;
+  // console.log(cares)
+
+  // 時間の表示を変換
+  const changeCareLists = (cares) => {
+    return cares.map(care => {
+      care.date = care.careDate.slice(0, 10); // 日付変換
+      care.title = care.careList.name;
+      return care;
+    });
+  }
+
+  const updatedCares = changeCareLists(originalList);
+  console.log(updatedCares)
+
+
+
   return (
     <FullCalendar
       plugins={[ dayGridPlugin ]}
+      timeZone="UTC"
       initialView="dayGridMonth"
-      events={[
-        { title: 'event 1', date: '2024-12-08', backgroundColor: "blue" },
-        { title: 'event 2', date: '2024-12-10', backgroundColor: "red" }
-      ]}
+      contentHeight="auto"
+      dayCellContent={ (e) => e.dayNumberText = e.dayNumberText.replace('日', '')} // カレンダーから日の文字を削除
+      locale="ja"
+      events={updatedCares}
     />
   )
 }
