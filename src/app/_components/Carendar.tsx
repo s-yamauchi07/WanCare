@@ -17,23 +17,35 @@ interface CalendarProps {
   cares: CareList[];
 }
 
+interface ChangeCareLists {
+  id: string;
+  date: string;
+  title: string;
+  amount?: number | null;
+  memo?: string | null;
+  imageKey: string | null;
+  careIcon: string;
+}
+
 const Calendar: React.FC<CalendarProps> = ({ cares }) => {
   const originalList = cares;
   // console.log(cares)
 
   // 時間の表示を変換
-  const changeCareLists = (cares) => {
-    return cares.map(care => {
-      care.date = care.careDate.slice(0, 10); // 日付変換
-      care.title = care.careList.name;
-      return care;
-    });
+  const changeCareLists = (cares: CareList[]) : ChangeCareLists[] => {
+    return cares.map(care => ({
+      id: care.id,
+      date: care.careDate.slice(0, 10), // 日付変換
+      title: care.careList.name,
+      amount: care.amount,
+      memo: care.memo,
+      imageKey: care.imageKey,
+      careName: care.careList.name,
+      careIcon: care.careList.icon,
+    }));
   }
 
   const updatedCares = changeCareLists(originalList);
-  console.log(updatedCares)
-
-
 
   return (
     <FullCalendar
