@@ -1,5 +1,8 @@
-import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid' 
+import React, { useState } from "react";
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid'; 
+import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
+
 
 interface CareList { 
   id: string;
@@ -29,9 +32,9 @@ interface ChangeCareLists {
 
 const Calendar: React.FC<CalendarProps> = ({ cares }) => {
   const originalList = cares;
-  // console.log(cares)
+  const [selectEvent, setSelectEvent] = useState<ChangeCareLists[]>([]);
 
-  // 時間の表示を変換
+  // カレンダー表示用の新しい配列を作成
   const changeCareLists = (cares: CareList[]) : ChangeCareLists[] => {
     return cares.map(care => ({
       id: care.id,
@@ -47,16 +50,40 @@ const Calendar: React.FC<CalendarProps> = ({ cares }) => {
 
   const updatedCares = changeCareLists(originalList);
 
+  const handleDateClick = (e: DateClickArg) => {
+    const eventLists = updatedCares.filter((d) => d.date == e.dateStr)
+    setSelectEvent(eventLists);
+    console.log(eventLists)
+  }
+
   return (
-    <FullCalendar
-      plugins={[ dayGridPlugin ]}
-      timeZone="UTC"
-      initialView="dayGridMonth"
-      contentHeight="auto"
-      dayCellContent={ (e) => e.dayNumberText = e.dayNumberText.replace('日', '')} // カレンダーから日の文字を削除
-      locale="ja"
-      events={updatedCares}
-    />
+    <>
+      <FullCalendar
+        plugins={[ dayGridPlugin,interactionPlugin]}
+        timeZone="UTC"
+        initialView="dayGridMonth"
+        contentHeight="auto"
+        dayCellContent={ (e) => e.dayNumberText = e.dayNumberText.replace('日', '')} // カレンダーから日の文字を削除
+        locale="ja"
+        showNonCurrentDates={false}
+        dateClick={handleDateClick}
+        events={updatedCares}
+      />
+
+
+      <div>
+        <h3>記録</h3>
+        <ul>
+          {selectEvent.map((event) => {
+            return(
+              <li key={event.id}>
+                {event.title}
+              </li>
+            )
+          })}
+        </ul>
+      </div>
+    </>
   )
 }
 
