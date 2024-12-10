@@ -12,7 +12,6 @@ const CareIndex: React.FC = () => {
   const { token, session } = useSupabaseSession();
   const [cares, setCares] = useState([]);
 
-
   useEffect(() => {
     if(!token || !session) return;
     console.log(token)
@@ -43,13 +42,15 @@ const CareIndex: React.FC = () => {
   return(
     <>
     <div className="flex justify-center">
-      <div className="max-w-64 my-20 flex flex-col items-center">
+      <div className="max-w-64 mt-20 flex flex-col items-center">
         <h2 className="text-primary text-center text-2xl font-bold mb-10">お世話ログ</h2>
       </div>
     </div>
-    <div className="p-4">
-      <Calendar cares={cares} />
-    </div>
+      {/* カレンダーエリア */}
+      <div className="p-4 ">
+        <Calendar cares={cares} />
+      </div>
+
     <Toaster />
     </>
   )
