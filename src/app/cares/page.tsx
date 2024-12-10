@@ -47,7 +47,7 @@ const CareIndex: React.FC = () => {
       </div>
     </div>
       {/* カレンダーエリア */}
-      <div className="p-4 ">
+      <div className="p-4">
         <Calendar cares={cares} />
       </div>
 

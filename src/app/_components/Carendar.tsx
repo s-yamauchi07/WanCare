@@ -57,12 +57,13 @@ const Calendar: React.FC<CalendarProps> = ({ cares }) => {
   }
 
   return (
-    <>
+    <div className="h-screen overflow-y-auto">
       <FullCalendar
         plugins={[ dayGridPlugin,interactionPlugin]}
         timeZone="UTC"
         initialView="dayGridMonth"
         contentHeight="auto"
+        dayMaxEvents={3} 
         dayCellContent={ (e) => e.dayNumberText = e.dayNumberText.replace('日', '')} // カレンダーから日の文字を削除
         locale="ja"
         showNonCurrentDates={false}
@@ -71,8 +72,8 @@ const Calendar: React.FC<CalendarProps> = ({ cares }) => {
       />
 
 
-      <div>
-        <h3>記録</h3>
+      <div className="py-10">
+        <h3 className="text-primary text-start text-xl font-bold mb-5">記録</h3>
         <ul>
           {selectEvent.map((event) => {
             return(
@@ -83,7 +84,7 @@ const Calendar: React.FC<CalendarProps> = ({ cares }) => {
           })}
         </ul>
       </div>
-    </>
+    </div>
   )
 }
 
