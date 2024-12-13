@@ -39,19 +39,21 @@ const CareIndex: React.FC = () => {
     fetchCareLists();
   }, [token, session])
 
+  
+
   return(
     <>
-    <div className="flex justify-center">
-      <div className="max-w-64 mt-20 flex flex-col items-center">
-        <h2 className="text-primary text-center text-2xl font-bold mb-10">お世話ログ</h2>
+      <div className="flex justify-center">
+        <div className="max-w-64 mt-20 flex flex-col items-center">
+          <h2 className="text-primary text-center text-2xl font-bold mb-10">お世話ログ</h2>
+        </div>
       </div>
-    </div>
       {/* カレンダーエリア */}
-      <div className="p-4">
+      <div className="p-4 pb-20 win-h-screen overflow-y-auto">
         <Calendar cares={cares} />
       </div>
 
-    <Toaster />
+      <Toaster />
     </>
   )
 }

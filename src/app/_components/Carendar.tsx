@@ -23,6 +23,7 @@ interface CalendarProps {
 interface ChangeCareLists {
   id: string;
   date: string;
+  time: string;
   title: string;
   amount?: number | null;
   memo?: string | null;
@@ -36,9 +37,11 @@ const Calendar: React.FC<CalendarProps> = ({ cares }) => {
 
   // カレンダー表示用の新しい配列を作成
   const changeCareLists = (cares: CareList[]) : ChangeCareLists[] => {
+    console.log(cares)
     return cares.map(care => ({
       id: care.id,
-      date: care.careDate.slice(0, 10), // 日付変換
+      date: care.careDate.slice(0, 10),
+      time: care.careDate.slice(12,16),
       title: care.careList.name,
       amount: care.amount,
       memo: care.memo,
@@ -56,8 +59,10 @@ const Calendar: React.FC<CalendarProps> = ({ cares }) => {
     console.log(eventLists)
   }
 
+  // カレンダー表示のカスタマイズ
+
   return (
-    <div className="h-screen overflow-y-auto">
+    <>
       <FullCalendar
         plugins={[ dayGridPlugin,interactionPlugin]}
         timeZone="UTC"
@@ -71,20 +76,23 @@ const Calendar: React.FC<CalendarProps> = ({ cares }) => {
         events={updatedCares}
       />
 
-
       <div className="py-10">
         <h3 className="text-primary text-start text-xl font-bold mb-5">記録</h3>
-        <ul>
+        <ul className="flex flex-col gap-1">
           {selectEvent.map((event) => {
             return(
-              <li key={event.id}>
-                {event.title}
+              <li key={event.id} className="border rounded-full py-2 px-4 shadow-md flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <span className={`${event.careIcon} w-5 h-5`}></span>
+                  <span className="min-w-20">{event.title}</span>
+                </div>
+                <span>{event.time}</span>
               </li>
             )
           })}
         </ul>
       </div>
-    </div>
+    </>
   )
 }
 
