@@ -3,7 +3,6 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid'; 
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 
-
 interface CareList { 
   id: string;
   careDate: string;
@@ -34,7 +33,7 @@ interface ChangeCareLists {
 const Calendar: React.FC<CalendarProps> = ({ cares }) => {
   const originalList = cares;
   const [selectEvent, setSelectEvent] = useState<ChangeCareLists[]>([]);
-
+  
   // カレンダー表示用の新しい配列を作成
   const changeCareLists = (cares: CareList[]) : ChangeCareLists[] => {
     console.log(cares)
@@ -50,8 +49,8 @@ const Calendar: React.FC<CalendarProps> = ({ cares }) => {
       careIcon: care.careList.icon,
     }));
   }
-
   const updatedCares = changeCareLists(originalList);
+
 
   const handleDateClick = (e: DateClickArg) => {
     const eventLists = updatedCares.filter((d) => d.date == e.dateStr)
@@ -59,13 +58,12 @@ const Calendar: React.FC<CalendarProps> = ({ cares }) => {
     console.log(eventLists)
   }
 
-  // カレンダー表示のカスタマイズ
-
   return (
     <>
       <FullCalendar
         plugins={[ dayGridPlugin,interactionPlugin]}
         timeZone="UTC"
+        headerToolbar={{ start: "prev", center: "title", end: "next" }}
         initialView="dayGridMonth"
         contentHeight="auto"
         dayMaxEvents={3} 
