@@ -49,7 +49,7 @@ const CareIndex: React.FC = () => {
         </div>
       </div>
       {/* カレンダーエリア */}
-      <div className="p-4 pb-20 win-h-screen overflow-y-auto">
+      <div className="p-4 pb-20 win-h-screen overflow-y-auto text-gray-800">
         <Calendar cares={cares} />
       </div>
 

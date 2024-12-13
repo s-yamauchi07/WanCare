@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid'; 
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
+import { parseISO, format } from 'date-fns'
+import IconButton from "./IconButton";
 
 interface CareList { 
   id: string;
@@ -39,8 +41,8 @@ const Calendar: React.FC<CalendarProps> = ({ cares }) => {
     console.log(cares)
     return cares.map(care => ({
       id: care.id,
-      date: care.careDate.slice(0, 10),
-      time: care.careDate.slice(12,16),
+      date: format(parseISO(care.careDate), "yyyy-MM-dd"),
+      time: format(parseISO(care.careDate), "HH:mm"),
       title: care.careList.name,
       amount: care.amount,
       memo: care.memo,
@@ -66,20 +68,24 @@ const Calendar: React.FC<CalendarProps> = ({ cares }) => {
         headerToolbar={{ start: "prev", center: "title", end: "next" }}
         initialView="dayGridMonth"
         contentHeight="auto"
-        dayMaxEvents={3} 
+        dayMaxEvents={2} 
         dayCellContent={ (e) => e.dayNumberText = e.dayNumberText.replace('日', '')} // カレンダーから日の文字を削除
         locale="ja"
         showNonCurrentDates={false}
         dateClick={handleDateClick}
         events={updatedCares}
+        eventColor={"#15A083"}
       />
 
       <div className="py-10">
-        <h3 className="text-primary text-start text-xl font-bold mb-5">記録</h3>
+        <div className="flex justify-between items-stretch mb-4">
+          <h3 className="text-primary text-start text-2xl font-bold">記録</h3>
+          <IconButton iconName="i-material-symbols-add-rounded" buttonText="記録をつける" />
+        </div>
         <ul className="flex flex-col gap-1">
           {selectEvent.map((event) => {
             return(
-              <li key={event.id} className="border rounded-full py-2 px-4 shadow-md flex items-center gap-4">
+              <li key={event.id} className="border text-gray-800 rounded-full py-2 px-4 shadow-md flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <span className={`${event.careIcon} w-5 h-5`}></span>
                   <span className="min-w-20">{event.title}</span>

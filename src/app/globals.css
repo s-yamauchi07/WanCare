@@ -26,3 +26,9 @@ body {
     text-wrap: balance;
   }
 }
+
+
+/* fullCalendar用のcustomCSS */
+.fc-event-title, .fc-list-event-title {
+  font-size: 11px;
+}
