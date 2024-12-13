@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid'; 
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
-import { parseISO, format } from 'date-fns'
+import { parseISO, format, startOfToday } from 'date-fns'
 import IconButton from "./IconButton";
 
 interface CareList { 
@@ -35,10 +35,8 @@ interface ChangeCareLists {
 const Calendar: React.FC<CalendarProps> = ({ cares }) => {
   const originalList = cares;
   const [selectEvent, setSelectEvent] = useState<ChangeCareLists[]>([]);
-  
   // カレンダー表示用の新しい配列を作成
   const changeCareLists = (cares: CareList[]) : ChangeCareLists[] => {
-    console.log(cares)
     return cares.map(care => ({
       id: care.id,
       date: format(parseISO(care.careDate), "yyyy-MM-dd"),
@@ -53,11 +51,16 @@ const Calendar: React.FC<CalendarProps> = ({ cares }) => {
   }
   const updatedCares = changeCareLists(originalList);
 
+  useEffect(() => {
+    const today = format(startOfToday(), "yyyy-MM-dd");
+    const todaysEvents = updatedCares.filter((d) => d.date === today);
+    setSelectEvent(todaysEvents);
+  }, [cares]);
+  
 
   const handleDateClick = (e: DateClickArg) => {
     const eventLists = updatedCares.filter((d) => d.date == e.dateStr)
     setSelectEvent(eventLists);
-    console.log(eventLists)
   }
 
   return (
