@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Sawarabi_Gothic } from "next/font/google";
 import Menu from "@/app/_components/Menu";
+import './globals.css';
 
 const SawarabiGothic = Sawarabi_Gothic({
   weight: "400",
