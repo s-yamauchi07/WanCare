@@ -4,6 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { parseISO, format, startOfToday } from 'date-fns'
 import IconButton from "./IconButton";
+import Link from "next/link";
 
 interface CareList { 
   id: string;
@@ -83,7 +84,9 @@ const Calendar: React.FC<CalendarProps> = ({ cares }) => {
       <div className="py-10">
         <div className="flex justify-between items-stretch mb-4">
           <h3 className="text-primary text-start text-2xl font-bold">記録</h3>
-          <IconButton iconName="i-material-symbols-add-rounded" buttonText="記録をつける" />
+          <Link href="/cares/new">
+            <IconButton iconName="i-material-symbols-add-rounded" buttonText="記録をつける" />
+          </Link>
         </div>
         <ul className="flex flex-col gap-1">
           {selectEvent.map((event) => {
