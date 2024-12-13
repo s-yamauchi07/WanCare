@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid'; 
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
-import { parseISO, format, startOfToday } from 'date-fns'
+import { startOfToday } from 'date-fns'
+import { format } from "date-fns-tz";
 import IconButton from "../../_components/IconButton";
 import Link from "next/link";
+import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
 
 interface CareList { 
   id: string;
@@ -40,8 +42,8 @@ const Calendar: React.FC<CalendarProps> = ({ cares }) => {
   const changeCareLists = (cares: CareList[]) : ChangeCareLists[] => {
     return cares.map(care => ({
       id: care.id,
-      date: format(parseISO(care.careDate), "yyyy-MM-dd"),
-      time: format(parseISO(care.careDate), "HH:mm"),
+      date: changeFromISOtoDate(care.careDate, "date"),
+      time: changeFromISOtoDate(care.careDate, "time"),
       title: care.careList.name,
       amount: care.amount,
       memo: care.memo,
