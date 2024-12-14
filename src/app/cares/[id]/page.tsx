@@ -4,9 +4,9 @@ import React, { useEffect, useState } from "react";
 import { useParams  } from "next/navigation";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { usePreviewImage } from "@/_hooks/usePreviewImage";
-import { parseISO } from 'date-fns'
-import { format } from "date-fns-tz";
+import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
 import Image from "next/image";
+import IconButton from "@/app/_components/IconButton";
 
 interface CareDetail {
   id: string;
@@ -21,12 +21,30 @@ interface CareDetail {
   careList: { name: string, icon: string };
 }
 
+interface CareUnit {
+  title :string;
+  unit: string;
+}
+
+const careUnitLists : { [key: string]: CareUnit } = {
+  ごはん: { title: "食べた量", unit: "g" },
+  水分: { title: "飲んだ量", unit: "ml" },
+  さんぽ: { title: "歩いた時間", unit: "分" },
+  おしっこ: { title:"回数", unit: "回" },
+  うんち: { title: "回数", unit: "回" },
+  体重: { title: "体重", unit: "kg" },
+  くすり: { title: "1回の量", unit: "錠" },
+};
+
 const CareDetail: React.FC = () => {
   const params = useParams();
   const { id } = params;
   const { token } = useSupabaseSession();
   const [care, setCare] = useState<CareDetail | null>(null);
   const careImage = usePreviewImage(care?.imageKey ?? null, "care_img");
+  const [careTitle, setTitle] = useState<string>("");
+  const [careUnit, setUnit] = useState<string>("");
+
 
   useEffect(() => {
     if (!token) return;
@@ -42,6 +60,8 @@ const CareDetail: React.FC = () => {
       
         const { care } = await res.json();
         setCare(care);
+        setTitle(careUnitLists[care.careList.name].title);
+        setUnit(careUnitLists[care.careList.name].unit);
       } catch (error) {
         console.log(error);
       }
@@ -53,36 +73,54 @@ const CareDetail: React.FC = () => {
 
   return(
     <div className="flex justify-center text-gray-800">
-      <div className="min-w-64 my-20 flex flex-col items-center">
+      <div className="min-w-64 my-20 flex flex-col items-center gap-6 px-4">
         <h2 className="text-2xl font-bold text-center text-primary mb-6">お世話の詳細</h2>
-        <div className="w-full flex flex-col gap-4">
+        <div className="w-full flex flex-col gap-6">
           <div>
-            <p className="text-primary font-bold text-lg">日付</p>
-            <p>{format(parseISO(care.careDate), "yyyy/MM/dd HH:mm", { timeZone: 'Asia/Tokyo'} )}</p>
+            <p className="text-primary font-bold text-xl mb-2">日付</p>
+            <p>{changeFromISOtoDate(care.careDate, "dateTime")}</p>
+          </div>
+          {careTitle && (
+            <div>
+              <p className="text-primary font-bold text-xl mb-2">{care.careList.name}</p>
+              <div className="flex gap-2">
+                <span>{careTitle}</span> 
+                <div>
+                  <span>
+                    {care.amount}
+                    {careUnit}
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+          <div>
+            <p className="text-primary font-bold text-xl mb-2">メモ</p>
+            <p className="bg-white w-full h-20 rounded-lg shadow p-2">{care.memo ? care.memo : "記録なし"}</p>
           </div>
           <div>
-            <p className="text-primary font-bold text-lg">{care.careList.name}</p>
-            <p>{care.amount ? care.amount : "記録なし"}</p>
-          </div>
-          <div>
-            <p className="text-primary font-bold text-lg">メモ</p>
-            <p className="bg-white w-full h-20">{care.memo ? care.memo : "記録なし"}</p>
-          </div>
-          <div>
+            <p className="text-primary font-bold text-xl mb-2">写真</p>
             {careImage ? (
-              <Image 
-                src={careImage}
-                alt="careImage"
-                width={320}
-                height={400}
-              />
-            ) : (
-              <p>NoImage...</p>
-            )}
+                <Image 
+                  src={careImage}
+                  alt="careImage"
+                  width={256}
+                  height={144}
+                />
+              ) : (
+                <div className="w-full h-40 border border-dashed border-primary rounded-lg shadow flex flex-col items-center justify-center">
+                  <span className="i-tabler-dog w-10 h-10"></span>
+                  <p>No Image</p>
+                </div>
+              )
+            }
           </div>
         </div>
-
-        </div>
+        <IconButton 
+          iconName="i-material-symbols-light-edit-square-outline"
+          buttonText="記録を編集"
+        />
+      </div>
 
     </div>
   )
