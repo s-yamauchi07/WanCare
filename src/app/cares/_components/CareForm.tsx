@@ -10,6 +10,7 @@ import { careUnitLists } from "@/_constants/careUnitLists";
 import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
 import { v4 as uuidv4 } from "uuid";
 import { toast, Toaster } from "react-hot-toast";
+import { useEditPreviewImage } from "@/_hooks/useEditPreviewImage";
 
 interface CareDetail {
   id: string;
@@ -38,7 +39,8 @@ const CareForm: React.FC<CareFormProps> = ({careId, careName, token, isEdit, car
   const { register, handleSubmit, reset, watch, setValue, formState: { errors, isSubmitting } } = useForm<Care>();
   const imageKey = watch("imageKey");
   const [uploadedKey, setUploadedKey] = useState<string | null>(null);
-  const [thumbnailImageUrl, setThumbnailImageUrl] = useState<string | null>(null);
+  // const [thumbnailImageUrl, setThumbnailImageUrl] = useState<string | null>(null);
+  const thumbnailImageUrl = useEditPreviewImage(uploadedKey ?? null,"care_img", careInfo?.imageKey ?? null)
   const [isUploading, setUploading] = useState<boolean>(false);
   const unit = careUnitLists[careName]?.unit;
   const unitTitle = careUnitLists[careName]?.title;
@@ -71,21 +73,6 @@ const CareForm: React.FC<CareFormProps> = ({careId, careName, token, isEdit, car
     }
     uploadImage();
   },[imageKey]);
-
-  // 画像のプレビュー
-  useEffect(() => {
-    const fetchImage = async(img: string) => {
-
-      const { data: { publicUrl}, } = await supabase.storage.from("care_img").getPublicUrl(img);
-        setThumbnailImageUrl(publicUrl);
-      }
-
-      if(uploadedKey) {
-        fetchImage(uploadedKey);
-      } else if (careInfo?.imageKey) {
-        fetchImage(careInfo.imageKey)
-      }
-  }, [uploadedKey, careInfo?.imageKey]);
 
   useEffect(() => {
     if(isEdit && careInfo) {
