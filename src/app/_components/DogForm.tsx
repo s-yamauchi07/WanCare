@@ -62,9 +62,9 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
         })
         const { breeds } = await res.json();
         setBreeds(breeds);
-        setLoading(false);
       } catch(error) {
         console.log(error);
+      } finally {
         setLoading(false);
       }
     }

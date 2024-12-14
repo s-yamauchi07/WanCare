@@ -7,6 +7,7 @@ import { usePreviewImage } from "@/_hooks/usePreviewImage";
 import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
 import Image from "next/image";
 import IconButton from "@/app/_components/IconButton";
+import PageLoading from "@/app/_components/PageLoading";
 
 interface CareDetail {
   id: string;
@@ -44,7 +45,7 @@ const CareDetail: React.FC = () => {
   const careImage = usePreviewImage(care?.imageKey ?? null, "care_img");
   const [careTitle, setTitle] = useState<string>("");
   const [careUnit, setUnit] = useState<string>("");
-
+  const [isLoading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (!token) return;
@@ -64,6 +65,8 @@ const CareDetail: React.FC = () => {
         setUnit(careUnitLists[care.careList.name].unit);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     }
     fetchCare();
@@ -72,57 +75,64 @@ const CareDetail: React.FC = () => {
   if (!care) return;
 
   return(
-    <div className="flex justify-center text-gray-800">
-      <div className="min-w-64 my-20 flex flex-col items-center gap-6 px-4">
-        <h2 className="text-2xl font-bold text-center text-primary mb-6">お世話の詳細</h2>
-        <div className="w-full flex flex-col gap-6">
-          <div>
-            <p className="text-primary font-bold text-xl mb-2">日付</p>
-            <p>{changeFromISOtoDate(care.careDate, "dateTime")}</p>
-          </div>
-          {careTitle && (
+    <>
+      {!isLoading ? (
+        <div className="flex justify-center text-gray-800">
+        <div className="min-w-64 my-20 flex flex-col items-center gap-6 px-4">
+          <h2 className="text-2xl font-bold text-center text-primary mb-6">お世話の詳細</h2>
+          <div className="w-full flex flex-col gap-6">
             <div>
-              <p className="text-primary font-bold text-xl mb-2">{care.careList.name}</p>
-              <div className="flex gap-2">
-                <span>{careTitle}</span> 
-                <div>
-                  <span>
-                    {care.amount}
-                    {careUnit}
-                  </span>
+              <p className="text-primary font-bold text-xl mb-2">日付</p>
+              <p>{changeFromISOtoDate(care.careDate, "dateTime")}</p>
+            </div>
+            {careTitle && (
+              <div>
+                <p className="text-primary font-bold text-xl mb-2">{care.careList.name}</p>
+                <div className="flex gap-2">
+                  <span>{careTitle}</span> 
+                  <div>
+                    <span>
+                      {care.amount}
+                      {careUnit}
+                    </span>
+                  </div>
                 </div>
               </div>
+            )}
+            <div>
+              <p className="text-primary font-bold text-xl mb-2">メモ</p>
+              <p className="bg-white w-full h-20 rounded-lg shadow p-2">{care.memo ? care.memo : "記録なし"}</p>
             </div>
-          )}
-          <div>
-            <p className="text-primary font-bold text-xl mb-2">メモ</p>
-            <p className="bg-white w-full h-20 rounded-lg shadow p-2">{care.memo ? care.memo : "記録なし"}</p>
+            <div>
+              <p className="text-primary font-bold text-xl mb-2">写真</p>
+              {careImage ? (
+                  <Image 
+                    src={careImage}
+                    alt="careImage"
+                    width={256}
+                    height={144}
+                  />
+                ) : (
+                  <div className="w-full h-40 border border-dashed border-primary rounded-lg shadow flex flex-col items-center justify-center">
+                    <span className="i-tabler-dog w-10 h-10"></span>
+                    <p>No Image</p>
+                  </div>
+                )
+              }
+            </div>
           </div>
-          <div>
-            <p className="text-primary font-bold text-xl mb-2">写真</p>
-            {careImage ? (
-                <Image 
-                  src={careImage}
-                  alt="careImage"
-                  width={256}
-                  height={144}
-                />
-              ) : (
-                <div className="w-full h-40 border border-dashed border-primary rounded-lg shadow flex flex-col items-center justify-center">
-                  <span className="i-tabler-dog w-10 h-10"></span>
-                  <p>No Image</p>
-                </div>
-              )
-            }
-          </div>
+          <IconButton 
+            iconName="i-material-symbols-light-edit-square-outline"
+            buttonText="記録を編集"
+          />
         </div>
-        <IconButton 
-          iconName="i-material-symbols-light-edit-square-outline"
-          buttonText="記録を編集"
-        />
       </div>
+      ) : (
+        <PageLoading />
+      )};
+    </>
 
-    </div>
+
   )
 }
 
