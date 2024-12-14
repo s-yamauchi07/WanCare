@@ -31,16 +31,7 @@ interface DogFormProps {
 const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
   useRouteGuard();
   
-  const { register, handleSubmit, reset, watch, setValue, formState: { errors, isSubmitting}} = useForm<DogRequest>({
-    defaultValues: {
-      imageKey: dogInfo?.imageKey || "",
-      breedId: dogInfo?.breedId || "",
-      sex: dogInfo?.sex || "",
-      name: dogInfo?.name || "",
-      birthDate: dogInfo?.birthDate?.split('T')[0] || "",
-      adoptionDate: dogInfo?.adoptionDate?.split('T')[0] || "",
-    }
-  });
+  const { register, handleSubmit, reset, watch, setValue, formState: { errors, isSubmitting}} = useForm<DogRequest>();
   const { token } = useSupabaseSession();
   const router = useRouter();
   const [breeds, setBreeds] = useState<Breed[]>([]);
