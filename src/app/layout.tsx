@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Sawarabi_Gothic } from "next/font/google";
+import { Zen_Maru_Gothic } from "next/font/google";
 import Menu from "@/app/_components/Menu";
 import './globals.css';
 
-const SawarabiGothic = Sawarabi_Gothic({
-  weight: "400",
-  subsets: ["latin"]
-}) 
+const ZenMaruGothic = Zen_Maru_Gothic({
+    weight: "400",
+    subsets: ["latin"]
+  }) 
+  
 
 export const metadata: Metadata = {
   title: "WanCare",
@@ -22,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body
-        className={`${SawarabiGothic.className} antialiased min-h-screen flex justify-center`}>
+        className={`${ZenMaruGothic.className} antialiased min-h-screen flex justify-center`}>
           <div className="w-main min-h-full bg-main">
             {children}
           </div>
