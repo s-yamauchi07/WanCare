@@ -35,6 +35,7 @@ const CareDetail: React.FC = () => {
   const [careUnit, setUnit] = useState<string>("");
   const [isLoading, setLoading] = useState<boolean>(true);
   const [openModal, setOpenModal] = useState(false);
+  const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(() => {
     if (!token) return;
@@ -59,10 +60,11 @@ const CareDetail: React.FC = () => {
       }
     }
     fetchCare();
-  }, [id, token]);
+  }, [id, token, refresh]);
 
   const ModalClose = () => {
     setOpenModal(false);
+    setRefresh(!refresh);
   }
 
   if (!care) return;

@@ -100,7 +100,7 @@ const CareForm: React.FC<CareFormProps> = ({careId, careName, token, isEdit, car
   const onSubmit: SubmitHandler<Care> = async (data) => {
     const req = {
       ...data,
-      imageKey: uploadedKey,
+      imageKey: uploadedKey || careInfo?.imageKey,
       careListId: careId,
     }
     
