@@ -24,3 +24,8 @@ export interface CareLists {
   memo: string;
   careList: { name: string }
 }
+
+export interface CareUnit {
+  title :string;
+  unit: string;
+}

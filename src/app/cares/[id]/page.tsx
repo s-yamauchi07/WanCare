@@ -5,6 +5,7 @@ import { useParams  } from "next/navigation";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { usePreviewImage } from "@/_hooks/usePreviewImage";
 import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
+import { careUnitLists } from "@/_constants/careUnitLists";
 import Image from "next/image";
 import IconButton from "@/app/_components/IconButton";
 import PageLoading from "@/app/_components/PageLoading";
@@ -21,21 +22,6 @@ interface CareDetail {
   updatedAt: string;
   careList: { name: string, icon: string };
 }
-
-interface CareUnit {
-  title :string;
-  unit: string;
-}
-
-const careUnitLists : { [key: string]: CareUnit } = {
-  ごはん: { title: "食べた量", unit: "g" },
-  水分: { title: "飲んだ量", unit: "ml" },
-  さんぽ: { title: "歩いた時間", unit: "分" },
-  おしっこ: { title:"回数", unit: "回" },
-  うんち: { title: "回数", unit: "回" },
-  体重: { title: "体重", unit: "kg" },
-  くすり: { title: "1回の量", unit: "錠" },
-};
 
 const CareDetail: React.FC = () => {
   const params = useParams();
@@ -129,10 +115,8 @@ const CareDetail: React.FC = () => {
       </div>
       ) : (
         <PageLoading />
-      )};
+      )}
     </>
-
-
   )
 }
 
