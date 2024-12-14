@@ -5,7 +5,7 @@ import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import PageLoading from "@/app/_components/PageLoading";
 import React, { useEffect, useState } from "react";
 import ModalWindow from "@/app/_components/ModalWindow";
-import CareForm from "@/app/_components/CareForm";
+import CareForm from "@/app/cares/_components/CareForm";
 
 interface careList {
   id: string;
