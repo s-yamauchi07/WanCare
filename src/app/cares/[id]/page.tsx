@@ -7,6 +7,8 @@ import { usePreviewImage } from "@/_hooks/usePreviewImage";
 import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
 import { careUnitLists } from "@/_constants/careUnitLists";
 import Image from "next/image";
+import ModalWindow from "@/app/_components/ModalWindow";
+import CareForm from "../_components/CareForm";
 import IconButton from "@/app/_components/IconButton";
 import PageLoading from "@/app/_components/PageLoading";
 
@@ -32,6 +34,7 @@ const CareDetail: React.FC = () => {
   const [careTitle, setTitle] = useState<string>("");
   const [careUnit, setUnit] = useState<string>("");
   const [isLoading, setLoading] = useState<boolean>(true);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     if (!token) return;
@@ -58,62 +61,72 @@ const CareDetail: React.FC = () => {
     fetchCare();
   }, [id, token]);
 
+  const ModalClose = () => {
+    setOpenModal(false);
+  }
+
   if (!care) return;
 
   return(
     <>
       {!isLoading ? (
         <div className="flex justify-center text-gray-800">
-        <div className="min-w-64 my-20 flex flex-col items-center gap-6 px-4">
-          <h2 className="text-2xl font-bold text-center text-primary mb-6">お世話の詳細</h2>
-          <div className="w-full flex flex-col gap-6">
-            <div>
-              <p className="text-primary font-bold text-xl mb-2">日付</p>
-              <p>{changeFromISOtoDate(care.careDate, "dateTime")}</p>
-            </div>
-            {careTitle && (
+          <div className="min-w-64 my-20 flex flex-col items-center gap-6 px-4">
+            <h2 className="text-2xl font-bold text-center text-primary mb-6">お世話の詳細</h2>
+            <div className="w-full flex flex-col gap-6">
               <div>
-                <p className="text-primary font-bold text-xl mb-2">{care.careList.name}</p>
-                <div className="flex gap-2">
-                  <span>{careTitle}</span> 
-                  <div>
-                    <span>
-                      {care.amount}
-                      {careUnit}
-                    </span>
+                <p className="text-primary font-bold text-xl mb-2">日付</p>
+                <p>{changeFromISOtoDate(care.careDate, "dateTime")}</p>
+              </div>
+              {careTitle && (
+                <div>
+                  <p className="text-primary font-bold text-xl mb-2">{care.careList.name}</p>
+                  <div className="flex gap-2">
+                    <span>{careTitle}</span> 
+                    <div>
+                      <span>
+                        {care.amount}
+                        {careUnit}
+                      </span>
+                    </div>
                   </div>
                 </div>
+              )}
+              <div>
+                <p className="text-primary font-bold text-xl mb-2">メモ</p>
+                <p className="bg-white w-full h-20 rounded-lg shadow p-2">{care.memo ? care.memo : "記録なし"}</p>
               </div>
-            )}
-            <div>
-              <p className="text-primary font-bold text-xl mb-2">メモ</p>
-              <p className="bg-white w-full h-20 rounded-lg shadow p-2">{care.memo ? care.memo : "記録なし"}</p>
+              <div>
+                <p className="text-primary font-bold text-xl mb-2">写真</p>
+                {careImage ? (
+                    <Image 
+                      src={careImage}
+                      alt="careImage"
+                      width={256}
+                      height={144}
+                      priority={true}
+                      className="rounded-lg"
+                    />
+                  ) : (
+                    <div className="w-full h-40 border border-dashed border-primary rounded-lg shadow flex flex-col items-center justify-center">
+                      <span className="i-tabler-dog w-10 h-10"></span>
+                      <p>No Image</p>
+                    </div>
+                  )
+                }
+              </div>
             </div>
-            <div>
-              <p className="text-primary font-bold text-xl mb-2">写真</p>
-              {careImage ? (
-                  <Image 
-                    src={careImage}
-                    alt="careImage"
-                    width={256}
-                    height={144}
-                    className="rounded-lg"
-                  />
-                ) : (
-                  <div className="w-full h-40 border border-dashed border-primary rounded-lg shadow flex flex-col items-center justify-center">
-                    <span className="i-tabler-dog w-10 h-10"></span>
-                    <p>No Image</p>
-                  </div>
-                )
-              }
+            <div onClick={ () => setOpenModal(true)}>
+              <IconButton 
+                iconName="i-material-symbols-light-edit-square-outline"
+                buttonText="記録を編集"
+              />
             </div>
           </div>
-          <IconButton 
-            iconName="i-material-symbols-light-edit-square-outline"
-            buttonText="記録を編集"
-          />
+          <ModalWindow show={openModal} onClose={ModalClose} >
+            <CareForm careId={care.careListId} careName={care.careList.name} token={token} onClose={ModalClose} />
+          </ModalWindow>
         </div>
-      </div>
       ) : (
         <PageLoading />
       )}
