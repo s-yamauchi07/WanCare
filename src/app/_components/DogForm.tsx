@@ -8,6 +8,7 @@ import Label from "@/app/_components/Label";
 import { useEffect, useState } from "react";
 import LoadingButton from "@/app/_components/LoadingButton";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
+import { useEditPreviewImage } from "@/_hooks/useEditPreviewImage";
 import { supabase } from "@/app/utils/supabase";
 import { v4 as uuidv4 } from "uuid";
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
@@ -45,7 +46,7 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
   const [breeds, setBreeds] = useState<Breed[]>([]);
   const imageKey = watch("imageKey");
   const [uploadedKey, setUploadedKey] = useState<string | null>(null);
-  const [thumbnailImageUrl, setThumbnailImageUrl] = useState<string | null>(null);
+  const thumbnailImageUrl = useEditPreviewImage(uploadedKey, "profile_img", dogInfo?.imageKey ?? null);
   const [isUploading, setUploading] = useState<boolean>(true);
   const [isLoading, setLoading] = useState<boolean>(true);
 
@@ -100,23 +101,6 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
   
     uploadImage();
   }, [imageKey]); 
-
-  // 画像表示を行う処理
-  useEffect(() => {
-    const fetchImage = async(img: string) => {
-      const { data: { publicUrl}, } = await supabase.storage
-        .from("profile_img")
-        .getPublicUrl(img);
-      
-        setThumbnailImageUrl(publicUrl);
-      }
-
-    if (uploadedKey) {
-      fetchImage(uploadedKey);
-    } else if (dogInfo?.imageKey) {
-      fetchImage(dogInfo.imageKey);
-    }
-  }, [uploadedKey, dogInfo?.imageKey]);
 
   // 編集の場合の初期値設定
   useEffect(() => { 
