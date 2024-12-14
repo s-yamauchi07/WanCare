@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid'; 
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
-import { parseISO, format, startOfToday } from 'date-fns'
-import IconButton from "./IconButton";
+import { startOfToday } from 'date-fns'
+import { format } from "date-fns-tz";
+import IconButton from "../../_components/IconButton";
 import Link from "next/link";
+import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
 
 interface CareList { 
   id: string;
@@ -40,8 +42,8 @@ const Calendar: React.FC<CalendarProps> = ({ cares }) => {
   const changeCareLists = (cares: CareList[]) : ChangeCareLists[] => {
     return cares.map(care => ({
       id: care.id,
-      date: format(parseISO(care.careDate), "yyyy-MM-dd"),
-      time: format(parseISO(care.careDate), "HH:mm"),
+      date: changeFromISOtoDate(care.careDate, "date"),
+      time: changeFromISOtoDate(care.careDate, "time"),
       title: care.careList.name,
       amount: care.amount,
       memo: care.memo,
@@ -91,12 +93,14 @@ const Calendar: React.FC<CalendarProps> = ({ cares }) => {
         <ul className="flex flex-col gap-1">
           {selectEvent.map((event) => {
             return(
-              <li key={event.id} className="border text-gray-800 rounded-full py-2 px-4 shadow-md flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <span className={`${event.careIcon} w-5 h-5`}></span>
-                  <span className="min-w-20">{event.title}</span>
-                </div>
-                <span>{event.time}</span>
+              <li key={event.id} className="border text-gray-800 rounded-full py-2 px-4 shadow-md">
+                <Link href={`/cares/${event.id}`} className="flex gap-4">
+                  <div className="flex items-center gap-2">
+                    <span className={`${event.careIcon} w-5 h-5`}></span>
+                    <span className="min-w-20">{event.title}</span>
+                  </div>
+                  <span>{event.time}</span>
+                </Link>
               </li>
             )
           })}

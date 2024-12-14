@@ -6,6 +6,7 @@ import { FileInput, Label } from "flowbite-react";
 import { supabase } from "@/app/utils/supabase";
 import { useEffect, useState } from "react";
 import { Care } from "@/_types/care";
+import { careUnitLists } from "@/_constants/careUnitLists";
 import { v4 as uuidv4 } from "uuid";
 import { toast, Toaster } from "react-hot-toast";
 
@@ -16,24 +17,8 @@ interface Props {
   onClose: () => void;
 }
 
-interface CareUnit {
-  title :string;
-  unit: string;
-}
-
-const careUnitLists : { [key: string]: CareUnit } = {
-  ごはん: { title: "食べた量", unit: "g" },
-  水分: { title: "飲んだ量", unit: "ml" },
-  さんぽ: { title: "歩いた時間", unit: "分" },
-  おしっこ: { title:"回数", unit: "回" },
-  うんち: { title: "回数", unit: "回" },
-  体重: { title: "体重", unit: "kg" },
-  くすり: { title: "1回の量", unit: "錠" },
-};
-
 const CareForm: React.FC<Props> = ({careId, careName, token, onClose } ) => {
-  console.log(careName)
-  
+
   const { register, handleSubmit, reset, watch, formState: { errors, isSubmitting } } = useForm<Care>();
   const imageKey = watch("imageKey");
   const [uploadedKey, setUploadedKey] = useState<string | null>(null);

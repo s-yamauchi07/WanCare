@@ -1,10 +1,9 @@
 "use client"
 
 import React, { useEffect, useState } from "react";
-import Calendar from "../_components/Carendar";
+import Calendar from "./_components/Carendar";
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
-import { toast, Toaster } from "react-hot-toast"
 
 const CareIndex: React.FC = () => {
   useRouteGuard();
@@ -14,7 +13,6 @@ const CareIndex: React.FC = () => {
 
   useEffect(() => {
     if(!token || !session) return;
-    console.log(token)
 
     const fetchCareLists = async() => {
       try {
@@ -26,7 +24,6 @@ const CareIndex: React.FC = () => {
         });
 
         if (response.status !== 200) {
-          toast.error("読み込みができませんでした");
           throw new Error("Not record.")
         }
 
@@ -39,8 +36,6 @@ const CareIndex: React.FC = () => {
     fetchCareLists();
   }, [token, session])
 
-  
-
   return(
     <>
       <div className="flex justify-center">
@@ -52,8 +47,6 @@ const CareIndex: React.FC = () => {
       <div className="p-4 pb-20 win-h-screen overflow-y-auto text-gray-800">
         <Calendar cares={cares} />
       </div>
-
-      <Toaster />
     </>
   )
 }
