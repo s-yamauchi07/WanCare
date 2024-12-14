@@ -10,12 +10,12 @@ import Link from "next/link";
 import  Chart from "../_components/Chart"
 import IconButton from "../_components/IconButton";
 import  PageLoading  from "@/app/_components/PageLoading";
-import { supabase } from "../utils/supabase";
 import { changeDateFormat } from "../utils/ChangeDateTime/changeDateFormat";
 import { changeTimeFormat } from "../utils/ChangeDateTime/changeTimeFormat";
 import { WeightInfo } from "@/_types/weight";
 import { TodayCareInfo } from "@/_types/care";
 import { DogProfile } from "@/_types/dog";
+import usePreviewImage from "@/_hooks/usePreviewImage";
 
 interface DogInfo {
   id: string;
@@ -32,7 +32,7 @@ const Home: React.FC = () => {
   const [dogInfo, setDogInfo] = useState<DogInfo | null>(null);
   const [todayCare, setTodayCare] = useState<TodayCareInfo[]>([]);
   const [dogWeight, setDogWeight] = useState<WeightInfo[]>([]);
-  const [dogImage, setDogImage] = useState("");
+  const dogImage= usePreviewImage(dogInfo?.dog.imageKey ?? null, "profile_img")
   const userId = session?.user.id
 
   useEffect(() => {
@@ -68,19 +68,7 @@ const Home: React.FC = () => {
       }
     }
     fetchDogInfo();
-  }, [token]);
-
-  useEffect(()=>{
-    const dogImg = dogInfo?.dog.imageKey;
-    if(!dogImg) return;
-
-    const fetchImage = async() => {
-      const { data: { publicUrl}, } = await supabase.storage.from("profile_img").getPublicUrl(dogImg)
-      setDogImage(publicUrl);
-    }
-    fetchImage();
-
-  }, [dogInfo]);
+  }, [token, session]);
 
   const getAgeInMonths = (birthday: string) => {
     const today = new Date();
