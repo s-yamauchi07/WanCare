@@ -24,7 +24,7 @@ interface CareDetail {
   careList: { name: string, icon: string };
 }
 
-interface Props {
+interface CareFormProps {
   careId: string;
   careName: string;
   token: string | null;
@@ -33,7 +33,7 @@ interface Props {
   onClose: () => void;
 }
 
-const CareForm: React.FC<Props> = ({careId, careName, token, isEdit, careInfo, onClose } ) => {
+const CareForm: React.FC<CareFormProps> = ({careId, careName, token, isEdit, careInfo, onClose } ) => {
 
   const { register, handleSubmit, reset, watch, setValue, formState: { errors, isSubmitting } } = useForm<Care>();
   const imageKey = watch("imageKey");
@@ -43,7 +43,6 @@ const CareForm: React.FC<Props> = ({careId, careName, token, isEdit, careInfo, o
   const unit = careUnitLists[careName]?.unit;
   const unitTitle = careUnitLists[careName]?.title;
   const excludeFields = ["ワクチン", "通院", "トリミング", "シャンプー", "爪切り"];
-  console.log(careInfo)
 
   useEffect(()=> {
     const uploadImage = async () => {
@@ -76,12 +75,8 @@ const CareForm: React.FC<Props> = ({careId, careName, token, isEdit, careInfo, o
   // 画像のプレビュー
   useEffect(() => {
     const fetchImage = async(img: string) => {
-      if(!uploadedKey) return;
 
-      const { data: { publicUrl}, } = await supabase.storage
-        .from("care_img")
-        .getPublicUrl(img);
-      
+      const { data: { publicUrl}, } = await supabase.storage.from("care_img").getPublicUrl(img);
         setThumbnailImageUrl(publicUrl);
       }
 
@@ -111,18 +106,18 @@ const CareForm: React.FC<Props> = ({careId, careName, token, isEdit, careInfo, o
     
     if(!token) return;
     try {
-      const response = await fetch("/api/cares/", {
+      const response = await fetch(isEdit ? `/api/cares/${careInfo?.id}` : "/api/cares/", {
         headers: {
           "Content-Type" : "application/json",
           Authorization: token,
         },
-        method: "POST",
+        method: isEdit? "PUT" : "POST",
         body: JSON.stringify(req),
       })
       
       if(response.status === 200) {
         reset();
-        toast.success("投稿が完了しました");
+        toast.success(isEdit? "更新しました" : "投稿が完了しました");
 
         // toast表示を待ってからClose
         setTimeout(()=> {
@@ -131,7 +126,7 @@ const CareForm: React.FC<Props> = ({careId, careName, token, isEdit, careInfo, o
       }
     } catch (error) {
       console.log(error);
-      toast.error("登録に失敗しました");
+      toast.error(isEdit? "更新に失敗しました" :"登録に失敗しました");
     }
 
   }
