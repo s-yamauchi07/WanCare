@@ -194,12 +194,13 @@ const CareForm: React.FC<CareFormProps> = ({careId, careName, token, isEdit, car
             <FileInput 
               id="dropzone-file"
               className="hidden" 
-              {...register("imageKey")} />
+              {...register("imageKey")} 
+            />
           </Label>
         </div>
         <LoadingButton
           isSubmitting={isSubmitting}
-          buttonText="登録" 
+          buttonText={isEdit? "更新" : "登録"} 
         />
     </form>
     <Toaster />
