@@ -124,7 +124,7 @@ const CareDetail: React.FC = () => {
             </div>
           </div>
           <ModalWindow show={openModal} onClose={ModalClose} >
-            <CareForm careId={care.careListId} careName={care.careList.name} token={token} onClose={ModalClose} />
+            <CareForm careId={care.careListId} careName={care.careList.name} token={token} onClose={ModalClose} isEdit={true} careInfo={care}/>
           </ModalWindow>
         </div>
       ) : (

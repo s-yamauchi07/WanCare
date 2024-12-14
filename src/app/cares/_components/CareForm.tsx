@@ -7,19 +7,35 @@ import { supabase } from "@/app/utils/supabase";
 import { useEffect, useState } from "react";
 import { Care } from "@/_types/care";
 import { careUnitLists } from "@/_constants/careUnitLists";
+import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
 import { v4 as uuidv4 } from "uuid";
 import { toast, Toaster } from "react-hot-toast";
 
+interface CareDetail {
+  id: string;
+  careDate: string;
+  amount?: number | null;
+  memo?: string | null ;
+  imageKey: string | null;
+  ownerId: string;
+  careListId: string;
+  createdAt: string;
+  updatedAt: string;
+  careList: { name: string, icon: string };
+}
+
 interface Props {
   careId: string;
-  careName: string
+  careName: string;
   token: string | null;
+  isEdit?: boolean,
+  careInfo?: CareDetail;
   onClose: () => void;
 }
 
-const CareForm: React.FC<Props> = ({careId, careName, token, onClose } ) => {
+const CareForm: React.FC<Props> = ({careId, careName, token, isEdit, careInfo, onClose } ) => {
 
-  const { register, handleSubmit, reset, watch, formState: { errors, isSubmitting } } = useForm<Care>();
+  const { register, handleSubmit, reset, watch, setValue, formState: { errors, isSubmitting } } = useForm<Care>();
   const imageKey = watch("imageKey");
   const [uploadedKey, setUploadedKey] = useState<string | null>(null);
   const [thumbnailImageUrl, setThumbnailImageUrl] = useState<string | null>(null);
@@ -27,7 +43,8 @@ const CareForm: React.FC<Props> = ({careId, careName, token, onClose } ) => {
   const unit = careUnitLists[careName]?.unit;
   const unitTitle = careUnitLists[careName]?.title;
   const excludeFields = ["ワクチン", "通院", "トリミング", "シャンプー", "爪切り"];
-  
+  console.log(careInfo)
+
   useEffect(()=> {
     const uploadImage = async () => {
       if(!imageKey || imageKey.length === 0) return;
@@ -58,17 +75,31 @@ const CareForm: React.FC<Props> = ({careId, careName, token, onClose } ) => {
 
   // 画像のプレビュー
   useEffect(() => {
-    const fetchImage = async() => {
+    const fetchImage = async(img: string) => {
       if(!uploadedKey) return;
 
       const { data: { publicUrl}, } = await supabase.storage
         .from("care_img")
-        .getPublicUrl(uploadedKey);
+        .getPublicUrl(img);
       
         setThumbnailImageUrl(publicUrl);
       }
-      fetchImage();
-  }, [uploadedKey]);
+
+      if(uploadedKey) {
+        fetchImage(uploadedKey);
+      } else if (careInfo?.imageKey) {
+        fetchImage(careInfo.imageKey)
+      }
+  }, [uploadedKey, careInfo?.imageKey]);
+
+  useEffect(() => {
+    if(isEdit && careInfo) {
+      setValue("careDate", changeFromISOtoDate(careInfo.careDate, "date") + "T" + changeFromISOtoDate(careInfo.careDate, "time"));
+      setValue("amount", String(careInfo.amount));
+      setValue("memo", careInfo.memo ?? "");
+      setValue("imageKey", careInfo.imageKey ?? "")
+    }
+  }, [isEdit, setValue , careInfo]);
 
   
   const onSubmit: SubmitHandler<Care> = async (data) => {
