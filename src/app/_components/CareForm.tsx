@@ -32,8 +32,7 @@ const careUnitLists : { [key: string]: CareUnit } = {
 };
 
 const CareForm: React.FC<Props> = ({careId, careName, token, onClose } ) => {
-  console.log(careName)
-  
+
   const { register, handleSubmit, reset, watch, formState: { errors, isSubmitting } } = useForm<Care>();
   const imageKey = watch("imageKey");
   const [uploadedKey, setUploadedKey] = useState<string | null>(null);

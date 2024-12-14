@@ -43,7 +43,6 @@ const Home: React.FC = () => {
 
   useEffect(() => {  
     if(!token || !session) return;
-    console.log(token)
 
     const fetchDogInfo = async() => {
       try {
@@ -60,7 +59,6 @@ const Home: React.FC = () => {
         }
 
         const {dogInfo, todayCare, dogWeight} = await response.json();
-        console.log(todayCare)
 
         setDogInfo(dogInfo);
         setTodayCare(todayCare);
