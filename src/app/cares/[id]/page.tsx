@@ -97,6 +97,7 @@ const CareDetail: React.FC = () => {
                     alt="careImage"
                     width={256}
                     height={144}
+                    className="rounded-lg"
                   />
                 ) : (
                   <div className="w-full h-40 border border-dashed border-primary rounded-lg shadow flex flex-col items-center justify-center">
