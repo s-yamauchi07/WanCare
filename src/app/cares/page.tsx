@@ -13,7 +13,6 @@ const CareIndex: React.FC = () => {
 
   useEffect(() => {
     if(!token || !session) return;
-    console.log(token)
 
     const fetchCareLists = async() => {
       try {
