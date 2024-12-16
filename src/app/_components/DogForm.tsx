@@ -9,13 +9,12 @@ import { useEffect, useState } from "react";
 import LoadingButton from "@/app/_components/LoadingButton";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { useEditPreviewImage } from "@/_hooks/useEditPreviewImage";
-import { supabase } from "@/app/utils/supabase";
-import { v4 as uuidv4 } from "uuid";
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
 import { toast, Toaster } from "react-hot-toast"
 import { useRouter } from "next/navigation"
 import { DogResponse } from "@/_types/dog";
 import  PageLoading  from "@/app/_components/PageLoading";
+import { useUploadImage } from "@/_hooks/useUploadImage";
 
 const sexSelection = [
   {id: 1, name: "男の子"},
@@ -36,9 +35,8 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
   const router = useRouter();
   const [breeds, setBreeds] = useState<Breed[]>([]);
   const imageKey = watch("imageKey");
-  const [uploadedKey, setUploadedKey] = useState<string | null>(null);
+  const { uploadedKey, isUploading } = useUploadImage(imageKey ?? null, "profile_img"); 
   const thumbnailImageUrl = useEditPreviewImage(uploadedKey, "profile_img", dogInfo?.imageKey ?? null);
-  const [isUploading, setUploading] = useState<boolean>(true);
   const [isLoading, setLoading] = useState<boolean>(true);
 
   useEffect(()=>{
@@ -63,36 +61,6 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
     fetchBreeds();
   },[token]);
 
-  // 画像が選択された時の処理(画像を変更するたびに発火)
-  useEffect(() => {
-    const uploadImage = async () => {
-      if (!imageKey || imageKey.length === 0) return;
-      
-      if(typeof imageKey[0] === "object") {
-        setUploading(true);
-
-        const file = imageKey[0];                   
-        const filePath = `private/${uuidv4()}`;
-        const { data, error } = await supabase.storage
-          .from("profile_img")
-          .upload(filePath, file, {
-            cacheControl: "3600",
-            upsert: false,
-          });
-
-        if (error) {
-          toast.error("画像のアップロードに失敗しました");
-          setUploading(false);
-          return;
-        }
-        setUploadedKey(data.path);
-        setUploading(false);
-      }
-    };
-  
-    uploadImage();
-  }, [imageKey]); 
-
   // 編集の場合の初期値設定
   useEffect(() => { 
     if (dogInfo && isEdit && breeds.length > 0) { 
@@ -105,7 +73,6 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
       setLoading(false);
     }}, [dogInfo, isEdit, setValue, breeds]);
 
-  // 新規登録
   const onsubmit: SubmitHandler<DogRequest> = async(data) => {
     const req = {
       ...data,
