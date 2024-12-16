@@ -3,14 +3,14 @@ import Textarea from "@/app/_components/Textarea";
 import LoadingButton from "@/app/_components/LoadingButton";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { FileInput, Label } from "flowbite-react";
-import { supabase } from "@/app/utils/supabase";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Care } from "@/_types/care";
 import { careUnitLists } from "@/_constants/careUnitLists";
 import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
-import { v4 as uuidv4 } from "uuid";
+
 import { toast, Toaster } from "react-hot-toast";
 import { useEditPreviewImage } from "@/_hooks/useEditPreviewImage";
+import { useUploadImage } from "@/_hooks/useUploadImage";
 
 interface CareDetail {
   id: string;
@@ -38,41 +38,11 @@ const CareForm: React.FC<CareFormProps> = ({careId, careName, token, isEdit, car
 
   const { register, handleSubmit, reset, watch, setValue, formState: { errors, isSubmitting } } = useForm<Care>();
   const imageKey = watch("imageKey");
-  const [uploadedKey, setUploadedKey] = useState<string | null>(null);
-  // const [thumbnailImageUrl, setThumbnailImageUrl] = useState<string | null>(null);
+  const { uploadedKey, isUploading } = useUploadImage(imageKey ?? null, "care_img");
   const thumbnailImageUrl = useEditPreviewImage(uploadedKey ?? null,"care_img", careInfo?.imageKey ?? null)
-  const [isUploading, setUploading] = useState<boolean>(false);
   const unit = careUnitLists[careName]?.unit;
   const unitTitle = careUnitLists[careName]?.title;
   const excludeFields = ["ワクチン", "通院", "トリミング", "シャンプー", "爪切り"];
-
-  useEffect(()=> {
-    const uploadImage = async () => {
-      if(!imageKey || imageKey.length === 0) return;
-
-      if(typeof imageKey[0] === "object") {
-        setUploading(true);
-
-        const file = imageKey[0];                   
-        const filePath = `private/${uuidv4()}`;
-        const { data, error } = await supabase.storage
-          .from("care_img")
-          .upload(filePath, file, {
-            cacheControl: "3600",
-            upsert: false,
-          });
-
-        if (error) {
-          toast.error("画像のアップロードに失敗しました");
-          setUploading(false);
-          return;
-        }
-        setUploadedKey(data.path);
-        setUploading(false);
-      }
-    }
-    uploadImage();
-  },[imageKey]);
 
   useEffect(() => {
     if(isEdit && careInfo) {
