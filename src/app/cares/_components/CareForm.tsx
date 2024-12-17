@@ -3,95 +3,78 @@ import Textarea from "@/app/_components/Textarea";
 import LoadingButton from "@/app/_components/LoadingButton";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { FileInput, Label } from "flowbite-react";
-import { supabase } from "@/app/utils/supabase";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Care } from "@/_types/care";
 import { careUnitLists } from "@/_constants/careUnitLists";
-import { v4 as uuidv4 } from "uuid";
-import { toast, Toaster } from "react-hot-toast";
+import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
 
-interface Props {
+import { toast, Toaster } from "react-hot-toast";
+import { useEditPreviewImage } from "@/_hooks/useEditPreviewImage";
+import { useUploadImage } from "@/_hooks/useUploadImage";
+
+interface CareDetail {
+  id: string;
+  careDate: string;
+  amount?: number | null;
+  memo?: string | null ;
+  imageKey: string | null;
+  ownerId: string;
+  careListId: string;
+  createdAt: string;
+  updatedAt: string;
+  careList: { name: string, icon: string };
+}
+
+interface CareFormProps {
   careId: string;
-  careName: string
+  careName: string;
   token: string | null;
+  isEdit?: boolean,
+  careInfo?: CareDetail;
   onClose: () => void;
 }
 
-const CareForm: React.FC<Props> = ({careId, careName, token, onClose } ) => {
+const CareForm: React.FC<CareFormProps> = ({careId, careName, token, isEdit, careInfo, onClose } ) => {
 
-  const { register, handleSubmit, reset, watch, formState: { errors, isSubmitting } } = useForm<Care>();
+  const { register, handleSubmit, reset, watch, setValue, formState: { errors, isSubmitting } } = useForm<Care>();
   const imageKey = watch("imageKey");
-  const [uploadedKey, setUploadedKey] = useState<string | null>(null);
-  const [thumbnailImageUrl, setThumbnailImageUrl] = useState<string | null>(null);
-  const [isUploading, setUploading] = useState<boolean>(false);
+  const { uploadedKey, isUploading } = useUploadImage(imageKey ?? null, "care_img");
+  const thumbnailImageUrl = useEditPreviewImage(uploadedKey ?? null,"care_img", careInfo?.imageKey ?? null)
   const unit = careUnitLists[careName]?.unit;
   const unitTitle = careUnitLists[careName]?.title;
   const excludeFields = ["ワクチン", "通院", "トリミング", "シャンプー", "爪切り"];
-  
-  useEffect(()=> {
-    const uploadImage = async () => {
-      if(!imageKey || imageKey.length === 0) return;
 
-      if(typeof imageKey[0] === "object") {
-        setUploading(true);
-
-        const file = imageKey[0];                   
-        const filePath = `private/${uuidv4()}`;
-        const { data, error } = await supabase.storage
-          .from("care_img")
-          .upload(filePath, file, {
-            cacheControl: "3600",
-            upsert: false,
-          });
-
-        if (error) {
-          toast.error("画像のアップロードに失敗しました");
-          setUploading(false);
-          return;
-        }
-        setUploadedKey(data.path);
-        setUploading(false);
-      }
-    }
-    uploadImage();
-  },[imageKey]);
-
-  // 画像のプレビュー
   useEffect(() => {
-    const fetchImage = async() => {
-      if(!uploadedKey) return;
-
-      const { data: { publicUrl}, } = await supabase.storage
-        .from("care_img")
-        .getPublicUrl(uploadedKey);
-      
-        setThumbnailImageUrl(publicUrl);
-      }
-      fetchImage();
-  }, [uploadedKey]);
+    if(isEdit && careInfo) {
+      setValue("careDate", changeFromISOtoDate(careInfo.careDate, "date") + "T" + changeFromISOtoDate(careInfo.careDate, "time"));
+      setValue("amount", String(careInfo.amount));
+      setValue("memo", careInfo.memo ?? "");
+      setValue("imageKey", careInfo.imageKey ?? "")
+    }
+  }, [isEdit, setValue , careInfo]);
 
   
   const onSubmit: SubmitHandler<Care> = async (data) => {
     const req = {
       ...data,
-      imageKey: uploadedKey,
+      imageKey: uploadedKey || careInfo?.imageKey,
       careListId: careId,
     }
     
     if(!token) return;
     try {
-      const response = await fetch("/api/cares/", {
+      const response = await fetch(isEdit ? `/api/cares/${careInfo?.id}` : "/api/cares/", {
         headers: {
           "Content-Type" : "application/json",
           Authorization: token,
         },
-        method: "POST",
+        method: isEdit? "PUT" : "POST",
         body: JSON.stringify(req),
       })
       
       if(response.status === 200) {
         reset();
-        toast.success("投稿が完了しました");
+        toast.success(isEdit? "更新しました" : "投稿が完了しました");
 
         // toast表示を待ってからClose
         setTimeout(()=> {
@@ -100,7 +83,7 @@ const CareForm: React.FC<Props> = ({careId, careName, token, onClose } ) => {
       }
     } catch (error) {
       console.log(error);
-      toast.error("登録に失敗しました");
+      toast.error(isEdit? "更新に失敗しました" :"登録に失敗しました");
     }
 
   }
@@ -168,12 +151,13 @@ const CareForm: React.FC<Props> = ({careId, careName, token, onClose } ) => {
             <FileInput 
               id="dropzone-file"
               className="hidden" 
-              {...register("imageKey")} />
+              {...register("imageKey")} 
+            />
           </Label>
         </div>
         <LoadingButton
           isSubmitting={isSubmitting}
-          buttonText="登録" 
+          buttonText={isEdit? "更新" : "登録"} 
         />
     </form>
     <Toaster />
