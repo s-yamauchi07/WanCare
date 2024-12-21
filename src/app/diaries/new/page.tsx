@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Input from "@/app/_components/Input";
 import Textarea from "@/app/_components/Textarea";
+import IconButton from "@/app/_components/IconButton";
 import { FileInput, Label } from "flowbite-react";
 import LoadingButton from "@/app/_components/LoadingButton";
 import { toast, Toaster } from "react-hot-toast";
@@ -153,7 +154,7 @@ const AddDiary: React.FC<DiaryRequest> = () => {
               </Label>
             </div>
 
-            <div className="my-6">
+            <div className="mt-6 mb-3">
               <label className="block text-primary text-sm font-bold mb-2" id="summaryId">
                 まとめに追加する
               </label>
@@ -171,6 +172,13 @@ const AddDiary: React.FC<DiaryRequest> = () => {
                 </select>
               </div>
               <div className="text-red-500 text-xs mt-2">{errors.summaryId?.message}</div>
+            </div>
+
+            <div className="text-right">
+              <IconButton
+                iconName="i-material-symbols-add-rounded" 
+                buttonText="まとめを作成" 
+              />
             </div>
 
             <LoadingButton 
