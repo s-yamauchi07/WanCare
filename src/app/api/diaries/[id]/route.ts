@@ -1,7 +1,6 @@
 import { userAuthentication } from "@/app/utils/userAuthentication";
 import { NextRequest, NextResponse } from "next/server";
 import { handleError } from "@/app/utils/errorHandler";
-import { Diary } from "@/_types/diary";
 import { findOrCreateTag } from "@/app/utils/findOrCreateTag";
 import { verifyUser } from "@/app/utils/verifyUser";
 import prisma from "@/libs/prisma";
@@ -57,7 +56,7 @@ export const PUT = async(request: NextRequest,  { params } : { params : Promise<
   const { data, error } = await userAuthentication(request);
   if (error) return handleError(request);
 
-  const { title, content, imageKey, tags, summaryId }: Diary = body;
+  const { title, content, imageKey, tags, summaryId } = body;
   const currentUserId = data.user.id;
 
   try {
@@ -85,8 +84,8 @@ export const PUT = async(request: NextRequest,  { params } : { params : Promise<
   
       if(tags && tags.length > 0) {
         // tagを紐付けし直す
-        const updateTags = tags.map(async(tag) => {
-          const updateTag = await findOrCreateTag(tag);
+        const updateTags = tags.map(async(tag: string) => {
+          const updateTag = await findOrCreateTag(tx, tag);
         
           await tx.diaryTag.create({
             data: {
