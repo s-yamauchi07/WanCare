@@ -56,7 +56,6 @@ export const POST = async(request: NextRequest) => {
   
       // 既存タグか、新規タグかのチェックを行いDBに保存。
       if(tags && tags.length > 0) {
-        // const createTags = tags.map(async(tag: string) => {
         for(const tag of tags) {
           const addTag = await findOrCreateTag(tx, tag);
   
