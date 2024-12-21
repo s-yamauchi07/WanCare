@@ -20,7 +20,7 @@ interface SummaryResponse {
   title: string;
 }
 
-const AddDiary: React.FC<DiaryRequest> = () => {
+const AddDiary: React.FC = () => {
   useRouteGuard();
   const { token, session } = useSupabaseSession();
 
