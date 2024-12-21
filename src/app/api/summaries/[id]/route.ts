@@ -78,7 +78,7 @@ export const PUT = async(request: NextRequest, { params } : { params : Promise<{
 
       if (tags && tags.length > 0) {
         const updateTags = tags.map(async(tag) => {
-          const addTag = await findOrCreateTag(tag);
+          const addTag = await findOrCreateTag(tx,tag);
 
           return tx.summaryTag.create({
             data: {

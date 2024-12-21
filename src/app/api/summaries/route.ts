@@ -16,9 +16,9 @@ export const POST = async(request: NextRequest) => {
   try {
     const currentUserId = data.user.id;
 
-    const addSummary = await prisma.$transaction(async(prisma) => {
+    const addSummary = await prisma.$transaction(async(tx) => {
       // summaryテーブルへの保存
-      const summary = await prisma.summary.create({
+      const summary = await tx.summary.create({
         data: {
           title,
           explanation,
@@ -29,9 +29,9 @@ export const POST = async(request: NextRequest) => {
       // 既存タグか、新規タグかのチェック
       if (tags && tags.length > 0) {
         const CreateTags = tags.map(async(tag) => {
-          const addTag = await findOrCreateTag(tag);
+          const addTag = await findOrCreateTag(tx, tag);
 
-          return prisma.summaryTag.create({
+          return tx.summaryTag.create({
             data: {
               summaryId: summary.id,
               tagId: addTag.id,
@@ -43,7 +43,7 @@ export const POST = async(request: NextRequest) => {
 
       if (diaryIds && diaryIds.length > 0) {
         const linkedSummary = diaryIds.map(async(id) => {
-          const diary = await prisma.diary.findUnique({
+          const diary = await tx.diary.findUnique({
             where: {
               id,
             },
@@ -53,7 +53,7 @@ export const POST = async(request: NextRequest) => {
             return NextResponse.json({ status: "Not Found", message: "diary Not found."}, { status: 404});
           }
 
-          await prisma.diary.update({
+          await tx.diary.update({
             where: { 
               id: diary.id
             },
