@@ -2,7 +2,6 @@ import { userAuthentication } from "@/app/utils/userAuthentication";
 import prisma from "@/libs/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { handleError } from "@/app/utils/errorHandler";
-import { Diary } from "@/_types/diary";
 import { findOrCreateTag } from "@/app/utils/findOrCreateTag";
 
 
@@ -39,7 +38,7 @@ export const POST = async(request: NextRequest) => {
   if (error) return handleError(request);
 
   const body = await request.json();
-  const { title, content, imageKey, tags, summaryId }: Diary = body;
+  const { title, content, imageKey, tags, summaryId } = body;
 
   try {
     const currentUserId = data.user.id;
@@ -57,17 +56,17 @@ export const POST = async(request: NextRequest) => {
   
       // 既存タグか、新規タグかのチェックを行いDBに保存。
       if(tags && tags.length > 0) {
-        const createTags = tags.map(async(tag) => {
-          const addTag = await findOrCreateTag(tag);
+        // const createTags = tags.map(async(tag: string) => {
+        for(const tag of tags) {
+          const addTag = await findOrCreateTag(tx, tag);
   
-          return tx.diaryTag.create({
+          await tx.diaryTag.create({
             data: {
               diaryId: diary.id,
               tagId: addTag.id
             },
           });
-        })
-        await Promise.all(createTags);
+        }
       }
 
       return diary;
