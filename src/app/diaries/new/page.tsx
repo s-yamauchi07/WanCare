@@ -11,6 +11,7 @@ import { useEditPreviewImage } from "@/_hooks/useEditPreviewImage";
 import useUploadImage from "@/_hooks/useUploadImage";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import LoadingButton from "@/app/_components/LoadingButton";
+import { toast, Toaster } from "react-hot-toast";
 
 interface SummaryResponse {
   id: string;
@@ -20,7 +21,7 @@ interface SummaryResponse {
 const AddDiary: React.FC<DiaryRequest> = () => {
   useRouteGuard();
   const { token, session } = useSupabaseSession();
-  console.log(token)
+
   const userId = session?.user.id;
   const [summaryLists, setSummaryLists] = useState<SummaryResponse[]>([]);
   const [isLoading, setLoading] = useState<boolean>(true);
@@ -51,12 +52,43 @@ const AddDiary: React.FC<DiaryRequest> = () => {
         setLoading(false);
       }
     }
+
     fetchSummaries();
   }, [token, userId]);
 
+  const onSubmit: SubmitHandler<DiaryRequest> = async(data) => {
+    if(!token) return;
+
+    const req = {
+      ...data,
+      tags: data.tags?.split(" "),
+      imageKey: uploadedKey,
+    }
+
+    try {
+      const res = await fetch("/api/diaries/", {
+        headers: {
+          "Content-Type" : "application/json",
+          Authorization: token,
+        },
+        method: "POST",
+        body: JSON.stringify(req),
+      });
+
+      if (res.status === 200) {
+        reset();
+        toast.success("投稿が完了しました");
+      }
+
+    } catch(error) {
+      console.log(error);
+      toast.error("投稿に失敗しました");
+    }
+  }
+
   return(
     <div className="flex justify-center">
-      <form className="max-w-64 my-20 pb-20">
+      <form className="max-w-64 my-20 pb-20" onSubmit={handleSubmit(onSubmit)}>
         <h2 className="text-primary text-center text-2xl font-bold mb-10">日記投稿</h2>
 
         <Input 
@@ -74,9 +106,9 @@ const AddDiary: React.FC<DiaryRequest> = () => {
           id="tags"
           labelName="タグ"
           type="text"
-          placeholder="柴犬"
+          placeholder="柴犬 アレルギー"
           register={{...register("tags")}}
-          error={errors.title?.message}
+          error={errors.tags?.message}
         />
 
         <Textarea 
@@ -126,10 +158,10 @@ const AddDiary: React.FC<DiaryRequest> = () => {
               className="block appearance-none border border-primary bg-white text-gray-800 w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
               {...register("summaryId")}
               >
-              <option value=""></option>
+              <option value="">追加しない</option>
               {summaryLists.map((summaryList) => {
                 return(
-                  <option value={summaryList.title} key={summaryList.id}>{summaryList.title}</option>
+                  <option value={summaryList.id} key={summaryList.id}>{summaryList.title}</option>
                 )
               })} 
             </select>
@@ -142,6 +174,7 @@ const AddDiary: React.FC<DiaryRequest> = () => {
           buttonText={"登録"}
         />
       </form>
+      <Toaster />
     </div>
   )
 }
