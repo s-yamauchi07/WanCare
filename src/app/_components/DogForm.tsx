@@ -139,7 +139,7 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
 
             <div className="mb-6">
               <Label id="性別" />
-              <div className="inline-block relative w-64">
+              <div className="inline-block w-64">
                 <select
                   className="block appearance-none border border-primary bg-white text-gray-800 w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                   {...register("sex",{
@@ -152,16 +152,13 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
                     )
                   })}
                 </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
-                  <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                </div>
               </div>
               <div className="text-red-500 text-xs mt-2">{errors.sex?.message}</div>
             </div>
 
             <div className="mb-6">
               <Label id="犬種" />
-              <div className="inline-block relative w-64">
+              <div className="inline-block w-64">
                 <select 
                   className="block appearance-none border border-primary bg-white text-gray-800 w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                   {...register("breedId",{
@@ -174,9 +171,6 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
                     )
                   })}
                 </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
-                  <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                </div>
               </div>
               <div className="text-red-500 text-xs mt-2">{errors.breedId?.message}</div>
             </div>
