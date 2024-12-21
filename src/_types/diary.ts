@@ -1,4 +1,4 @@
-export interface Diary {
+export interface DiaryRequest {
   title: string
   content: string
   imageKey?: string | null
