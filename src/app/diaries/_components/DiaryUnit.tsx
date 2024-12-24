@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import usePreviewImage from "@/_hooks/usePreviewImage";
-import dog_registration from "@/public/dog_registration.png";
+import no_diary_img from "@/public/no_diary_img.png";
 
 interface diaryIndex {
   id: string;
@@ -34,7 +34,7 @@ const DiaryUnit: React.FC<diaryProps> = ({diary}) => {
       <div className="w-full h-64 relative">
         <Image 
           className="rounded-lg " 
-          src={diaryImage ? diaryImage :  dog_registration}
+          src={diaryImage ? diaryImage :  no_diary_img}
           alt="image description" 
           layout="fill"
           objectFit="contain"
