@@ -38,7 +38,7 @@ const DiaryUnit: React.FC<diaryProps> = ({diary}) => {
           src={diaryImage ? diaryImage :  no_diary_img}
           alt="diary image"
           fill={true}
-          style={{ objectFit: "cover", objectPosition: "center", boxSizing: "border-box" }}
+          style={{ objectFit: "contain", objectPosition: "center", boxSizing: "border-box" }}
         />
       </div>
       <Link href={`/diaries/${diary.id}`} >

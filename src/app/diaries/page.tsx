@@ -50,14 +50,18 @@ const RecordIndex: React.FC<diaryIndex> = () => {
 
   return(
     <div className="flex justify-center">
-      <div className="max-w-64 my-20 pb-20">
-        <div>
-          <span>日記一覧</span>
-          <span>まとめ一覧</span>
+      <div className="min-w-64 my-20 pb-20">
+        <div className="flex">
+          <div className="w-1/2 p-2 text-center border border-primary solid rounded bg-primary text-white">
+            日記一覧
+          </div>
+          <div className="w-1/2 p-2 text-center border border-primary solid rounded">
+            まとめ一覧
+          </div>
         </div>
 
         {/* 検索フォーム */}
-        <form className="max-w-md mx-auto">   
+        <form className="max-w-md my-6">   
           <label id="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
           <div className="relative">
             <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
