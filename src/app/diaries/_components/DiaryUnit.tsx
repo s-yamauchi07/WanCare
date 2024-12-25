@@ -27,7 +27,7 @@ interface diaryProps {
 
 const DiaryUnit: React.FC<diaryProps> = ({diary}) => {
   const diaryImage = usePreviewImage(diary.imageKey, "diary_img");
-  console.log(diaryImage);
+  console.log(diary);
 
   return(
   <div className="max-w-sm rounded overflow-hidden shadow-lg" key={diary.id}>
@@ -48,9 +48,15 @@ const DiaryUnit: React.FC<diaryProps> = ({diary}) => {
       </p>
     </div>
     <div className="px-6 pt-4 pb-2">
-      <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#photography</span>
-      <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#travel</span>
-      <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
+      {diary.diaryTags?.map((tag) => {
+        return(
+          <span 
+            className="inline-block bg-secondary rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+            key={tag.id}>
+            {`#${tag.tag.name}`}
+          </span>
+        )
+      })}
     </div>
   </div>
 
