@@ -42,10 +42,9 @@ const DiaryUnit: React.FC<diaryProps> = ({diary}) => {
       </div>
     <div className="px-6 py-4">
       <div className="font-bold text-xl mb-2">{diary.title}</div>
-      <p className="text-gray-700 text-base">
-        {diary.createdAt}
+      <div className="text-gray-700 text-base line-clamp-3">
         {diary.content}
-      </p>
+      </div>
     </div>
     <div className="px-6 pt-4 pb-2">
       {diary.diaryTags?.map((tag) => {
