@@ -30,35 +30,34 @@ const DiaryUnit: React.FC<diaryProps> = ({diary}) => {
   console.log(diary);
 
   return(
-  <div className="max-w-sm rounded overflow-hidden shadow-lg" key={diary.id}>
-      <div className="w-full h-64 relative">
+    <div className="max-w-sm rounded-lg shadow-lg" key={diary.id}>
+      <div className="w-full h-64 relative overflow-hidden">
         <Image 
-          className="rounded-lg " 
+          className="rounded-lg" 
           src={diaryImage ? diaryImage :  no_diary_img}
-          alt="image description" 
-          layout="fill"
-          objectFit="contain"
+          alt="diary image"
+          fill={true}
+          style={{ objectFit: "cover", objectPosition: "center", boxSizing: "border-box" }}
         />
       </div>
-    <div className="px-6 py-4">
-      <div className="font-bold text-xl mb-2">{diary.title}</div>
-      <div className="text-gray-700 text-base line-clamp-3">
-        {diary.content}
+      <div className="px-6 py-4">
+        <div className="font-bold text-xl mb-2">{diary.title}</div>
+        <div className="text-gray-700 text-base line-clamp-2">
+          {diary.content}
+        </div>
+      </div>
+      <div className="px-6 pt-4 pb-2">
+        {diary.diaryTags?.map((tag) => {
+          return(
+            <span 
+              className="inline-block bg-secondary rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+              key={tag.id}>
+              {`#${tag.tag.name}`}
+            </span>
+          )
+        })}
       </div>
     </div>
-    <div className="px-6 pt-4 pb-2">
-      {diary.diaryTags?.map((tag) => {
-        return(
-          <span 
-            className="inline-block bg-secondary rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-            key={tag.id}>
-            {`#${tag.tag.name}`}
-          </span>
-        )
-      })}
-    </div>
-  </div>
-
   )
 }
 

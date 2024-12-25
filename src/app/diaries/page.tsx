@@ -70,11 +70,13 @@ const RecordIndex: React.FC<diaryIndex> = () => {
           </div>
         </form>
 
-        {diaryList.map((diary) => {
-          return(
-            <DiaryUnit diary={diary} key={diary.id}/>
-          )
-        })}
+        <div className="flex flex-col gap-4">
+          {diaryList.map((diary) => {
+            return(
+              <DiaryUnit diary={diary} key={diary.id}/>
+            )
+          })}
+        </div>
       </div>
     </div>
   )
