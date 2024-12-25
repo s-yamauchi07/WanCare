@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from 'next/link'
 import usePreviewImage from "@/_hooks/usePreviewImage";
 import no_diary_img from "@/public/no_diary_img.png";
 
@@ -40,12 +41,14 @@ const DiaryUnit: React.FC<diaryProps> = ({diary}) => {
           style={{ objectFit: "cover", objectPosition: "center", boxSizing: "border-box" }}
         />
       </div>
-      <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2">{diary.title}</div>
-        <div className="text-gray-700 text-base line-clamp-2">
-          {diary.content}
+      <Link href={`/diaries/${diary.id}`} >
+        <div className="px-6 py-4">
+          <p className="font-bold text-xl mb-2">{diary.title}</p>
+          <p className="text-gray-700 text-base line-clamp-2">
+            {diary.content}
+          </p>
         </div>
-      </div>
+      </Link>
       <div className="px-6 pt-4 pb-2">
         {diary.diaryTags?.map((tag) => {
           return(
