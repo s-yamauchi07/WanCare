@@ -31,34 +31,37 @@ const DiaryUnit: React.FC<diaryProps> = ({diary}) => {
   console.log(diary);
 
   return(
-    <div className="max-w-sm rounded-lg shadow-lg" key={diary.id}>
-      <div className="w-full h-64 relative overflow-hidden">
-        <Image 
-          className="rounded-lg" 
-          src={diaryImage ? diaryImage :  no_diary_img}
-          alt="diary image"
-          fill={true}
-          style={{ objectFit: "contain", objectPosition: "center", boxSizing: "border-box" }}
-        />
-      </div>
+    <div>
       <Link href={`/diaries/${diary.id}`} >
-        <div className="px-6 py-4">
-          <p className="font-bold text-xl mb-2">{diary.title}</p>
-          <p className="text-gray-700 text-base line-clamp-2">
+        <div className="relative w-full h-auto">
+          <div className="relative w-full h-0 pb-[100%]"> 
+            <Image
+              className="rounded-lg border border-solid shadow border-main bg-secondary"
+              src={diaryImage ? diaryImage : no_diary_img}
+              alt="diary image"
+              layout="fill"
+              objectFit="cover" 
+            />
+          </div> 
+        </div>
+        <div>
+          <p className="font-bold text-md mb-1">{diary.title}</p>
+          <p className="text-gray-700 text-sm line-clamp-2">
             {diary.content}
           </p>
         </div>
       </Link>
-      <div className="px-6 pt-4 pb-2">
+
+      <div>
         {diary.diaryTags?.map((tag) => {
           return(
             <span 
-              className="inline-block bg-secondary rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+              className="pr-2 py-1 text-xs font-semibold text-primary"
               key={tag.id}>
               {`#${tag.tag.name}`}
             </span>
           )
-        })}
+          })}
       </div>
     </div>
   )

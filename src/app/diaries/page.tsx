@@ -50,7 +50,7 @@ const RecordIndex: React.FC<diaryIndex> = () => {
 
   return(
     <div className="flex justify-center">
-      <div className="min-w-64 my-20 pb-20">
+      <div className="min-w-64 my-20 pb-20 px-4">
         <div className="flex">
           <div className="w-1/2 p-2 text-center border border-primary solid rounded bg-primary text-white">
             日記一覧
@@ -74,12 +74,12 @@ const RecordIndex: React.FC<diaryIndex> = () => {
           </div>
         </form>
 
-        <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {diaryList.map((diary) => {
-            return(
-              <DiaryUnit diary={diary} key={diary.id}/>
-            )
-          })}
+              return(
+                <DiaryUnit diary={diary} key={diary.id}/>
+              )
+            })}
         </div>
       </div>
     </div>
