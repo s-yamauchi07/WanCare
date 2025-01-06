@@ -81,6 +81,11 @@ const RecordIndex: React.FC<diaryIndex> = () => {
               )
             })}
         </div>
+
+        <div className="bg-primary text-white w-12 h-12 rounded-full fixed bottom-20">
+          <button className="i-material-symbols-add-rounded w-12 h-12">
+          </button>
+        </div>
       </div>
     </div>
   )
