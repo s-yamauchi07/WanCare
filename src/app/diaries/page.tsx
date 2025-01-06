@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import DiaryUnit from "./_components/DiaryUnit";
+import Link from "next/link";
 
 interface diaryIndex {
   id: string;
@@ -50,7 +51,7 @@ const RecordIndex: React.FC<diaryIndex> = () => {
 
   return(
     <div className="flex justify-center">
-      <div className="min-w-64 my-20 pb-20 px-4">
+      <div className="min-w-64 my-20 pb-20 px-4 relative">
         <div className="flex">
           <div className="w-1/2 p-2 text-center border border-primary solid rounded bg-primary text-white">
             日記一覧
@@ -82,9 +83,13 @@ const RecordIndex: React.FC<diaryIndex> = () => {
             })}
         </div>
 
-        <div className="bg-primary text-white w-12 h-12 rounded-full fixed bottom-20">
-          <button className="i-material-symbols-add-rounded w-12 h-12">
-          </button>
+        <div className="flex justify-end sticky bottom-20">
+          <Link
+            href="diaries/new" 
+            className="bg-primary text-white rounded-full w-12 h-12">
+            <span className="i-material-symbols-add-rounded w-12 h-12">
+            </span>
+          </Link>
         </div>
       </div>
     </div>
