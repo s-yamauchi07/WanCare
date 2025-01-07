@@ -45,8 +45,8 @@ const DiaryUnit: React.FC<diaryProps> = ({diary}) => {
           </div> 
         </div>
         <div>
-          <p className="font-bold text-md mb-1">{diary.title}</p>
-          <p className="text-gray-700 text-sm line-clamp-2">
+          <p className="font-bold text-md">{diary.title}</p>
+          <p className="text-gray-700 text-xs line-clamp-2">
             {diary.content}
           </p>
         </div>
