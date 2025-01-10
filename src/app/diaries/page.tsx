@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
+import InfiniteScroll from 'react-infinite-scroller';
 import DiaryUnit from "./_components/DiaryUnit";
 import Link from "next/link";
 
@@ -25,28 +26,36 @@ interface tags {
 const RecordIndex: React.FC<diaryIndex> = () => {
   const { token } = useSupabaseSession();
   const [diaryList, setDiaryList] = useState<diaryIndex[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(0);
 
-  useEffect(() => {
+  const fetchDiary = async() => {
     if(!token) return;
 
-    const fetchDiary = async() => {
-      try{
-        const res = await fetch("/api/diaries", {
-          headers: {
-            "Content-Type" : "application/json",
-            Authorization: token,
-          },
-        })
+    try{
+      const res = await fetch(`/api/diaries?page=${page}`, {
+        headers: {
+          "Content-Type" : "application/json",
+          Authorization: token,
+        },
+      })
 
-        const { diaries } = await res.json();
-        console.log(diaries)
-        setDiaryList(diaries);
-      } catch(error) {
-        console.log(error);
-      } 
-    }
+      const { diaries } = await res.json();
+      setDiaryList((prevDiaryList) => [...prevDiaryList, ...diaries]);
+      setPage(prevPage => prevPage + 1);
+      if(diaries.length < 4) {
+        setHasMore(false);
+      }
+
+    } catch(error) {
+      console.log(error);
+      setHasMore(false);
+    } 
+  }
+
+  useEffect(() => {
     fetchDiary();
-  }, [token]);
+  }, []);
 
 
   return(
@@ -75,13 +84,20 @@ const RecordIndex: React.FC<diaryIndex> = () => {
           </div>
         </form>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {diaryList.map((diary) => {
-              return(
-                <DiaryUnit diary={diary} key={diary.id}/>
-              )
-            })}
-        </div>
+        <InfiniteScroll 
+          loadMore={fetchDiary}
+          hasMore={hasMore}
+          loader={<h4 key={0}>Loading...</h4>}
+        >
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {diaryList.map((diary) => {
+                  return(
+                    <DiaryUnit diary={diary} key={diary.id}/>
+                  )
+                })
+              }
+          </div>
+        </InfiniteScroll>
 
         <div className="flex justify-end sticky bottom-20">
           <Link
