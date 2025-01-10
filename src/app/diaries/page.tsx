@@ -39,9 +39,14 @@ const RecordIndex: React.FC<diaryIndex> = () => {
           Authorization: token,
         },
       })
-
       const { diaries } = await res.json();
-      setDiaryList((prevDiaryList) => [...prevDiaryList, ...diaries]);
+      setDiaryList((prevDiaryList) => {
+        const newDiaries = diaries.filter((newDiary: diaryIndex) => 
+          !prevDiaryList.some((prevDiary) => prevDiary.id === newDiary.id)
+        );
+        return [...prevDiaryList, ...newDiaries];
+      });
+
       setPage(prevPage => prevPage + 1);
       if(diaries.length < 4) {
         setHasMore(false);
@@ -54,6 +59,9 @@ const RecordIndex: React.FC<diaryIndex> = () => {
   }
 
   useEffect(() => {
+    setHasMore(true);
+    setPage(0);
+    setDiaryList([]);
     fetchDiary();
   }, []);
 

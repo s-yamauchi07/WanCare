@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
 import Link from 'next/link'
-import Head from 'next/head';
 import usePreviewImage from "@/_hooks/usePreviewImage";
 import no_diary_img from "@/public/no_diary_img.png";
 
@@ -28,13 +27,10 @@ interface diaryProps {
 }
 
 const DiaryUnit: React.FC<diaryProps> = ({diary}) => {
-  const diaryImage = usePreviewImage(diary.imageKey, "diary_img") || undefined;
+  const diaryImage = usePreviewImage(diary.imageKey, "diary_img");
 
   return(
     <div>
-      <Head> 
-        <link rel="preload" href={diaryImage} as="image" /> 
-      </Head>
       <Link href={`/diaries/${diary.id}`}>
         <div className="relative w-full h-auto">
           <div className="relative w-full h-0 pb-[100%]"> 
