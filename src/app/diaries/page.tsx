@@ -6,22 +6,16 @@ import InfiniteScroll from 'react-infinite-scroller';
 import DiaryUnit from "./_components/DiaryUnit";
 import LoadingDiary from "./_components/LoadingDiary";
 import Link from "next/link";
+import { Tag } from "@/_types/tag";
 
 interface diaryIndex {
   id: string;
   title: string;
   content: string;
   imageKey: string | null;
-  diaryTags: tags[] | null;
+  diaryTags: Tag[] | null;
   summaryId: string | null;
   createdAt: string;
-}
-
-interface tags {
-  id: string;
-  diaryId: string;
-  tag: {id: string, name: string}
-  tagId: string;
 }
 
 const RecordIndex: React.FC = () => {
