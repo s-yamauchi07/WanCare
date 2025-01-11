@@ -4,7 +4,10 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
+import { usePreviewImage } from "@/_hooks/usePreviewImage";
+import no_diary_img from "@/public/no_diary_img.png";
 import { Tag } from "@/_types/tag";
+import Image from "next/image";
 
 interface DiaryDetail {
   id: string;
@@ -24,7 +27,8 @@ const DiaryDetail: React.FC = () => {
   const { id } = params;
   const { token } = useSupabaseSession();
   const [diary, setDiary] = useState<DiaryDetail | null >(null);
-  // const thumbnailImage = useState(null);
+  const thumbnailImage = usePreviewImage(diary?.imageKey ?? null, "diary_img")
+  console.log(thumbnailImage)
 
   useEffect(() => {
     if (!token) return;
@@ -52,42 +56,59 @@ const DiaryDetail: React.FC = () => {
 
   return(
     <div className="flex justify-center">
-      <div className="min-w-64 my-20 flex flex-col">
+      <div className="max-w-64 my-20 flex flex-col">
         {/* 日付タイトルエリア */}
         <div>
-          <p>投稿日{changeFromISOtoDate(diary.createdAt, "date")}</p>
-          <h2>タイトル</h2>
+          <p>{changeFromISOtoDate(diary.createdAt, "date")}</p>
+          <h2 className="text-2xl border-b-2 border-gray-700 pb-2">
+            {diary.title}
+          </h2>
         </div>
         {/* 日付タイトルエリア */}
 
         {/* 編集・削除ボタン */}
-        <div>
-          <span>編集</span>
-          <span>削除</span>
+        <div className="flex justify-end gap-2 my-2">
+          <span className="text-sm">編集</span>
+          <span className="text-sm">削除</span>
         </div>
         {/* 編集・削除ボタン */}
 
         {/* 画像表示エリア */}
-        <div>
-          画像エリア
+        <div className="relative w-full h-[256px]">
+          <Image 
+            src={thumbnailImage ? thumbnailImage : no_diary_img}
+            alt="diary Image"
+            fill
+            priority
+            style={{ objectFit: "cover"}}
+          />
         </div>
         {/* 画像表示エリア */}
 
         {/* 本文エリア */}
-        <div>
-
+        <div className="min-h-20 p-2 mt-6 mb-2 bg-white rounded-lg">
+          {diary.content}  
         </div>
         {/* 本文エリア */}
 
         {/* タグ表示エリア */}
-        <div>
-          <span>タグ名</span>
+        <div className="min-h-6 text-primary font-bold">
+          {diary.diaryTags && diary.diaryTags.length > 0 && (
+            diary.diaryTags.map((tag) => (
+              <span 
+                key={tag.id}
+                className="mr-2"
+              >
+                {`#${tag.tag.name}`}
+              </span>
+            ))
+          )}
         </div>
         {/* タグ表示エリア */}
 
 
         {/* ブックマーク/コメントタブエリア */}
-        <div className="flex">
+        <div className="flex my-8">
           <div className="w-1/2 p-2 text-center border border-primary solid rounded bg-primary text-white flex items-center justify-center gap-1">
             <span className="i-mdi-chat-processing-outline"></span>
             <span className="text-sm">コメントする</span>
