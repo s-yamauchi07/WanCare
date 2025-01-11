@@ -106,7 +106,6 @@ const CareDetail: React.FC = () => {
                       alt="careImage"
                       width={256}
                       height={144}
-                      style={{ width: '100%', height: 'auto' }}
                       priority={true}
                       className="rounded-lg"
                     />
