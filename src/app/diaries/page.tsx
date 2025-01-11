@@ -40,6 +40,7 @@ const RecordIndex: React.FC<diaryIndex> = () => {
         },
       })
       const { diaries } = await res.json();
+      
       setDiaryList((prevDiaryList) => {
         const newDiaries = diaries.filter((newDiary: diaryIndex) => 
           !prevDiaryList.some((prevDiary) => prevDiary.id === newDiary.id)
@@ -51,7 +52,6 @@ const RecordIndex: React.FC<diaryIndex> = () => {
       if(diaries.length < 4) {
         setHasMore(false);
       }
-
     } catch(error) {
       console.log(error);
       setHasMore(false);
@@ -68,7 +68,7 @@ const RecordIndex: React.FC<diaryIndex> = () => {
 
   return(
     <div className="flex justify-center">
-      <div className="min-w-64 my-20 pb-20 px-4 relative">
+      <div className="my-20 pb-10 px-4 relative w-full max-w-screen-lg">
         <div className="flex">
           <div className="w-1/2 p-2 text-center border border-primary solid rounded bg-primary text-white">
             日記一覧
