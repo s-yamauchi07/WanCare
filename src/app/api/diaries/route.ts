@@ -29,6 +29,9 @@ export const GET = async(request: NextRequest) => {
           },
         },
       },
+      orderBy: {
+        createdAt: "desc"
+      }
     });
 
     return NextResponse.json({ status: "OK", diaries: diaries }, { status: 200});
