@@ -29,10 +29,12 @@ const RecordIndex: React.FC<diaryIndex> = () => {
   const [diaryList, setDiaryList] = useState<diaryIndex[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchDiary = async() => {
-    if(!token) return;
+    if(!token || isLoading) return;
 
+    setIsLoading(true);
     try{
       const res = await fetch(`/api/diaries?page=${page}`, {
         headers: {
@@ -56,13 +58,15 @@ const RecordIndex: React.FC<diaryIndex> = () => {
     } catch(error) {
       console.log(error);
       setHasMore(false);
-    } 
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   useEffect(() => {
-    setHasMore(true);
-    setPage(0);
-    setDiaryList([]);
+    // setHasMore(true);
+    // setPage(0);
+    // setDiaryList([]);
     fetchDiary();
   }, []);
 

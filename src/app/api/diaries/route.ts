@@ -12,7 +12,7 @@ export const GET = async(request: NextRequest) => {
 
   const { searchParams } = new URL(request.url);
   const page = parseInt(searchParams.get('page') || '0', 10);
-
+  
   try {
     const diaries = await prisma.diary.findMany({
       skip: page * 4,
