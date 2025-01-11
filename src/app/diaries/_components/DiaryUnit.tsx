@@ -54,15 +54,15 @@ const DiaryUnit: React.FC<diaryProps> = ({diary}) => {
       </Link>
 
       <div>
-        {diary.diaryTags?.map((tag) => {
-          return(
+        {diary.diaryTags && diary.diaryTags.length > 0 && (
+          diary.diaryTags.map((tag) => (
             <span 
               className="pr-2 py-1 text-xs font-semibold text-primary"
               key={tag.id}>
               {`#${tag.tag.name}`}
             </span>
-          )
-          })}
+          ))
+        )}
       </div>
     </div>
   )
