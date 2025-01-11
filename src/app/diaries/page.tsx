@@ -24,7 +24,7 @@ interface tags {
   tagId: string;
 }
 
-const RecordIndex: React.FC<diaryIndex> = () => {
+const RecordIndex: React.FC = () => {
   const { token } = useSupabaseSession();
   const [diaryList, setDiaryList] = useState<diaryIndex[]>([]);
   const [hasMore, setHasMore] = useState(true);
@@ -64,9 +64,6 @@ const RecordIndex: React.FC<diaryIndex> = () => {
   }
 
   useEffect(() => {
-    // setHasMore(true);
-    // setPage(0);
-    // setDiaryList([]);
     fetchDiary();
   }, []);
 
