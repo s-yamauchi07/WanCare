@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import InfiniteScroll from 'react-infinite-scroller';
 import DiaryUnit from "./_components/DiaryUnit";
+import LoadingDiary from "./_components/LoadingDiary";
 import Link from "next/link";
 
 interface diaryIndex {
@@ -95,7 +96,7 @@ const RecordIndex: React.FC<diaryIndex> = () => {
         <InfiniteScroll 
           loadMore={fetchDiary}
           hasMore={hasMore}
-          loader={<h4 key={0}>Loading...</h4>}
+          loader={<LoadingDiary key={0} />}
         >
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {diaryList.map((diary) => {
