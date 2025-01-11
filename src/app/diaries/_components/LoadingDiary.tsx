@@ -1,7 +1,7 @@
 import React from "react";
 
 const LoadingDiary: React.FC = () => {
-  const skeletons = Array(8).fill(0);
+  const skeletons = Array(6).fill(0);
 
   return(
     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
