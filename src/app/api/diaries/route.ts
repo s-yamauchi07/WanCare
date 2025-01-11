@@ -10,8 +10,13 @@ export const GET = async(request: NextRequest) => {
   const { error } = await userAuthentication(request);
   if (error) return handleError(error);
 
+  const { searchParams } = new URL(request.url);
+  const page = parseInt(searchParams.get('page') || '0', 10);
+  
   try {
     const diaries = await prisma.diary.findMany({
+      skip: page * 4,
+      take: 4,
       include: {
         diaryTags: {
           include: {
@@ -24,6 +29,9 @@ export const GET = async(request: NextRequest) => {
           },
         },
       },
+      orderBy: {
+        createdAt: "desc"
+      }
     });
 
     return NextResponse.json({ status: "OK", diaries: diaries }, { status: 200});

@@ -32,9 +32,9 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        main: "#FDF9F2",
-        primary: "#15A083",
-        secondary: "#fDCf3E",
+        main: "#f5ebda",
+        primary: "#326a55",
+        secondary: "#eead6b",
       },
       width: {
         'main': '450px',
