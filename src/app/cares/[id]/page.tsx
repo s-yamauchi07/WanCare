@@ -106,7 +106,6 @@ const CareDetail: React.FC = () => {
                       alt="careImage"
                       width={256}
                       height={144}
-                      style={{ width: '100%', height: 'auto' }}
                       priority={true}
                       className="rounded-lg"
                     />
@@ -123,6 +122,8 @@ const CareDetail: React.FC = () => {
               <IconButton 
                 iconName="i-material-symbols-light-edit-square-outline"
                 buttonText="記録を編集"
+                color="bg-primary"
+                textColor="text-white"
               />
             </div>
           </div>

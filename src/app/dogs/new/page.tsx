@@ -20,6 +20,8 @@ const addDog: React.FC = () => {
           <IconButton 
             iconName="i-material-symbols-add-rounded"
             buttonText="ペットを登録する"
+            color="bg-primary"
+            textColor="text-white"
           />
         </Link>
       </div>

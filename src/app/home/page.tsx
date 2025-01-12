@@ -125,6 +125,8 @@ const Home: React.FC = () => {
                   <IconButton 
                   iconName="i-material-symbols-light-edit-square-outline"
                   buttonText="Edit"
+                  color="bg-primary"
+                  textColor="text-white"
                   />
                 </Link>
               </div>
