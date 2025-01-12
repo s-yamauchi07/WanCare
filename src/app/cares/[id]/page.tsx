@@ -122,6 +122,8 @@ const CareDetail: React.FC = () => {
               <IconButton 
                 iconName="i-material-symbols-light-edit-square-outline"
                 buttonText="記録を編集"
+                color="bg-primary"
+                textColor="text-white"
               />
             </div>
           </div>

@@ -34,7 +34,7 @@ const config: Config = {
         foreground: "var(--foreground)",
         main: "#f5ebda",
         primary: "#326a55",
-        secondary: "#eead6b",
+        secondary: "#FBC95C",
       },
       width: {
         'main': '450px',

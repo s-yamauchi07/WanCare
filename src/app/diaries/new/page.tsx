@@ -178,6 +178,8 @@ const AddDiary: React.FC = () => {
               <IconButton
                 iconName="i-material-symbols-add-rounded" 
                 buttonText="まとめを作成" 
+                color="bg-secondary"
+                textColor="text-gray-800"
               />
             </div>
 

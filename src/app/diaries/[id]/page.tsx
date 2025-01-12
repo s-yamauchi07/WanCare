@@ -6,6 +6,7 @@ import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
 import { usePreviewImage } from "@/_hooks/usePreviewImage";
 import no_diary_img from "@/public/no_diary_img.png";
+import IconButton from "@/app/_components/IconButton";
 import { Tag } from "@/_types/tag";
 import Image from "next/image";
 
@@ -68,8 +69,18 @@ const DiaryDetail: React.FC = () => {
 
         {/* 編集・削除ボタン */}
         <div className="flex justify-end gap-2 my-2">
-          <span className="text-sm">編集</span>
-          <span className="text-sm">削除</span>
+          <IconButton
+            iconName="i-material-symbols-light-edit-square-outline"
+            buttonText="編集"
+            color="bg-primary"
+            textColor="text-white" 
+          />
+          <IconButton
+            iconName="i-material-symbols-light-edit-square-outline"
+            buttonText="削除" 
+            color="bg-secondary"
+            textColor="text-gray-800"
+          />
         </div>
         {/* 編集・削除ボタン */}
 

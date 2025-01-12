@@ -87,7 +87,12 @@ const Calendar: React.FC<CalendarProps> = ({ cares }) => {
         <div className="flex justify-between items-stretch mb-4">
           <h3 className="text-primary text-start text-2xl font-bold">記録</h3>
           <Link href="/cares/new">
-            <IconButton iconName="i-material-symbols-add-rounded" buttonText="記録をつける" />
+            <IconButton 
+              iconName="i-material-symbols-add-rounded"
+              buttonText="記録をつける"
+              color="bg-primary"
+              textColor="text-white"
+            />
           </Link>
         </div>
         <ul className="flex flex-col gap-1">
