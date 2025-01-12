@@ -57,14 +57,12 @@ const DiaryDetail: React.FC = () => {
   return(
     <div className="flex justify-center">
       <div className="max-w-64 my-20 flex flex-col">
-        {/* 日付タイトルエリア */}
-        <div>
+        <div className="mb-8">
           <p>{changeFromISOtoDate(diary.createdAt, "date")}</p>
           <h2 className="text-2xl border-b-2 border-gray-700 pb-2">
             {diary.title}
           </h2>
         </div>
-        {/* 日付タイトルエリア */}
 
         {session?.user.id === diary.ownerId && (
           <div className="flex justify-end gap-2 my-2">
