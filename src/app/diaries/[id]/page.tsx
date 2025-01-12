@@ -26,10 +26,9 @@ interface DiaryDetail {
 const DiaryDetail: React.FC = () => {
   const params = useParams();
   const { id } = params;
-  const { token } = useSupabaseSession();
+  const { token, session } = useSupabaseSession();
   const [diary, setDiary] = useState<DiaryDetail | null >(null);
   const thumbnailImage = usePreviewImage(diary?.imageKey ?? null, "diary_img")
-  console.log(thumbnailImage)
 
   useEffect(() => {
     if (!token) return;
@@ -67,22 +66,22 @@ const DiaryDetail: React.FC = () => {
         </div>
         {/* 日付タイトルエリア */}
 
-        {/* 編集・削除ボタン */}
-        <div className="flex justify-end gap-2 my-2">
-          <IconButton
-            iconName="i-material-symbols-light-edit-square-outline"
-            buttonText="編集"
-            color="bg-primary"
-            textColor="text-white" 
-          />
-          <IconButton
-            iconName="i-material-symbols-light-edit-square-outline"
-            buttonText="削除" 
-            color="bg-secondary"
-            textColor="text-gray-800"
-          />
-        </div>
-        {/* 編集・削除ボタン */}
+        {session?.user.id === diary.ownerId && (
+          <div className="flex justify-end gap-2 my-2">
+            <IconButton
+              iconName="i-material-symbols-light-edit-square-outline"
+              buttonText="編集"
+              color="bg-primary"
+              textColor="text-white" 
+            />
+            <IconButton
+              iconName="i-material-symbols-light-edit-square-outline"
+              buttonText="削除" 
+              color="bg-secondary"
+              textColor="text-gray-800"
+            />
+          </div>
+        )}
 
         {/* 画像表示エリア */}
         <div className="relative w-full h-[256px]">
