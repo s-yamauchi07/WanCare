@@ -10,6 +10,7 @@ import IconButton from "@/app/_components/IconButton";
 import { Tag } from "@/_types/tag";
 import Image from "next/image";
 import ModalWindow from "@/app/_components/ModalWindow";
+import DiaryForm from "../_components/DiaryForm";
 
 interface DiaryDetail {
   id: string;
@@ -65,7 +66,7 @@ const DiaryDetail: React.FC = () => {
   return(
     <div className="flex justify-center">
       <div className="max-w-64 my-20 flex flex-col">
-        <div className="mb-8">
+        <div className="mb-4">
           <p>{changeFromISOtoDate(diary.createdAt, "date")}</p>
           <h2 className="text-2xl border-b-2 border-gray-700 pb-2">
             {diary.title}
@@ -91,14 +92,11 @@ const DiaryDetail: React.FC = () => {
             />
           </div>
           <ModalWindow show={openModal} onClose={ModalClose} >
-            <div>
-              <h1>モーダルOpen</h1>
-            </div>
+            <DiaryForm diary={diary} isEdit={true} />
           </ModalWindow>
           </>
         )}
 
-        {/* 画像表示エリア */}
         <div className="relative w-full h-[256px]">
           <Image 
             src={thumbnailImage ? thumbnailImage : no_diary_img}
@@ -108,15 +106,11 @@ const DiaryDetail: React.FC = () => {
             style={{ objectFit: "cover"}}
           />
         </div>
-        {/* 画像表示エリア */}
 
-        {/* 本文エリア */}
         <div className="min-h-20 p-2 mt-6 mb-2 bg-white rounded-lg">
           {diary.content}  
         </div>
-        {/* 本文エリア */}
 
-        {/* タグ表示エリア */}
         <div className="min-h-6 text-primary font-bold">
           {diary.diaryTags && diary.diaryTags.length > 0 && (
             diary.diaryTags.map((tag) => (
@@ -129,10 +123,7 @@ const DiaryDetail: React.FC = () => {
             ))
           )}
         </div>
-        {/* タグ表示エリア */}
 
-
-        {/* ブックマーク/コメントタブエリア */}
         <div className="flex my-8">
           <div className="w-1/2 p-2 text-center border border-primary solid rounded bg-primary text-white flex items-center justify-center gap-1">
             <span className="i-mdi-chat-processing-outline"></span>
@@ -143,8 +134,6 @@ const DiaryDetail: React.FC = () => {
             <span className="text-sm">ブックマーク</span>
           </div>
         </div>
-        {/* ブックマーク/コメント投稿エリア */}
-
 
       </div>
     </div>
