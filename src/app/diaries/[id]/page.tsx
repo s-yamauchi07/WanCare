@@ -59,7 +59,7 @@ const DiaryDetail: React.FC = () => {
       }
     }
     fetchDiary()
-  }, [id, token]);
+  }, [id, token, refresh]);
 
   if (!diary) return;
 
@@ -92,7 +92,7 @@ const DiaryDetail: React.FC = () => {
             />
           </div>
           <ModalWindow show={openModal} onClose={ModalClose} >
-            <DiaryForm diary={diary} isEdit={true} />
+            <DiaryForm diary={diary} isEdit={true} onClose={ModalClose} />
           </ModalWindow>
           </>
         )}
