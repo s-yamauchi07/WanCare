@@ -14,11 +14,7 @@ import { useEditPreviewImage } from "@/_hooks/useEditPreviewImage";
 import useUploadImage from "@/_hooks/useUploadImage";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { DiaryRequest } from "@/_types/diary";
-
-interface SummaryResponse {
-  id: string;
-  title: string;
-}
+import { SummaryResponse } from "@/_types/summary";
 
 const AddDiary: React.FC = () => {
   useRouteGuard();

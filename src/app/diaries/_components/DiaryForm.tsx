@@ -12,6 +12,7 @@ import useUploadImage from "@/_hooks/useUploadImage";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { DiaryRequest } from "@/_types/diary";
 import { Tag } from "@/_types/tag";
+import { SummaryResponse } from "@/_types/summary";
 
 interface DiaryDetail {
   id: string;
@@ -30,11 +31,6 @@ interface DiaryFormProps {
   diary: DiaryDetail;
   isEdit?: boolean;
   onClose: () => void;
-}
-
-interface SummaryResponse {
-  id: string;
-  title: string;
 }
 
 const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose}) => {
