@@ -10,25 +10,11 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useEditPreviewImage } from "@/_hooks/useEditPreviewImage";
 import useUploadImage from "@/_hooks/useUploadImage";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
-import { DiaryRequest } from "@/_types/diary";
-import { Tag } from "@/_types/tag";
+import { DiaryRequest, DiaryDetails } from "@/_types/diary";
 import { SummaryResponse } from "@/_types/summary";
 
-interface DiaryDetail {
-  id: string;
-  title: string;
-  content: string;
-  imageKey: string | null;
-  ownerId: string;
-  summaryId: string | null;
-  createdAt: string;
-  updatedAt: string;
-  diaryTags: Tag[] | null;
-  comments: {comment: string, nickname: string}
-}
-
 interface DiaryFormProps {
-  diary: DiaryDetail;
+  diary: DiaryDetails;
   isEdit?: boolean;
   onClose: () => void;
 }

@@ -7,29 +7,16 @@ import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoD
 import { usePreviewImage } from "@/_hooks/usePreviewImage";
 import no_diary_img from "@/public/no_diary_img.png";
 import IconButton from "@/app/_components/IconButton";
-import { Tag } from "@/_types/tag";
+import { DiaryDetails } from "@/_types/diary";
 import Image from "next/image";
 import ModalWindow from "@/app/_components/ModalWindow";
 import DiaryForm from "../_components/DiaryForm";
-
-interface DiaryDetail {
-  id: string;
-  title: string;
-  content: string;
-  imageKey: string | null;
-  ownerId: string;
-  summaryId: string | null;
-  createdAt: string;
-  updatedAt: string;
-  diaryTags: Tag[] | null;
-  comments: {comment: string, nickname: string}
-}
 
 const DiaryDetail: React.FC = () => {
   const params = useParams();
   const { id } = params;
   const { token, session } = useSupabaseSession();
-  const [diary, setDiary] = useState<DiaryDetail | null >(null);
+  const [diary, setDiary] = useState<DiaryDetails | null >(null);
   const thumbnailImage = usePreviewImage(diary?.imageKey ?? null, "diary_img")
   const [openModal, setOpenModal] = useState(false);
   const [refresh, setRefresh] = useState<boolean>(false);
