@@ -9,6 +9,7 @@ import no_diary_img from "@/public/no_diary_img.png";
 import IconButton from "@/app/_components/IconButton";
 import { Tag } from "@/_types/tag";
 import Image from "next/image";
+import ModalWindow from "@/app/_components/ModalWindow";
 
 interface DiaryDetail {
   id: string;
@@ -29,6 +30,13 @@ const DiaryDetail: React.FC = () => {
   const { token, session } = useSupabaseSession();
   const [diary, setDiary] = useState<DiaryDetail | null >(null);
   const thumbnailImage = usePreviewImage(diary?.imageKey ?? null, "diary_img")
+  const [openModal, setOpenModal] = useState(false);
+  const [refresh, setRefresh] = useState<boolean>(false);
+
+  const ModalClose = () => {
+    setOpenModal(false);
+    setRefresh(!refresh);
+  }
 
   useEffect(() => {
     if (!token) return;
@@ -65,13 +73,16 @@ const DiaryDetail: React.FC = () => {
         </div>
 
         {session?.user.id === diary.ownerId && (
+          <>
           <div className="flex justify-end gap-2 my-2">
-            <IconButton
-              iconName="i-material-symbols-light-edit-square-outline"
-              buttonText="編集"
-              color="bg-primary"
-              textColor="text-white" 
-            />
+            <div onClick={ () => setOpenModal(true)}>
+              <IconButton
+                iconName="i-material-symbols-light-edit-square-outline"
+                buttonText="編集"
+                color="bg-primary"
+                textColor="text-white" 
+              />
+            </div>
             <IconButton
               iconName="i-material-symbols-light-edit-square-outline"
               buttonText="削除" 
@@ -79,6 +90,12 @@ const DiaryDetail: React.FC = () => {
               textColor="text-gray-800"
             />
           </div>
+          <ModalWindow show={openModal} onClose={ModalClose} >
+            <div>
+              <h1>モーダルOpen</h1>
+            </div>
+          </ModalWindow>
+          </>
         )}
 
         {/* 画像表示エリア */}
