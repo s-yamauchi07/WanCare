@@ -6,21 +6,11 @@ import InfiniteScroll from 'react-infinite-scroller';
 import DiaryUnit from "./_components/DiaryUnit";
 import LoadingDiary from "./_components/LoadingDiary";
 import Link from "next/link";
-import { Tag } from "@/_types/tag";
-
-interface diaryIndex {
-  id: string;
-  title: string;
-  content: string;
-  imageKey: string | null;
-  diaryTags: Tag[] | null;
-  summaryId: string | null;
-  createdAt: string;
-}
+import { DiaryDetails } from "@/_types/diary";
 
 const RecordIndex: React.FC = () => {
   const { token } = useSupabaseSession();
-  const [diaryList, setDiaryList] = useState<diaryIndex[]>([]);
+  const [diaryList, setDiaryList] = useState<DiaryDetails[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +29,7 @@ const RecordIndex: React.FC = () => {
       const { diaries } = await res.json();
       
       setDiaryList((prevDiaryList) => {
-        const newDiaries = diaries.filter((newDiary: diaryIndex) => 
+        const newDiaries = diaries.filter((newDiary: DiaryDetails) => 
           !prevDiaryList.some((prevDiary) => prevDiary.id === newDiary.id)
         );
         return [...prevDiaryList, ...newDiaries];

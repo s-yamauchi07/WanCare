@@ -4,19 +4,22 @@ export interface DiaryRequest {
   title: string;
   content: string;
   imageKey?: string | null;
-  tags?: string;
+  tags?: string | null;
   summaryId?: string | null;
 }
 
-export interface DiaryDetails {
+export interface BaseDiary {
   id: string;
   title: string;
   content: string;
   imageKey: string | null;
-  ownerId: string;
+  diaryTags: Tag[] | null;
   summaryId: string | null;
   createdAt: string;
   updatedAt: string;
-  diaryTags: Tag[] | null;
+}
+
+export interface DiaryDetails extends BaseDiary {
+  ownerId: string;
   comments: {comment: string, nickname: string}
 }
