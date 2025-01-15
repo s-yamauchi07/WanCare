@@ -35,7 +35,7 @@ const DiaryUnit: React.FC<diaryProps> = ({diary}) => {
         <div className="relative w-full h-auto">
           <div className="relative w-full h-0 pb-[100%]"> 
             <Image
-              className="rounded-lg border border-solid shadow-xl drop-shadow-xl border-main bg-main"
+              className="rounded-lg shadow-xl drop-shadow-xl border-main bg-main"
               src={diaryImage ? diaryImage : no_diary_img}
               alt="diary image"
               fill
