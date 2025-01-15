@@ -39,7 +39,6 @@ const DiaryDetail: React.FC = () => {
         });
 
         const { diary } = await res.json();
-        console.log(diary)
         setDiary(diary);
       } catch(error) {
         console.log(error);
