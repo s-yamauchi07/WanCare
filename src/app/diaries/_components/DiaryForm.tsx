@@ -73,7 +73,7 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose}) => {
 
   return(
     <div className="flex justify-center">
-      <form className="max-w-64 my-20 pb-20" onSubmit={handleSubmit(onSubmit)}>
+      <form className="max-w-64 my-8" onSubmit={handleSubmit(onSubmit)}>
         <h2 className="text-primary text-center text-2xl font-bold mb-10">{isEdit ? "日記編集" : "日記投稿"}</h2>
 
         <Input 
