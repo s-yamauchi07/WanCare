@@ -14,7 +14,7 @@ import { DiaryRequest, DiaryDetails } from "@/_types/diary";
 import { SummaryResponse } from "@/_types/summary";
 
 interface DiaryFormProps {
-  diary: DiaryDetails;
+  diary?: DiaryDetails;
   isEdit?: boolean;
   onClose: () => void;
 }
@@ -26,20 +26,20 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose}) => {
   const { register, handleSubmit, reset, setValue, watch, formState: { errors, isSubmitting}} = useForm<DiaryRequest>();
   const imageKey = watch("imageKey");
   const { uploadedKey, isUploading } = useUploadImage(imageKey ?? null, "diary_img" );
-  const thumbnailImageUrl = useEditPreviewImage(uploadedKey ?? null, "diary_img", diary.imageKey ?? null);
+  const thumbnailImageUrl = useEditPreviewImage(uploadedKey ?? null, "diary_img", diary?.imageKey ?? null);
 
   const [summaryLists, setSummaryLists] = useState<SummaryResponse[]>([]);
 
   const onSubmit: SubmitHandler<DiaryRequest> = async(data) => {
     const req = {
       ...data,
-      tags: data.tags?.split(" "),
-      imageKey: uploadedKey || diary.imageKey,
+      tags: data.tags?.split(" ").filter(tag => tag.trim() !== "") ?? null,
+      imageKey: uploadedKey || diary?.imageKey,
     }
 
     if(!token) return;
     try {
-      const response = await fetch(isEdit ? `/api/diaries/${diary.id}` : "/api/diaries/", {
+      const response = await fetch(isEdit ? `/api/diaries/${diary?.id}` : "/api/diaries/", {
         headers: {
           "Content-Type" : "application/json",
           Authorization: token,
@@ -97,7 +97,7 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose}) => {
   return(
     <div className="flex justify-center">
       <form className="max-w-64 my-20 pb-20" onSubmit={handleSubmit(onSubmit)}>
-        <h2 className="text-primary text-center text-2xl font-bold mb-10">日記編集</h2>
+        <h2 className="text-primary text-center text-2xl font-bold mb-10">{isEdit ? "日記編集" : "日記投稿"}</h2>
 
         <Input 
           id="title"
@@ -188,7 +188,7 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose}) => {
 
         <LoadingButton 
           isSubmitting={isSubmitting}
-          buttonText={"更新"}
+          buttonText={isEdit ? "更新" : "投稿"}
         />
       </form>
       <Toaster />
