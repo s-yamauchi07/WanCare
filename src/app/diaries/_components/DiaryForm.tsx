@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Input from "@/app/_components/Input";
 import Textarea from "@/app/_components/Textarea";
 import IconButton from "@/app/_components/IconButton";
@@ -11,7 +11,7 @@ import { useEditPreviewImage } from "@/_hooks/useEditPreviewImage";
 import useUploadImage from "@/_hooks/useUploadImage";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { DiaryRequest, DiaryDetails } from "@/_types/diary";
-import { SummaryResponse } from "@/_types/summary";
+import { useFetchSummaries } from "../_hooks/useFetchSummaries";
 
 interface DiaryFormProps {
   diary?: DiaryDetails;
@@ -21,14 +21,12 @@ interface DiaryFormProps {
 
 const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose}) => {
   useRouteGuard();
-  const { token, session } = useSupabaseSession();
-  const userId = session?.user.id;
+  const { token } = useSupabaseSession();
   const { register, handleSubmit, reset, setValue, watch, formState: { errors, isSubmitting}} = useForm<DiaryRequest>();
   const imageKey = watch("imageKey");
   const { uploadedKey, isUploading } = useUploadImage(imageKey ?? null, "diary_img" );
   const thumbnailImageUrl = useEditPreviewImage(uploadedKey ?? null, "diary_img", diary?.imageKey ?? null);
-
-  const [summaryLists, setSummaryLists] = useState<SummaryResponse[]>([]);
+  const { summaryLists } = useFetchSummaries();
 
   const onSubmit: SubmitHandler<DiaryRequest> = async(data) => {
     const req = {
@@ -72,27 +70,6 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose}) => {
       setValue("tags", tagNames)
     }
   },[isEdit, setValue, diary]);
-
-  useEffect(() => {
-    if(!token) return;
-
-    const fetchSummaries = async() => {
-      try {
-        const res = await fetch(`/api/users/${userId}/summaries`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-          },
-        })
-        const { summary } = await res.json();
-        setSummaryLists(summary);
-      } catch(error) {
-        console.log(error);
-      } 
-    }
-
-    fetchSummaries();
-  }, [token, userId]);
 
   return(
     <div className="flex justify-center">

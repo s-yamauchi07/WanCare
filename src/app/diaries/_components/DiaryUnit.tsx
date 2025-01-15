@@ -3,26 +3,10 @@ import Image from "next/image";
 import Link from 'next/link'
 import usePreviewImage from "@/_hooks/usePreviewImage";
 import no_diary_img from "@/public/no_diary_img.png";
-
-interface diaryIndex {
-  id: string;
-  title: string;
-  content: string;
-  imageKey: string | null;
-  diaryTags: tags[] | null;
-  summaryId: string | null;
-  createdAt: string;
-}
-
-interface tags {
-  id: string;
-  diaryId: string;
-  tag: {id: string, name: string}
-  tagId: string;
-}
+import { BaseDiary } from "@/_types/diary";
 
 interface diaryProps {
-  diary: diaryIndex;
+  diary: BaseDiary;
   key: string;
 }
 
