@@ -52,11 +52,22 @@ const DiaryDetail: React.FC = () => {
   return(
     <div className="flex justify-center">
       <div className="max-w-64 my-20 flex flex-col">
-        <div className="mb-4">
+        <div className="mb-6">
           <p>{changeFromISOtoDate(diary.createdAt, "date")}</p>
           <h2 className="text-2xl border-b-2 border-gray-700 pb-2">
             {diary.title}
           </h2>
+        </div>
+
+        <div className="relative w-full h-[256px]">
+          <Image 
+            src={thumbnailImage ? thumbnailImage : no_diary_img}
+            alt="diary Image"
+            fill
+            priority
+            sizes="(max-width:640px) 100%"
+            style={{ objectFit: "cover", borderRadius: "25px" }}
+          />
         </div>
 
         {session?.user.id === diary.ownerId && (
@@ -83,15 +94,6 @@ const DiaryDetail: React.FC = () => {
           </>
         )}
 
-        <div className="relative w-full h-[256px]">
-          <Image 
-            src={thumbnailImage ? thumbnailImage : no_diary_img}
-            alt="diary Image"
-            fill
-            priority
-            style={{ objectFit: "cover"}}
-          />
-        </div>
 
         <div className="min-h-20 p-2 mt-6 mb-2 bg-white rounded-lg">
           {diary.content}  
