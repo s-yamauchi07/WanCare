@@ -16,11 +16,12 @@ const RecordIndex: React.FC = () => {
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const [refresh, setRefresh] = useState<boolean>(false);
 
   const ModalClose = () => {
     setOpenModal(false);
-    setRefresh(!refresh);
+    setPage(0);
+    setHasMore(true);
+    setDiaryList([]);
   }
 
   const fetchDiary = async() => {
