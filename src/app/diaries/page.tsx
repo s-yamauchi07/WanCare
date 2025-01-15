@@ -5,8 +5,9 @@ import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import InfiniteScroll from 'react-infinite-scroller';
 import DiaryUnit from "./_components/DiaryUnit";
 import LoadingDiary from "./_components/LoadingDiary";
-import Link from "next/link";
 import { DiaryDetails } from "@/_types/diary";
+import ModalWindow from "../_components/ModalWindow";
+import DiaryForm from "./_components/DiaryForm";
 
 const RecordIndex: React.FC = () => {
   const { token } = useSupabaseSession();
@@ -14,6 +15,13 @@ const RecordIndex: React.FC = () => {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [refresh, setRefresh] = useState<boolean>(false);
+
+  const ModalClose = () => {
+    setOpenModal(false);
+    setRefresh(!refresh);
+  }
 
   const fetchDiary = async() => {
     if(!token || isLoading) return;
@@ -93,13 +101,17 @@ const RecordIndex: React.FC = () => {
           </div>
         </InfiniteScroll>
 
-        <div className="flex justify-end sticky bottom-20">
-          <Link
-            href="diaries/new" 
-            className="bg-primary text-white rounded-full w-12 h-12">
-            <span className="i-material-symbols-add-rounded w-12 h-12">
-            </span>
-          </Link>
+        <div className="flex justify-end sticky bottom-20 mt-4">
+            <div 
+              className="bg-primary text-white rounded-full w-12 h-12"
+              onClick={ () => setOpenModal(true)}
+              >
+              <span className="i-material-symbols-add-rounded text-white w-12 h-12">
+              </span>
+            </div>
+          <ModalWindow show={openModal} onClose={ModalClose}>
+            <DiaryForm onClose={ModalClose} />
+          </ModalWindow>
         </div>
       </div>
     </div>
