@@ -5,25 +5,24 @@ import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import InfiniteScroll from 'react-infinite-scroller';
 import DiaryUnit from "./_components/DiaryUnit";
 import LoadingDiary from "./_components/LoadingDiary";
-import Link from "next/link";
-import { Tag } from "@/_types/tag";
-
-interface diaryIndex {
-  id: string;
-  title: string;
-  content: string;
-  imageKey: string | null;
-  diaryTags: Tag[] | null;
-  summaryId: string | null;
-  createdAt: string;
-}
+import { DiaryDetails } from "@/_types/diary";
+import ModalWindow from "../_components/ModalWindow";
+import DiaryForm from "./_components/DiaryForm";
 
 const RecordIndex: React.FC = () => {
   const { token } = useSupabaseSession();
-  const [diaryList, setDiaryList] = useState<diaryIndex[]>([]);
+  const [diaryList, setDiaryList] = useState<DiaryDetails[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+
+  const ModalClose = () => {
+    setOpenModal(false);
+    setPage(0);
+    setHasMore(true);
+    setDiaryList([]);
+  }
 
   const fetchDiary = async() => {
     if(!token || isLoading) return;
@@ -39,7 +38,7 @@ const RecordIndex: React.FC = () => {
       const { diaries } = await res.json();
       
       setDiaryList((prevDiaryList) => {
-        const newDiaries = diaries.filter((newDiary: diaryIndex) => 
+        const newDiaries = diaries.filter((newDiary: DiaryDetails) => 
           !prevDiaryList.some((prevDiary) => prevDiary.id === newDiary.id)
         );
         return [...prevDiaryList, ...newDiaries];
@@ -103,13 +102,17 @@ const RecordIndex: React.FC = () => {
           </div>
         </InfiniteScroll>
 
-        <div className="flex justify-end sticky bottom-20">
-          <Link
-            href="diaries/new" 
-            className="bg-primary text-white rounded-full w-12 h-12">
-            <span className="i-material-symbols-add-rounded w-12 h-12">
-            </span>
-          </Link>
+        <div className="flex justify-end sticky bottom-20 mt-4">
+            <div 
+              className="bg-primary text-white rounded-full w-12 h-12"
+              onClick={ () => setOpenModal(true)}
+              >
+              <span className="i-material-symbols-add-rounded text-white w-12 h-12">
+              </span>
+            </div>
+          <ModalWindow show={openModal} onClose={ModalClose}>
+            <DiaryForm onClose={ModalClose} />
+          </ModalWindow>
         </div>
       </div>
     </div>
