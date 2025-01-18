@@ -14,6 +14,7 @@ import ModalWindow from "@/app/_components/ModalWindow";
 import DiaryForm from "../_components/DiaryForm";
 import  PageLoading  from "@/app/_components/PageLoading";
 import { toast, Toaster } from "react-hot-toast"
+import DeleteAlert from "@/app/_components/DeleteAlert";
 
 const DiaryDetail: React.FC = () => {
   const params = useParams();
@@ -25,17 +26,25 @@ const DiaryDetail: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(true);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const ModalClose = () => {
     setOpenModal(false);
     setRefresh(!refresh);
   }
 
-  const handleDelete = async() => {
+  const openEditModal = () => {
+    setIsEditMode(true);
+    setOpenModal(true);
+  };
+
+  const openDeleteModal = () => {
+    setIsEditMode(false);
+    setOpenModal(true);
+  };
+
+  const handleDelete = async () => {
     if(!token) return;
-
-    
-
     try {
       const response = await fetch(`/api/diaries/${id}`, {
         headers: {
@@ -57,7 +66,7 @@ const DiaryDetail: React.FC = () => {
       console.log(error);
     }
   }
-
+  
   useEffect(() => {
     if (!token) return;
 
@@ -107,7 +116,7 @@ const DiaryDetail: React.FC = () => {
             {session?.user.id === diary.ownerId && (
               <>
               <div className="flex justify-end gap-2 my-2">
-                <div onClick={() => setOpenModal(true)}>
+                <div onClick={() => openEditModal()}>
                   <IconButton
                     iconName="i-material-symbols-light-edit-square-outline"
                     buttonText="編集"
@@ -115,9 +124,9 @@ const DiaryDetail: React.FC = () => {
                     textColor="text-white" 
                   />
                 </div>
-                <div onClick={() => handleDelete()}>
+                <div onClick={() => openDeleteModal()}>
                   <IconButton
-                    iconName="i-material-symbols-light-edit-square-outline"
+                    iconName="i-material-symbols-light-delete-outline"
                     buttonText="削除" 
                     color="bg-secondary"
                     textColor="text-gray-800"
@@ -125,7 +134,12 @@ const DiaryDetail: React.FC = () => {
                 </div>
               </div>
               <ModalWindow show={openModal} onClose={ModalClose} >
-                <DiaryForm diary={diary} isEdit={true} onClose={ModalClose} />
+                {isEditMode ? (
+                  <DiaryForm diary={diary} isEdit={true} onClose={ModalClose} />
+                ): (
+                  <DeleteAlert onDelete={handleDelete} onClose={ModalClose} deleteObj="日記" />
+                ) 
+                }
               </ModalWindow>
               </>
             )}
@@ -164,7 +178,11 @@ const DiaryDetail: React.FC = () => {
       ) : (
         <PageLoading />
       )}
+      {/* {showDeleteAlert && (
+        <DeleteAlert />
+      )} */}
       <Toaster />
+      
     </>
   )
 }
