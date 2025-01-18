@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation"
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
 import { usePreviewImage } from "@/_hooks/usePreviewImage";
@@ -12,9 +13,11 @@ import Image from "next/image";
 import ModalWindow from "@/app/_components/ModalWindow";
 import DiaryForm from "../_components/DiaryForm";
 import  PageLoading  from "@/app/_components/PageLoading";
+import { toast, Toaster } from "react-hot-toast"
 
 const DiaryDetail: React.FC = () => {
   const params = useParams();
+  const router = useRouter();
   const { id } = params;
   const { token, session } = useSupabaseSession();
   const [diary, setDiary] = useState<DiaryDetails | null >(null);
@@ -26,6 +29,33 @@ const DiaryDetail: React.FC = () => {
   const ModalClose = () => {
     setOpenModal(false);
     setRefresh(!refresh);
+  }
+
+  const handleDelete = async() => {
+    if(!token) return;
+
+    
+
+    try {
+      const response = await fetch(`/api/diaries/${id}`, {
+        headers: {
+          "Content-Type" : "application/json",
+          Authorization: token,
+        },
+        method: "DELETE",
+      });
+
+      if (response.status === 200) {
+        toast.success("日記を削除しました");
+        router.push("/diaries");
+      } else {        
+        toast.error("削除に失敗しました");
+        throw new Error("Failed to delete.");
+      }
+
+    } catch(error) {
+      console.log(error);
+    }
   }
 
   useEffect(() => {
@@ -77,7 +107,7 @@ const DiaryDetail: React.FC = () => {
             {session?.user.id === diary.ownerId && (
               <>
               <div className="flex justify-end gap-2 my-2">
-                <div onClick={ () => setOpenModal(true)}>
+                <div onClick={() => setOpenModal(true)}>
                   <IconButton
                     iconName="i-material-symbols-light-edit-square-outline"
                     buttonText="編集"
@@ -85,12 +115,14 @@ const DiaryDetail: React.FC = () => {
                     textColor="text-white" 
                   />
                 </div>
-                <IconButton
-                  iconName="i-material-symbols-light-edit-square-outline"
-                  buttonText="削除" 
-                  color="bg-secondary"
-                  textColor="text-gray-800"
-                />
+                <div onClick={() => handleDelete()}>
+                  <IconButton
+                    iconName="i-material-symbols-light-edit-square-outline"
+                    buttonText="削除" 
+                    color="bg-secondary"
+                    textColor="text-gray-800"
+                  />
+                </div>
               </div>
               <ModalWindow show={openModal} onClose={ModalClose} >
                 <DiaryForm diary={diary} isEdit={true} onClose={ModalClose} />
@@ -132,6 +164,7 @@ const DiaryDetail: React.FC = () => {
       ) : (
         <PageLoading />
       )}
+      <Toaster />
     </>
   )
 }
