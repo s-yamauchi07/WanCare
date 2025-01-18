@@ -21,6 +21,7 @@ const DiaryDetail: React.FC = () => {
   const router = useRouter();
   const { id } = params;
   const { token, session } = useSupabaseSession();
+  const currentUserId = session?.user.id;
   const [diary, setDiary] = useState<DiaryDetails | null >(null);
   const thumbnailImage = usePreviewImage(diary?.imageKey ?? null, "diary_img")
   const [openModal, setOpenModal] = useState(false);
@@ -44,7 +45,7 @@ const DiaryDetail: React.FC = () => {
   };
 
   const handleDelete = async () => {
-    if(!token) return;
+    if(!token || currentUserId !== diary?.ownerId) return;
     try {
       const response = await fetch(`/api/diaries/${id}`, {
         headers: {
