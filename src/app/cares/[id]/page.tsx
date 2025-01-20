@@ -28,7 +28,7 @@ interface CareDetail {
 const CareDetail: React.FC = () => {
   const params = useParams();
   const { id } = params;
-  const { token } = useSupabaseSession();
+  const { token, session } = useSupabaseSession();
   const [care, setCare] = useState<CareDetail | null>(null);
   const careImage = usePreviewImage(care?.imageKey ?? null, "care_img");
   const [careTitle, setTitle] = useState<string>("");
@@ -36,6 +36,7 @@ const CareDetail: React.FC = () => {
   const [isLoading, setLoading] = useState<boolean>(true);
   const [openModal, setOpenModal] = useState(false);
   const [refresh, setRefresh] = useState<boolean>(false);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {
     if (!token) return;
@@ -61,6 +62,16 @@ const CareDetail: React.FC = () => {
     }
     fetchCare();
   }, [id, token, refresh]);
+
+  const openEditModal = () => {
+    setIsEditMode(true);
+    setOpenModal(true);
+  };
+
+  const openDeleteModal = () => {
+    setIsEditMode(false);
+    setOpenModal(true);
+  };
 
   const ModalClose = () => {
     setOpenModal(false);
@@ -118,14 +129,26 @@ const CareDetail: React.FC = () => {
                 }
               </div>
             </div>
-            <div onClick={ () => setOpenModal(true)}>
-              <IconButton 
-                iconName="i-material-symbols-light-edit-square-outline"
-                buttonText="記録を編集"
-                color="bg-primary"
-                textColor="text-white"
-              />
-            </div>
+            {session?.user.id === care.ownerId && (
+              <div className="flex gap-4 my-2">
+                <div onClick={ () => openEditModal()}>
+                  <IconButton 
+                    iconName="i-material-symbols-light-edit-square-outline"
+                    buttonText="編集"
+                    color="bg-primary"
+                    textColor="text-white"
+                  />
+                </div>
+                <div onClick={() => openDeleteModal()}>
+                  <IconButton
+                    iconName="i-material-symbols-light-delete-outline"
+                    buttonText="削除" 
+                    color="bg-secondary"
+                    textColor="text-gray-800"
+                  />
+                </div>
+              </div>
+            )}
           </div>
           <ModalWindow show={openModal} onClose={ModalClose} >
             <CareForm careId={care.careListId} careName={care.careList.name} token={token} onClose={ModalClose} isEdit={true} careInfo={care}/>
