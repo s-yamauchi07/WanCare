@@ -102,7 +102,7 @@ const DiaryDetail: React.FC = () => {
       {(diary && !isLoading) ? (
         <div className="flex justify-center">
           <div className="max-w-64 my-20 flex flex-col">
-            <div className="mb-6">
+            <div className="mb-6 text-gray-800">
               <p>{changeFromISOtoDate(diary.createdAt, "date")}</p>
               <h2 className="text-2xl border-b-2 border-gray-700 pb-2">
                 {diary.title}
@@ -174,7 +174,7 @@ const DiaryDetail: React.FC = () => {
                 <span className="i-mdi-chat-processing-outline"></span>
                 <span className="text-sm">コメントする</span>
               </div>
-              <div className="w-1/2 p-2 text-center border border-primary solid rounded flex items-center justify-center gap-1">
+              <div className="w-1/2 p-2 text-center border border-primary solid rounded flex items-center justify-center gap-1 text-gray-800">
                 <span className="i-material-symbols-bookmark-add-outline"></span>
                 <span className="text-sm">ブックマーク</span>
               </div>
