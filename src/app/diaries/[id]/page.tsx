@@ -1,8 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
-import { useRouter } from "next/navigation"
+import { useParams, useRouter } from "next/navigation";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
 import { usePreviewImage } from "@/_hooks/usePreviewImage";
@@ -156,7 +155,7 @@ const DiaryDetail: React.FC = () => {
               {diary.content}  
             </div>
     
-            <div className="min-h-6 text-primary font-bold">
+            <div className="min-h-6 text-primary font-bold text-gray-700">
               {diary.diaryTags && diary.diaryTags.length > 0 && (
                 diary.diaryTags.map((tag) => (
                   <span 

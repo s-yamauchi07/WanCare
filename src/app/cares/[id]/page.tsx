@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from "react";
-import { useParams  } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { usePreviewImage } from "@/_hooks/usePreviewImage";
 import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
@@ -11,6 +11,9 @@ import ModalWindow from "@/app/_components/ModalWindow";
 import CareForm from "../_components/CareForm";
 import IconButton from "@/app/_components/IconButton";
 import PageLoading from "@/app/_components/PageLoading";
+import { toast, Toaster } from "react-hot-toast"
+import DeleteAlert from "@/app/_components/DeleteAlert";
+import deleteStorageImage from "@/app/utils/deleteStorageImage";
 
 interface CareDetail {
   id: string;
@@ -28,7 +31,9 @@ interface CareDetail {
 const CareDetail: React.FC = () => {
   const params = useParams();
   const { id } = params;
-  const { token } = useSupabaseSession();
+  const { token, session } = useSupabaseSession();
+  const router = useRouter();
+  const currentUserId = session?.user.id;
   const [care, setCare] = useState<CareDetail | null>(null);
   const careImage = usePreviewImage(care?.imageKey ?? null, "care_img");
   const [careTitle, setTitle] = useState<string>("");
@@ -36,6 +41,7 @@ const CareDetail: React.FC = () => {
   const [isLoading, setLoading] = useState<boolean>(true);
   const [openModal, setOpenModal] = useState(false);
   const [refresh, setRefresh] = useState<boolean>(false);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {
     if (!token) return;
@@ -62,11 +68,50 @@ const CareDetail: React.FC = () => {
     fetchCare();
   }, [id, token, refresh]);
 
+  const openEditModal = () => {
+    setIsEditMode(true);
+    setOpenModal(true);
+  };
+
+  const openDeleteModal = () => {
+    setIsEditMode(false);
+    setOpenModal(true);
+  };
+
   const ModalClose = () => {
     setOpenModal(false);
     setRefresh(!refresh);
   }
 
+  const handleDelete = async () => {
+    if(!token || currentUserId !== care?.ownerId) return;
+
+    try {
+      const response = await fetch(`/api/cares/${id}`, {
+        headers: {
+          "Content-Type" : "application/json",
+          Authorization: token,
+        },
+        method: "DELETE",
+      });
+
+      if (response.status === 200) {
+        const deleteImage = care?.imageKey as string;
+        await deleteStorageImage(deleteImage, "care_img");
+
+        toast.success("記録を削除しました");
+        setTimeout(() => {
+          router.push("/cares");
+        }, 2000);
+      } else {
+        throw new Error("Failed to delete.")
+      }
+    } catch(error) {
+      console.log(error);
+      toast.error("削除に失敗しました");
+    }
+  }
+ 
   if (!care) return;
 
   return(
@@ -118,22 +163,39 @@ const CareDetail: React.FC = () => {
                 }
               </div>
             </div>
-            <div onClick={ () => setOpenModal(true)}>
-              <IconButton 
-                iconName="i-material-symbols-light-edit-square-outline"
-                buttonText="記録を編集"
-                color="bg-primary"
-                textColor="text-white"
-              />
-            </div>
+            {session?.user.id === care.ownerId && (
+              <div className="flex gap-4 my-2">
+                <div onClick={ () => openEditModal()}>
+                  <IconButton 
+                    iconName="i-material-symbols-light-edit-square-outline"
+                    buttonText="編集"
+                    color="bg-primary"
+                    textColor="text-white"
+                  />
+                </div>
+                <div onClick={() => openDeleteModal()}>
+                  <IconButton
+                    iconName="i-material-symbols-light-delete-outline"
+                    buttonText="削除" 
+                    color="bg-secondary"
+                    textColor="text-gray-800"
+                  />
+                </div>
+              </div>
+            )}
           </div>
           <ModalWindow show={openModal} onClose={ModalClose} >
-            <CareForm careId={care.careListId} careName={care.careList.name} token={token} onClose={ModalClose} isEdit={true} careInfo={care}/>
+            {isEditMode ? (
+              <CareForm careId={care.careListId} careName={care.careList.name} token={token} onClose={ModalClose} isEdit={true} careInfo={care}/>
+            ) : (
+              <DeleteAlert onDelete={handleDelete} onClose={ModalClose} deleteObj="お世話記録"/>
+            )}
           </ModalWindow>
         </div>
       ) : (
         <PageLoading />
       )}
+      <Toaster />
     </>
   )
 }
