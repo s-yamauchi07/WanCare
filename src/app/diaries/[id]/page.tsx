@@ -15,6 +15,7 @@ import DiaryForm from "../_components/DiaryForm";
 import  PageLoading  from "@/app/_components/PageLoading";
 import { toast, Toaster } from "react-hot-toast"
 import DeleteAlert from "@/app/_components/DeleteAlert";
+import deleteStorageImage from "@/app/utils/deleteStorageImage";
 
 const DiaryDetail: React.FC = () => {
   const params = useParams();
@@ -56,15 +57,20 @@ const DiaryDetail: React.FC = () => {
       });
 
       if (response.status === 200) {
+        const deleteImage = diary?.imageKey as string;
+        await deleteStorageImage(deleteImage, "diary_img");
+        
         toast.success("日記を削除しました");
-        router.push("/diaries");
+        setTimeout(() => {
+          router.push("/diaries");
+        }, 2000);
       } else {        
-        toast.error("削除に失敗しました");
         throw new Error("Failed to delete.");
       }
 
     } catch(error) {
       console.log(error);
+      toast.error("削除に失敗しました");
     }
   }
   
@@ -179,11 +185,7 @@ const DiaryDetail: React.FC = () => {
       ) : (
         <PageLoading />
       )}
-      {/* {showDeleteAlert && (
-        <DeleteAlert />
-      )} */}
       <Toaster />
-      
     </>
   )
 }
