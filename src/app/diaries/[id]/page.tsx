@@ -156,7 +156,7 @@ const DiaryDetail: React.FC = () => {
               {diary.content}  
             </div>
     
-            <div className="min-h-6 text-primary font-bold">
+            <div className="min-h-6 text-primary font-bold text-gray-700">
               {diary.diaryTags && diary.diaryTags.length > 0 && (
                 diary.diaryTags.map((tag) => (
                   <span 
