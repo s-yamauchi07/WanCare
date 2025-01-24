@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Summary } from "@/_types/summary";
+import { SummaryRequest } from "@/_types/summary";
 import Input from "@/app/_components/Input";
 import Textarea from "@/app/_components/Textarea";
 import Label from "@/app/_components/Label";
@@ -21,7 +21,6 @@ interface Option {
 }
 
 const DiarySelection = (props: OptionProps<Option>) => {
-  console.log(props)
   return(
     <div className="w-full">
       <input 
@@ -29,7 +28,7 @@ const DiarySelection = (props: OptionProps<Option>) => {
         id={props.data.id}
         onChange={() => props.selectOption(props.data)}
         checked={props.isSelected}
-        className="m-2 rounded-full"
+        className="m-2 rounded-full border border-primary"
       />
       <label htmlFor={props.data.id}>
         {props.data.title}
@@ -38,21 +37,46 @@ const DiarySelection = (props: OptionProps<Option>) => {
   )
 }
 
-const SummaryForm: React.FC<SummaryFormProps> = () => {
+const SummaryForm: React.FC<SummaryFormProps> = ({ onClose }) => {
   useRouteGuard();
   const { token, session } = useSupabaseSession();
-  const useId = session?.user.id;
-  const {register, handleSubmit, reset, setValue, watch, formState: {errors, isSubmitting}} = useForm<Summary>();
+  const userId = session?.user.id;
+  const {register, handleSubmit, reset, formState: {errors, isSubmitting}} = useForm<SummaryRequest>();
   const [selectedDiaryIds, setSelectedDiaryIds] = useState<Option[]>([]);
   const [diaryLists, setDiaryLists] = useState<Option[]>([]);
 
-  const onSubmit: SubmitHandler<Summary> = async (data) => {
+  const onSubmit: SubmitHandler<SummaryRequest> = async (data) => {
     const req = {
       ...data,
-      diaryIds: selectedDiaryIds
+      tags: data.tags?.split(" ").filter(tag => tag.trim() !== "") ?? null,
+      diaryIds: selectedDiaryIds.map(diary => diary.id)
+    }
+
+    try {
+      if(!token) return;
+
+      const response = await fetch(`api/summaries`, {
+        headers: {
+          "Content-Type" : "application/json",
+          Authorization: token,
+        },
+        method: "POST",
+        body: JSON.stringify(req),
+      });
+
+      if(response.status === 200) {
+        reset();
+        toast.success("投稿が完了しました");
+
+        setTimeout(() => {
+          onClose();
+        }, 2000);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("投稿に失敗しました");
     }
   }
-
 
   const handleChange = (selectedIds: MultiValue<Option>) => {
     setSelectedDiaryIds(selectedIds as Option[]);
@@ -62,7 +86,7 @@ const SummaryForm: React.FC<SummaryFormProps> = () => {
     if(!token) return;
     const fetchDiaryList = async () => {
       try {
-        const response = await fetch(`api/users/${useId}/summaries`, {
+        const response = await fetch(`api/users/${userId}/diaries`, {
           headers: {
             "Content-Type" : "application/json",
             Authorization: token,
@@ -73,9 +97,8 @@ const SummaryForm: React.FC<SummaryFormProps> = () => {
           throw new Error("Not record.")
         }
 
-        const { summary } = await response.json();
-        console.log(summary)
-        setDiaryLists(summary);
+        const { diaries } = await response.json();
+        setDiaryLists(diaries);
       } catch(error) {
         console.log(error);
       }
@@ -130,6 +153,10 @@ const SummaryForm: React.FC<SummaryFormProps> = () => {
             isMulti
             components={{Option: DiarySelection}}
             styles={{
+              control: (base) => ({
+                ...base,
+                borderColor: "#326a55",
+              }),
               multiValue: (base) => ({
                 ...base,
                 backgroundColor: "#326a55",
