@@ -19,8 +19,6 @@ const SummaryIndex: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
 
-
-
   const ModalClose = () => {
     setOpenModal(false);
     setPage(0);

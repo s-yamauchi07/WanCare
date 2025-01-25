@@ -10,7 +10,6 @@ interface SummaryProps {
 }
 
 const SummaryUnit: React.FC<SummaryProps> = ({summary}) => {
-  console.log(summary)
   return(
     <div>
       <Link href={`/summaries/${summary.id}`}>
