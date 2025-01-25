@@ -7,34 +7,13 @@ import Textarea from "@/app/_components/Textarea";
 import Label from "@/app/_components/Label";
 import LoadingButton from "@/app/_components/LoadingButton";
 import { toast, Toaster } from "react-hot-toast";
-import Select, { OptionProps, MultiValue } from "react-Select";
+import Select, { MultiValue, SingleValue } from "react-Select";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
-
+import DiarySelection from "./DiarySelection";
+import { Option } from "../_types/Option";
 
 interface SummaryFormProps {
   onClose: () => void;
-}
-
-interface Option {
-  id: string;
-  title: string;
-}
-
-const DiarySelection = (props: OptionProps<Option>) => {
-  return(
-    <div className="w-full">
-      <input 
-        type="checkbox"
-        id={props.data.id}
-        onChange={() => props.selectOption(props.data)}
-        checked={props.isSelected}
-        className="m-2 rounded-full border border-primary"
-      />
-      <label htmlFor={props.data.id}>
-        {props.data.title}
-      </label>
-    </div>
-  )
 }
 
 const SummaryForm: React.FC<SummaryFormProps> = ({ onClose }) => {
@@ -78,7 +57,7 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose }) => {
     }
   }
 
-  const handleChange = (selectedIds: MultiValue<Option>) => {
+  const handleChange = (selectedIds: MultiValue<Option> | SingleValue<Option>) => {
     setSelectedDiaryIds(selectedIds as Option[]);
   }
 
@@ -104,7 +83,7 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose }) => {
       }
     }
     fetchDiaryList();
-  },[token]);
+  },[token, userId]);
 
   return(
     <div className="flex justify-center">
@@ -151,7 +130,7 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose }) => {
             getOptionValue={(option) => option.id}
             closeMenuOnSelect={false}
             isMulti
-            components={{Option: DiarySelection}}
+            components={{Option: DiarySelection }}
             styles={{
               control: (base) => ({
                 ...base,
