@@ -9,14 +9,7 @@ import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import InfiniteScroll from 'react-infinite-scroller';
 import SummaryUnit from "./_components/SummaryUnit";
 import LoadingDiary from "../diaries/_components/LoadingDiary";
-
-interface SummaryDetails {
-  id: string
-  title: string
-  explanation: string
-  createdAt: string
-  summaryTags: { id: string, summaryId: string, tag: { name: string }, tagId: string, createAt: string, updatedAt: string}[]
-}
+import { SummaryDetails } from "@/_types/summary";
 
 const SummaryIndex: React.FC = () => {
   const { token } = useSupabaseSession();

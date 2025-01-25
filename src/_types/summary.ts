@@ -1,3 +1,4 @@
+import { Tag } from "./tag";
 
 export interface Summary {
   title: string
@@ -16,4 +17,12 @@ export interface SummaryRequest {
   explanation: string
   tags? : string | null;
   diaryIds? : string[] | null;
+}
+
+export interface SummaryDetails {
+  id: string
+  title: string
+  explanation: string
+  createdAt: string
+  summaryTags: Tag[]
 }

@@ -2,14 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from 'next/link'
 import summaryThumbnail from "@/public/summaryThumbnail.png";
-
-interface SummaryDetails {
-  id: string
-  title: string
-  explanation: string
-  createdAt: string
-  summaryTags: { id: string, summaryId: string, tag: { name: string }, tagId: string, createAt: string, updatedAt: string}[]
-}
+import { SummaryDetails } from "@/_types/summary";
 
 interface SummaryProps {
   summary: SummaryDetails;
