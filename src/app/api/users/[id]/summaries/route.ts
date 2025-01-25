@@ -5,7 +5,6 @@ import prisma from "@/libs/prisma";
 
 export const GET = async(request: NextRequest, {params}: {params: Promise<{id: string}>} ) => {
   const { id } = await params;
-  console.log(id)
   const { error } = await userAuthentication(request);
   if (error) return handleError(error);
 
