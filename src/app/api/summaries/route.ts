@@ -80,9 +80,15 @@ export const GET = async(request: NextRequest) => {
   const { error } = await userAuthentication(request);
   if (error) return handleError(error);
 
+  const { searchParams } = new URL(request.url);
+  const page = parseInt(searchParams.get('page') || '0', 10)
+
   try {
     const allSummaries = await prisma.summary.findMany({
+      skip: page * 4,
+      take: 4,
       select: {
+        id: true,
         title: true,
         createdAt: true,
         summaryTags: {
