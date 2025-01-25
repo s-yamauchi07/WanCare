@@ -7,7 +7,7 @@ import Textarea from "@/app/_components/Textarea";
 import Label from "@/app/_components/Label";
 import LoadingButton from "@/app/_components/LoadingButton";
 import { toast, Toaster } from "react-hot-toast";
-import Select, { MultiValue, SingleValue } from "react-Select";
+import Select, { MultiValue, SingleValue } from "react-select";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import DiarySelection from "./DiarySelection";
 import { Option } from "../_types/Option";
