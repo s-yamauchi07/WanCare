@@ -90,6 +90,7 @@ export const GET = async(request: NextRequest) => {
       select: {
         id: true,
         title: true,
+        explanation: true,
         createdAt: true,
         summaryTags: {
           include: {

@@ -1,23 +1,23 @@
 import React from "react";
 import Image from "next/image";
 import Link from 'next/link'
-import no_diary_img from "@/public/no_diary_img.png";
+import summaryThumbnail from "@/public/summaryThumbnail.png";
 
 interface SummaryDetails {
   id: string
   title: string
+  explanation: string
   createdAt: string
-  summaryTags: { id: string, summaryId: string, tagId: string, createAt: string, updatedAt: string}[]
-  tag: { name: string }[]
+  summaryTags: { id: string, summaryId: string, tag: { name: string }, tagId: string, createAt: string, updatedAt: string}[]
 }
 
-interface diaryProps {
+interface SummaryProps {
   summary: SummaryDetails;
   key: string;
 }
 
-const DiaryUnit: React.FC<diaryProps> = ({summary}) => {
-
+const SummaryUnit: React.FC<SummaryProps> = ({summary}) => {
+  console.log(summary)
   return(
     <div>
       <Link href={`/summaries/${summary.id}`}>
@@ -25,8 +25,8 @@ const DiaryUnit: React.FC<diaryProps> = ({summary}) => {
           <div className="relative w-full h-0 pb-[100%]"> 
             <Image
               className="rounded-lg shadow-xl drop-shadow-xl border-main bg-main"
-              src={no_diary_img}
-              alt="diary image"
+              src={summaryThumbnail}
+              alt="summary image"
               fill
               priority
               sizes="(max-width: 640px) 50vw, 100vw"
@@ -37,18 +37,18 @@ const DiaryUnit: React.FC<diaryProps> = ({summary}) => {
         <div>
           <p className="font-bold text-md">{summary.title}</p>
           <p className="text-gray-700 text-xs line-clamp-2">
-            説明文
+            {summary.explanation}
           </p>
         </div>
       </Link>
 
       <div>
-        {summary.tag && summary.tag.length > 0 && (
-          summary.tag.map((tag) => (
+        {summary.summaryTags && summary.summaryTags.length > 0 && (
+          summary.summaryTags.map((tag) => (
             <span 
               className="pr-2 py-1 text-xs font-semibold text-primary"
-              key={tag.name}>
-              {`#${tag.name}`}
+              key={tag.tagId}>
+              {`#${tag.tag.name}`}
             </span>
           ))
         )}
@@ -57,4 +57,4 @@ const DiaryUnit: React.FC<diaryProps> = ({summary}) => {
   )
 }
 
-export default DiaryUnit;
+export default SummaryUnit;

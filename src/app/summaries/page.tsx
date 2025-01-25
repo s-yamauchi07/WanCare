@@ -13,11 +13,10 @@ import LoadingDiary from "../diaries/_components/LoadingDiary";
 interface SummaryDetails {
   id: string
   title: string
+  explanation: string
   createdAt: string
-  summaryTags: { id: string, summaryId: string, tagId: string, createAt: string, updatedAt: string}[]
-  tag: { name: string }[]
+  summaryTags: { id: string, summaryId: string, tag: { name: string }, tagId: string, createAt: string, updatedAt: string}[]
 }
-
 
 const SummaryIndex: React.FC = () => {
   const { token } = useSupabaseSession();
