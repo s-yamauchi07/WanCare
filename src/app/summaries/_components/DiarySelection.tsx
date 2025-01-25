@@ -1,5 +1,5 @@
 import React from "react";
-import { OptionProps } from "react-Select";
+import { OptionProps } from "react-select";
 import { Option } from "../_types/Option";
 
 const DiarySelection: React.FC<OptionProps<Option>> = (props) => {
