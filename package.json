@@ -30,6 +30,7 @@
     "react-hot-toast": "^2.4.1",
     "react-infinite-scroller": "^1.2.6",
     "react-loader-spinner": "^6.1.6",
+    "react-select": "^5.9.0",
     "recharts": "^2.13.3",
     "uuid": "^11.0.3"
   },
