@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import Input from "@/app/_components/Input";
 import Textarea from "@/app/_components/Textarea";
-import IconButton from "@/app/_components/IconButton";
 import { FileInput, Label } from "flowbite-react";
 import LoadingButton from "@/app/_components/LoadingButton";
 import { toast, Toaster } from "react-hot-toast";
@@ -152,15 +151,6 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose}) => {
             </select>
           </div>
           <div className="text-red-500 text-xs mt-2">{errors.summaryId?.message}</div>
-        </div>
-
-        <div className="text-right">
-          <IconButton
-            iconName="i-material-symbols-add-rounded" 
-            buttonText="まとめを作成" 
-            color="bg-secondary"
-            textColor="text-gray-800"
-          />
         </div>
 
         <LoadingButton 
