@@ -9,7 +9,7 @@ import ModalWindow from "../_components/ModalWindow";
 import DiaryForm from "./_components/DiaryForm";
 import  Tab  from "@/app/_components/Tab";
 import  SearchForm  from "@/app/_components/SearchForm";
-import GenericUnit from "../_components/PostUnit";
+import PostUnit from "../_components/PostUnit";
 import no_diary_img from "@/public/no_diary_img.png";
 
 const DiaryIndex: React.FC = () => {
@@ -77,7 +77,7 @@ const DiaryIndex: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {diaryList.map((diary) => {
                   return(
-                  <GenericUnit 
+                  <PostUnit 
                     id={diary.id} 
                     key={diary.id}
                     title={diary.title} 
