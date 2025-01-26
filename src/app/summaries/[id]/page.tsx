@@ -86,7 +86,7 @@ const SummaryDetail: React.FC = () => {
                     <p className="text-xs mx-1">
                       {changeFromISOtoDate(diary.createdAt, "dateTime")}
                     </p>
-                    <h3 className="text-xl">{diary.title}</h3>
+                    <h3 className="text-lg">{diary.title}</h3>
                   </li>
                 ))
               ) : (
