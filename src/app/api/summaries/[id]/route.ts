@@ -29,6 +29,7 @@ export const GET = async(request: NextRequest, {params} : { params : Promise<{ i
         },
         diaries: {
           select: {
+            id: true,
             title: true,
             createdAt: true
           },

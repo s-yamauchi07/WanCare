@@ -33,7 +33,7 @@ export interface SummaryDetails {
   explanation: string
   ownerId: string
   summaryTags: Tag[]
-  diaries: { title: string, createdAt: string }[]
+  diaries: { id: string, title: string, createdAt: string }[]
   createdAt: string
   updatedAt: string
 }
