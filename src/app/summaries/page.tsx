@@ -7,9 +7,10 @@ import ModalWindow from "../_components/ModalWindow";
 import SummaryForm from "./_components/SummaryForm";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import InfiniteScroll from 'react-infinite-scroller';
-import SummaryUnit from "./_components/SummaryUnit";
 import LoadingDiary from "../diaries/_components/LoadingDiary";
 import { SummaryDetails } from "@/_types/summary";
+import PostUnit from "../_components/PostUnit";
+import summaryThumbnail from "@/public/summaryThumbnail.png";
 
 const SummaryIndex: React.FC = () => {
   const { token } = useSupabaseSession();
@@ -67,7 +68,6 @@ const SummaryIndex: React.FC = () => {
       <div className="my-20 pb-10 px-4 relative w-full max-w-screen-lg">
         <Tab />
         <SearchForm />
-
         <InfiniteScroll
           loadMore={fetchSummary}
           hasMore={hasMore}
@@ -76,14 +76,22 @@ const SummaryIndex: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {summaryList.map((summary) => {
                 return(
-                  <SummaryUnit summary={summary} key={summary.id}/>
+                  <PostUnit 
+                    id={summary.id}
+                    key={summary.id}
+                    title={summary.title} 
+                    content={summary.explanation} 
+                    imageKey={null}
+                    defaultImage={summaryThumbnail} 
+                    tags={summary.summaryTags.map(tag => ({ id: tag.tagId, name: tag.tag.name }))} 
+                    linkPrefix="summaries"
+                  />
                 )
               })
             }
           </div>
         </InfiniteScroll>
 
-        {/* 新規投稿ボタン */}
         <div className="flex justify-end sticky bottom-20 mt-4">
             <div 
               className="bg-primary text-white rounded-full w-12 h-12"
