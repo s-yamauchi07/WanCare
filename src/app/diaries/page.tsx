@@ -12,7 +12,7 @@ import  SearchForm  from "@/app/_components/SearchForm";
 import GenericUnit from "../_components/PostUnit";
 import no_diary_img from "@/public/no_diary_img.png";
 
-const RecordIndex: React.FC = () => {
+const DiaryIndex: React.FC = () => {
   const { token } = useSupabaseSession();
   const [diaryList, setDiaryList] = useState<DiaryDetails[]>([]);
   const [hasMore, setHasMore] = useState(true);
@@ -67,12 +67,8 @@ const RecordIndex: React.FC = () => {
   return(
     <div className="flex justify-center">
       <div className="my-20 pb-10 px-4 relative w-full max-w-screen-lg">
-         {/* Menuタブ*/}
         <Tab />
-
-        {/* 検索フォーム */}
         <SearchForm />
-
         <InfiniteScroll 
           loadMore={fetchDiary}
           hasMore={hasMore}
@@ -81,7 +77,6 @@ const RecordIndex: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {diaryList.map((diary) => {
                   return(
-                    // <DiaryUnit diary={diary} key={diary.id}/>
                   <GenericUnit 
                     id={diary.id} 
                     key={diary.id}
@@ -113,4 +108,4 @@ const RecordIndex: React.FC = () => {
     </div>
   )
 }
-export default RecordIndex;
+export default DiaryIndex;
