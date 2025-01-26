@@ -8,13 +8,13 @@ import SummaryForm from "./_components/SummaryForm";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import InfiniteScroll from 'react-infinite-scroller';
 import LoadingDiary from "../diaries/_components/LoadingDiary";
-import { SummaryDetails } from "@/_types/summary";
+import { AllSummary } from "@/_types/summary";
 import PostUnit from "../_components/PostUnit";
 import summaryThumbnail from "@/public/summaryThumbnail.png";
 
 const SummaryIndex: React.FC = () => {
   const { token } = useSupabaseSession();
-  const [summaryList, setSummaryList] = useState<SummaryDetails[]>([]);
+  const [summaryList, setSummaryList] = useState<AllSummary[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +42,7 @@ const SummaryIndex: React.FC = () => {
       const { summaries } = await res.json();
 
       setSummaryList((prevSummaryList) => {
-        const newSummaries = summaries.filter((newSummary: SummaryDetails) => !prevSummaryList.some((prevSummary) => prevSummary.id === newSummary.id));
+        const newSummaries = summaries.filter((newSummary: AllSummary) => !prevSummaryList.some((prevSummary) => prevSummary.id === newSummary.id));
 
         return [...prevSummaryList, ...newSummaries]
       });
