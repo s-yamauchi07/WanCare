@@ -3,13 +3,14 @@
 import React, { useEffect, useState } from "react";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import InfiniteScroll from 'react-infinite-scroller';
-import DiaryUnit from "./_components/DiaryUnit";
 import LoadingDiary from "./_components/LoadingDiary";
 import { DiaryDetails } from "@/_types/diary";
 import ModalWindow from "../_components/ModalWindow";
 import DiaryForm from "./_components/DiaryForm";
 import  Tab  from "@/app/_components/Tab";
 import  SearchForm  from "@/app/_components/SearchForm";
+import GenericUnit from "../_components/PostUnit";
+import no_diary_img from "@/public/no_diary_img.png";
 
 const RecordIndex: React.FC = () => {
   const { token } = useSupabaseSession();
@@ -80,7 +81,16 @@ const RecordIndex: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {diaryList.map((diary) => {
                   return(
-                    <DiaryUnit diary={diary} key={diary.id}/>
+                    // <DiaryUnit diary={diary} key={diary.id}/>
+                  <GenericUnit 
+                    id={diary.id} 
+                    key={diary.id}
+                    title={diary.title} 
+                    content={diary.content} 
+                    imageKey={diary.imageKey} 
+                    defaultImage={no_diary_img} 
+                    tags={diary.diaryTags && diary.diaryTags.map(tag => ({ id: tag.id, name: tag.tag.name }))} 
+                    linkPrefix="diaries" />
                   )
                 })
               }
