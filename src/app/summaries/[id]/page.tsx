@@ -81,7 +81,7 @@ const SummaryDetail: React.FC = () => {
                 summary.diaries.map((diary) => (
                   <li
                     key={diary.id}
-                    className="shadow-md border-rounded-lg p-2"
+                    className="shadow-sm border border-primary rounded-lg p-2"
                   >
                     <p className="text-xs mx-1">
                       {changeFromISOtoDate(diary.createdAt, "dateTime")}
