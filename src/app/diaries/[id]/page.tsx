@@ -6,7 +6,6 @@ import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
 import { usePreviewImage } from "@/_hooks/usePreviewImage";
 import no_diary_img from "@/public/no_diary_img.png";
-import IconButton from "@/app/_components/IconButton";
 import { DiaryDetails } from "@/_types/diary";
 import Image from "next/image";
 import ModalWindow from "@/app/_components/ModalWindow";
@@ -15,6 +14,8 @@ import  PageLoading  from "@/app/_components/PageLoading";
 import { toast, Toaster } from "react-hot-toast"
 import DeleteAlert from "@/app/_components/DeleteAlert";
 import deleteStorageImage from "@/app/utils/deleteStorageImage";
+import EditRoundButton from "@/app/_components/EditRoundButton";
+import DeleteRoundButton from "@/app/_components/DeleteRoundButton";
 
 const DiaryDetail: React.FC = () => {
   const params = useParams();
@@ -101,6 +102,23 @@ const DiaryDetail: React.FC = () => {
       {(diary && !isLoading) ? (
         <div className="flex justify-center">
           <div className="max-w-64 my-20 flex flex-col">
+            <div className="flex justify-end gap-3 my-2">
+              {session?.user.id === diary.ownerId && (
+                <>
+                  <EditRoundButton EditClick={() => openEditModal()}/>
+                  <DeleteRoundButton DeleteClick={() => openDeleteModal()}/>
+                </>
+              )}
+              <ModalWindow show={openModal} onClose={ModalClose} >
+                {isEditMode ? (
+                  <DiaryForm diary={diary} isEdit={true} onClose={ModalClose} />
+                ): (
+                  <DeleteAlert onDelete={handleDelete} onClose={ModalClose} deleteObj="日記" />
+                ) 
+                }
+              </ModalWindow>
+            </div>
+
             <div className="mb-6 text-gray-800">
               <p>{changeFromISOtoDate(diary.createdAt, "date")}</p>
               <h2 className="text-2xl border-b-2 border-gray-700 pb-2">
@@ -118,39 +136,7 @@ const DiaryDetail: React.FC = () => {
                 style={{ objectFit: "cover", borderRadius: "25px" }}
               />
             </div>
-    
-            {session?.user.id === diary.ownerId && (
-              <>
-              <div className="flex justify-end gap-2 my-2">
-                <div onClick={() => openEditModal()}>
-                  <IconButton
-                    iconName="i-material-symbols-light-edit-square-outline"
-                    buttonText="編集"
-                    color="bg-primary"
-                    textColor="text-white" 
-                  />
-                </div>
-                <div onClick={() => openDeleteModal()}>
-                  <IconButton
-                    iconName="i-material-symbols-light-delete-outline"
-                    buttonText="削除" 
-                    color="bg-secondary"
-                    textColor="text-gray-800"
-                  />
-                </div>
-              </div>
-              <ModalWindow show={openModal} onClose={ModalClose} >
-                {isEditMode ? (
-                  <DiaryForm diary={diary} isEdit={true} onClose={ModalClose} />
-                ): (
-                  <DeleteAlert onDelete={handleDelete} onClose={ModalClose} deleteObj="日記" />
-                ) 
-                }
-              </ModalWindow>
-              </>
-            )}
-    
-    
+
             <div className="min-h-20 p-2 mt-6 mb-2 bg-white rounded-lg">
               {diary.content}  
             </div>

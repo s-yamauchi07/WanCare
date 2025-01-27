@@ -19,10 +19,21 @@ export interface SummaryRequest {
   diaryIds? : string[] | null;
 }
 
-export interface SummaryDetails {
+export interface AllSummary {
   id: string
   title: string
   explanation: string
   createdAt: string
   summaryTags: Tag[]
+}
+
+export interface SummaryDetails {
+  id: string
+  title: string
+  explanation: string
+  ownerId: string
+  summaryTags: Tag[]
+  diaries: { id: string, title: string, createdAt: string }[]
+  createdAt: string
+  updatedAt: string
 }
