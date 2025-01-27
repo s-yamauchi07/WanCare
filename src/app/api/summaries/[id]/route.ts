@@ -92,6 +92,15 @@ export const PUT = async(request: NextRequest, { params } : { params : Promise<{
         await Promise.all(updateTags);
       }
 
+      await tx.diary.updateMany({
+        where: {
+          summaryId: id,
+        },
+        data: {
+          summaryId: null
+        },
+      })
+
       if (diaryIds && diaryIds.length > 0) {
         const updateSummaries = diaryIds.map(async(id) => {
           const diary = await tx.diary.findUnique({
