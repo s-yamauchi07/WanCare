@@ -2,7 +2,6 @@ import React from "react";
 
 interface EditButtonProps {
   EditClick?: () => void;
-
 }
 
 const EditRoundButton: React.FC<EditButtonProps> = ({EditClick}) => {

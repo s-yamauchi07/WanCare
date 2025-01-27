@@ -6,7 +6,6 @@ import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
 import { usePreviewImage } from "@/_hooks/usePreviewImage";
 import no_diary_img from "@/public/no_diary_img.png";
-import IconButton from "@/app/_components/IconButton";
 import { DiaryDetails } from "@/_types/diary";
 import Image from "next/image";
 import ModalWindow from "@/app/_components/ModalWindow";
@@ -107,7 +106,7 @@ const DiaryDetail: React.FC = () => {
               {session?.user.id === diary.ownerId && (
                 <>
                   <EditRoundButton EditClick={() => openEditModal()}/>
-                  <DeleteRoundButton />
+                  <DeleteRoundButton DeleteClick={() => openDeleteModal()}/>
                 </>
               )}
               <ModalWindow show={openModal} onClose={ModalClose} >
@@ -137,39 +136,7 @@ const DiaryDetail: React.FC = () => {
                 style={{ objectFit: "cover", borderRadius: "25px" }}
               />
             </div>
-    
-            {session?.user.id === diary.ownerId && (
-              <>
-              <div className="flex justify-end gap-2 my-2">
-                <div onClick={() => openEditModal()}>
-                  <IconButton
-                    iconName="i-material-symbols-light-edit-square-outline"
-                    buttonText="編集"
-                    color="bg-primary"
-                    textColor="text-white" 
-                  />
-                </div>
-                <div onClick={() => openDeleteModal()}>
-                  <IconButton
-                    iconName="i-material-symbols-light-delete-outline"
-                    buttonText="削除" 
-                    color="bg-secondary"
-                    textColor="text-gray-800"
-                  />
-                </div>
-              </div>
-              <ModalWindow show={openModal} onClose={ModalClose} >
-                {isEditMode ? (
-                  <DiaryForm diary={diary} isEdit={true} onClose={ModalClose} />
-                ): (
-                  <DeleteAlert onDelete={handleDelete} onClose={ModalClose} deleteObj="日記" />
-                ) 
-                }
-              </ModalWindow>
-              </>
-            )}
-    
-    
+
             <div className="min-h-20 p-2 mt-6 mb-2 bg-white rounded-lg">
               {diary.content}  
             </div>
