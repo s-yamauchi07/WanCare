@@ -15,7 +15,7 @@ import SummaryForm from "../_components/SummaryForm";
 const SummaryDetail: React.FC = () => {
   const params = useParams();
   const { id } = params;
-  const { token } = useSupabaseSession();
+  const { token, session } = useSupabaseSession();
   const [summary, setSummary] = useState<SummaryDetails>();
   const [isLoading, setLoading] = useState<boolean>(true);
   const [openModal, setOpenModal] = useState(false);
@@ -59,11 +59,15 @@ const SummaryDetail: React.FC = () => {
       <div className="flex justify-center">
         <div className="max-w-64 my-20 flex flex-col">
           <div className="flex justify-end gap-3 my-2">
-            <EditRoundButton EditClick={() => openEditModal()}/>
-            <DeleteRoundButton />
-            <ModalWindow show={openModal} onClose={ModalClose}>
-              <SummaryForm summary={summary} isEdit={true} onClose={ModalClose} />
-            </ModalWindow>  
+            {session?.user.id === summary.ownerId && (
+              <>
+                <EditRoundButton EditClick={() => openEditModal()}/>
+                <DeleteRoundButton />
+                <ModalWindow show={openModal} onClose={ModalClose}>
+                  <SummaryForm summary={summary} isEdit={true} onClose={ModalClose} />
+                </ModalWindow>  
+              </>
+            )}
           </div>
 
           <div>

@@ -37,18 +37,18 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose, summary, isEdit }) =
     try {
       if(!token) return;
 
-      const response = await fetch(`api/summaries`, {
+      const response = await fetch(isEdit ? `/api/summaries/${summary.id}` : "/api/summaries", {
         headers: {
           "Content-Type" : "application/json",
           Authorization: token,
         },
-        method: "POST",
+        method: isEdit ? "PUT" : "POST",
         body: JSON.stringify(req),
       });
 
       if(response.status === 200) {
         reset();
-        toast.success("投稿が完了しました");
+        toast.success(isEdit ? "更新しました" : "投稿が完了しました");
 
         setTimeout(() => {
           onClose();
@@ -56,7 +56,7 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose, summary, isEdit }) =
       }
     } catch (error) {
       console.log(error);
-      toast.error("投稿に失敗しました");
+      toast.error(isEdit ? "更新に失敗しました" : "投稿に失敗しました");
     }
   }
 
@@ -68,7 +68,7 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose, summary, isEdit }) =
     if(!token) return;
     const fetchDiaryList = async () => {
       try {
-        const response = await fetch(`api/users/${userId}/diaries`, {
+        const response = await fetch(`/api/users/${userId}/diaries`, {
           headers: {
             "Content-Type" : "application/json",
             Authorization: token,
@@ -101,7 +101,7 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose, summary, isEdit }) =
     <div className="flex justify-center">
       <form className="max-w-64 my-8" onSubmit={handleSubmit(onSubmit)}>
         <h2 className="text-primary text-center text-2xl font-bold mb-10">
-          まとめ投稿
+          {isEdit? "まとめ編集": "まとめ投稿"}
         </h2>
 
         <Input 
@@ -166,7 +166,7 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose, summary, isEdit }) =
 
         <LoadingButton 
           isSubmitting={isSubmitting}
-          buttonText={"登録"}
+          buttonText={isEdit ? "更新" : "登録"}
         />
       </form>
       <Toaster />
