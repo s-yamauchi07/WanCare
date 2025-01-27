@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { SummaryRequest } from "@/_types/summary";
+import { SummaryDetails, SummaryRequest } from "@/_types/summary";
 import Input from "@/app/_components/Input";
 import Textarea from "@/app/_components/Textarea";
 import Label from "@/app/_components/Label";
@@ -13,15 +13,18 @@ import DiarySelection from "./DiarySelection";
 import { Option } from "../_types/Option";
 
 interface SummaryFormProps {
+  summary: SummaryDetails;
+  isEdit: boolean
   onClose: () => void;
 }
 
-const SummaryForm: React.FC<SummaryFormProps> = ({ onClose }) => {
+const SummaryForm: React.FC<SummaryFormProps> = ({ onClose, summary, isEdit }) => {
   useRouteGuard();
   const { token, session } = useSupabaseSession();
   const userId = session?.user.id;
-  const {register, handleSubmit, reset, formState: {errors, isSubmitting}} = useForm<SummaryRequest>();
-  const [selectedDiaryIds, setSelectedDiaryIds] = useState<Option[]>([]);
+  const {register, handleSubmit, reset, setValue, formState: {errors, isSubmitting}} = useForm<SummaryRequest>();
+  const initialSelectedDiaries = isEdit ? summary.diaries : [];
+  const [selectedDiaryIds, setSelectedDiaryIds] = useState<Option[]>(initialSelectedDiaries || []);
   const [diaryLists, setDiaryLists] = useState<Option[]>([]);
 
   const onSubmit: SubmitHandler<SummaryRequest> = async (data) => {
@@ -85,6 +88,15 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose }) => {
     fetchDiaryList();
   },[token, userId]);
 
+  useEffect(() => {
+    if(isEdit && summary) {
+      setValue("title", summary.title);
+      const tagNames = summary.summaryTags.map(tag => tag.tag.name).join(" ") ?? "";
+      setValue("tags", tagNames);
+      setValue("explanation", summary.explanation);
+    }
+  },[isEdit, setValue, summary]);
+
   return(
     <div className="flex justify-center">
       <form className="max-w-64 my-8" onSubmit={handleSubmit(onSubmit)}>
@@ -126,6 +138,7 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose }) => {
           <Label id="まとめに登録する記事" />
           <Select 
             options={diaryLists}
+            value={selectedDiaryIds}
             getOptionLabel={(option) => option.title}
             getOptionValue={(option) => option.id}
             closeMenuOnSelect={false}
