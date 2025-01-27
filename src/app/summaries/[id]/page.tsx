@@ -6,6 +6,7 @@ import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { SummaryDetails } from "@/_types/summary";
 import PageLoading from "@/app/_components/PageLoading";
 import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
+import Link from "next/link";
 
 const SummaryDetail: React.FC = () => {
   const params = useParams();
@@ -79,15 +80,16 @@ const SummaryDetail: React.FC = () => {
             <ul className="flex flex-col gap-2">
               {summary.diaries && summary.diaries.length > 0 ? (
                 summary.diaries.map((diary) => (
-                  <li
-                    key={diary.id}
-                    className="shadow-sm border border-primary rounded-lg p-2"
-                  >
-                    <p className="text-xs mx-1">
-                      {changeFromISOtoDate(diary.createdAt, "dateTime")}
-                    </p>
-                    <h3 className="text-lg">{diary.title}</h3>
-                  </li>
+                  <Link href={`/diaries/${diary.id}`} key={diary.id}>
+                    <li
+                      className="shadow-sm border border-primary rounded-lg p-2"
+                    >
+                      <p className="text-xs mx-1">
+                        {changeFromISOtoDate(diary.createdAt, "dateTime")}
+                      </p>
+                      <h3 className="text-lg">{diary.title}</h3>
+                    </li>
+                  </Link>
                 ))
               ) : (
                 <li className="text-sm">
