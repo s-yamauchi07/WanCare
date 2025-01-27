@@ -42,7 +42,7 @@ const SummaryDetail: React.FC = () => {
       }
     }
     fetchSummary();
-  }, [token, id]);
+  }, [token, id, refresh]);
 
   const ModalClose = () => {
     setOpenModal(false);
