@@ -29,7 +29,7 @@ const SummaryDetail: React.FC = () => {
 
         const { summary } = await res.json();
         setSummary(summary);
-        console.log(summary)
+
       } catch(error) {
         console.log(error);
       } finally {
@@ -59,7 +59,7 @@ const SummaryDetail: React.FC = () => {
           </p>
 
           {/* タグエリア */}
-          <div className="min-h-20">
+          <div>
             {summary.summaryTags && summary.summaryTags.length > 0 && (
               summary.summaryTags.map((tag) => (
                 <span 
@@ -73,7 +73,7 @@ const SummaryDetail: React.FC = () => {
           </div>
 
           {/* 投稿一覧 */}
-          <div>
+          <div className="mt-6">
             <h3 className="text-lg text-primary font-bold mb-1">
               関連日記
             </h3>
