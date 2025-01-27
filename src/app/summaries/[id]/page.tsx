@@ -7,6 +7,8 @@ import { SummaryDetails } from "@/_types/summary";
 import PageLoading from "@/app/_components/PageLoading";
 import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
 import Link from "next/link";
+import EditRoundButton from "@/app/_components/EditRoundButton";
+import DeleteRoundButton from "@/app/_components/DeleteRoundButton";
 
 const SummaryDetail: React.FC = () => {
   const params = useParams();
@@ -44,6 +46,10 @@ const SummaryDetail: React.FC = () => {
       {(summary && !isLoading) ? (
       <div className="flex justify-center">
         <div className="max-w-64 my-20 flex flex-col">
+          <div className="flex justify-end gap-3 my-2">
+            <EditRoundButton />
+            <DeleteRoundButton />
+          </div>
           <div>
             <p className="text-sm px-1">
               {changeFromISOtoDate(summary.createdAt, "date")}
