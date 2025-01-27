@@ -15,6 +15,8 @@ import  PageLoading  from "@/app/_components/PageLoading";
 import { toast, Toaster } from "react-hot-toast"
 import DeleteAlert from "@/app/_components/DeleteAlert";
 import deleteStorageImage from "@/app/utils/deleteStorageImage";
+import EditRoundButton from "@/app/_components/EditRoundButton";
+import DeleteRoundButton from "@/app/_components/DeleteRoundButton";
 
 const DiaryDetail: React.FC = () => {
   const params = useParams();
@@ -101,6 +103,23 @@ const DiaryDetail: React.FC = () => {
       {(diary && !isLoading) ? (
         <div className="flex justify-center">
           <div className="max-w-64 my-20 flex flex-col">
+            <div className="flex justify-end gap-3 my-2">
+              {session?.user.id === diary.ownerId && (
+                <>
+                  <EditRoundButton EditClick={() => openEditModal()}/>
+                  <DeleteRoundButton />
+                </>
+              )}
+              <ModalWindow show={openModal} onClose={ModalClose} >
+                {isEditMode ? (
+                  <DiaryForm diary={diary} isEdit={true} onClose={ModalClose} />
+                ): (
+                  <DeleteAlert onDelete={handleDelete} onClose={ModalClose} deleteObj="日記" />
+                ) 
+                }
+              </ModalWindow>
+            </div>
+
             <div className="mb-6 text-gray-800">
               <p>{changeFromISOtoDate(diary.createdAt, "date")}</p>
               <h2 className="text-2xl border-b-2 border-gray-700 pb-2">
