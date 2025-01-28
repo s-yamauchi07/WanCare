@@ -16,6 +16,7 @@ import DeleteAlert from "@/app/_components/DeleteAlert";
 import deleteStorageImage from "@/app/utils/deleteStorageImage";
 import EditRoundButton from "@/app/_components/EditRoundButton";
 import DeleteRoundButton from "@/app/_components/DeleteRoundButton";
+import CommentForm from "../_components/CommentForm";
 
 const DiaryDetail: React.FC = () => {
   const params = useParams();
@@ -158,24 +159,24 @@ const DiaryDetail: React.FC = () => {
             </div>
     
             <div className="flex my-8 text-primary">
-              <div 
+              <button 
                 className="w-1/2 p-2 text-center border border-primary solid rounded flex items-center justify-center gap-1"
                 onClick={() => openCommentModal()}
               >
                 <span className="i-mdi-chat-processing-outline"></span>
                 <span className="text-sm">コメントする</span>
-              </div>
-              <div className="w-1/2 p-2 text-center border border-primary solid rounded flex items-center justify-center gap-1">
+              </button>
+              <button className="w-1/2 p-2 text-center border border-primary solid rounded flex items-center justify-center gap-1">
                 <span className="i-material-symbols-bookmark-add-outline"></span>
                 <span className="text-sm">ブックマーク</span>
-              </div>
+              </button>
             </div>
           </div>
           <ModalWindow show={openModal} onClose={ModalClose} >
             <>
               {modalType === "edit" && <DiaryForm diary={diary} isEdit={true} onClose={ModalClose} />}
               {modalType === "delete" && <DeleteAlert onDelete={handleDelete} onClose={ModalClose} deleteObj="日記" isDeleting={isDeleting}/>}
-              {modalType === "comment" && <DiaryForm diary={diary} isEdit={true} onClose={ModalClose} />}
+              {modalType === "comment" && <CommentForm  />}
             </>
           </ModalWindow>
         </div>
