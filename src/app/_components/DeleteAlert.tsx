@@ -4,9 +4,10 @@ interface DeleteProps {
   onDelete: () => Promise<void>;
   onClose: () => void;
   deleteObj: string;
+  isDeleting: boolean
 }
 
-const DeleteAlert: React.FC<DeleteProps> = ({ onDelete, onClose, deleteObj }) => {
+const DeleteAlert: React.FC<DeleteProps> = ({ onDelete, onClose, deleteObj, isDeleting }) => {
 
   return(
     <>
@@ -22,14 +23,14 @@ const DeleteAlert: React.FC<DeleteProps> = ({ onDelete, onClose, deleteObj }) =>
         <div className="flex justify-end">
           <button
             type="button"
-            className="text-white bg-red-800 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-xs px-3 py-1.5 me-2 text-center inline-flex items-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+            className="text-white bg-red-800 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-xs px-3 py-1.5 me-2 text-center inline-flex items-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
             onClick={onDelete}
             >
-            削除
+            {isDeleting ? "削除中" : "削除"}
           </button>
           <button 
             type="button"
-            className="text-red-800 bg-transparent border border-red-800 hover:bg-red-900 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-xs px-3 py-1.5 text-center dark:hover:bg-red-600 dark:border-red-600 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800" data-dismiss-target="#alert-additional-content-2"
+            className="text-red-800 bg-transparent border border-red-800 hover:bg-red-900 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-xs px-3 py-1.5 text-center dark:hover:bg-red-600 dark:border-red-600 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800" data-dismiss-target="#alert-additional-content-2"
             aria-label="Close"
             onClick={onClose}
             >

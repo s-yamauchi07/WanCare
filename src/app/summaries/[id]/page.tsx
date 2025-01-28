@@ -25,6 +25,7 @@ const SummaryDetail: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   useEffect(()=> {
     if(!token) return;
@@ -67,6 +68,7 @@ const SummaryDetail: React.FC = () => {
   const handleDelete = async() => {
     if(!token || currentUserId !== summary?.ownerId) return;
 
+    setIsDeleting(true);
     try {
       const response = await fetch(`/api/summaries/${id}`, {
         headers: {
@@ -87,6 +89,8 @@ const SummaryDetail: React.FC = () => {
     } catch(error) {
       console.log(error);
       toast.error("削除に失敗しました");
+    } finally {
+      setIsDeleting(false);
     }
   }
 
@@ -106,7 +110,7 @@ const SummaryDetail: React.FC = () => {
                 {isEditMode ? (
                   <SummaryForm summary={summary} isEdit={true} onClose={ModalClose} />
                 ) : (
-                  <DeleteAlert onDelete={handleDelete} onClose={ModalClose} deleteObj="まとめ"/>
+                  <DeleteAlert onDelete={handleDelete} onClose={ModalClose} deleteObj="まとめ" isDeleting={isDeleting}/>
                 )}
               </ModalWindow>  
           </div>

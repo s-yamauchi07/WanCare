@@ -29,6 +29,7 @@ const DiaryDetail: React.FC = () => {
   const [refresh, setRefresh] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const ModalClose = () => {
     setOpenModal(false);
@@ -47,6 +48,8 @@ const DiaryDetail: React.FC = () => {
 
   const handleDelete = async () => {
     if(!token || currentUserId !== diary?.ownerId) return;
+
+    setIsDeleting(true);
     try {
       const response = await fetch(`/api/diaries/${id}`, {
         headers: {
@@ -71,6 +74,8 @@ const DiaryDetail: React.FC = () => {
     } catch(error) {
       console.log(error);
       toast.error("削除に失敗しました");
+    } finally {
+      setIsDeleting(false);
     }
   }
   
@@ -113,7 +118,7 @@ const DiaryDetail: React.FC = () => {
                 {isEditMode ? (
                   <DiaryForm diary={diary} isEdit={true} onClose={ModalClose} />
                 ): (
-                  <DeleteAlert onDelete={handleDelete} onClose={ModalClose} deleteObj="日記" />
+                  <DeleteAlert onDelete={handleDelete} onClose={ModalClose} deleteObj="日記" isDeleting={isDeleting}/>
                 ) 
                 }
               </ModalWindow>
