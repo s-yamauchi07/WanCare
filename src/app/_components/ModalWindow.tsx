@@ -18,7 +18,7 @@ const ModalWindow: React.FC<ModalProps> = ({ show, onClose, children }) => {
       popup
     >
     <Modal.Header className="bg-main"/>
-    <Modal.Body className="bg-main rounded-lg">
+    <Modal.Body className="bg-main rounded-b-lg">
       {children}
     </Modal.Body>
   </Modal>
