@@ -7,7 +7,7 @@ const Tab: React.FC = () => {
   return(
   <div className="flex">
     <div 
-      className={`w-1/2 p-2 text-center border border-primary solid rounded ${activeTab === "diaries" ? "bg-primary text-white" : "" }`}
+      className={`w-1/2 p-2 text-center border border-primary solid rounded ${activeTab === "diaries" ? "bg-primary text-white" : "text-gray-800" }`}
       onClick={() => setActiveTab("diaries")}
     >
       <Link href="/diaries">
@@ -15,7 +15,7 @@ const Tab: React.FC = () => {
       </Link>
     </div>
     <div 
-      className={`w-1/2 p-2 text-center border border-primary solid rounded ${activeTab === "summaries" ? "bg-primary text-white": ""}`}
+      className={`w-1/2 p-2 text-center border border-primary solid rounded ${activeTab === "summaries" ? "bg-primary text-white": "text-gray-800"}`}
       onClick={() => setActiveTab("summaries")}
     >
       <Link href="/summaries" >

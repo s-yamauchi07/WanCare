@@ -56,7 +56,7 @@ const SummaryDetail: React.FC = () => {
   return(
     <>
       {(summary && !isLoading) ? (
-      <div className="flex justify-center">
+      <div className="flex justify-center dark: text-gray-700">
         <div className="max-w-64 my-20 flex flex-col">
           <div className="flex justify-end gap-3 my-2">
             {session?.user.id === summary.ownerId && (

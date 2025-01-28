@@ -41,9 +41,9 @@ const PostUnit: React.FC<PostUnitUnitProps> = ({
             />
           </div>
         </div>
-        <div>
+        <div className="text-gray-800">
           <p className="font-bold text-md">{title}</p>
-          <p className="text-gray-700 text-xs line-clamp-2">
+          <p className="text-xs line-clamp-2">
             {content}
           </p>
         </div>
