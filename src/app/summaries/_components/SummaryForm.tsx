@@ -13,8 +13,8 @@ import DiarySelection from "./DiarySelection";
 import { Option } from "../_types/Option";
 
 interface SummaryFormProps {
-  summary: SummaryDetails;
-  isEdit: boolean
+  summary?: SummaryDetails;
+  isEdit?: boolean
   onClose: () => void;
 }
 
@@ -23,7 +23,7 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose, summary, isEdit }) =
   const { token, session } = useSupabaseSession();
   const userId = session?.user.id;
   const {register, handleSubmit, reset, setValue, formState: {errors, isSubmitting}} = useForm<SummaryRequest>();
-  const initialSelectedDiaries = isEdit ? summary.diaries : [];
+  const initialSelectedDiaries = isEdit ? summary?.diaries : [];
   const [selectedDiaryIds, setSelectedDiaryIds] = useState<Option[]>(initialSelectedDiaries || []);
   const [diaryLists, setDiaryLists] = useState<Option[]>([]);
 
@@ -37,7 +37,7 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose, summary, isEdit }) =
     try {
       if(!token) return;
 
-      const response = await fetch(isEdit ? `/api/summaries/${summary.id}` : "/api/summaries", {
+      const response = await fetch(isEdit ? `/api/summaries/${summary?.id}` : "/api/summaries", {
         headers: {
           "Content-Type" : "application/json",
           Authorization: token,
