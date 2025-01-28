@@ -9,13 +9,17 @@ import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoD
 import Link from "next/link";
 import EditRoundButton from "@/app/_components/EditRoundButton";
 import DeleteRoundButton from "@/app/_components/DeleteRoundButton";
+import ModalWindow from "@/app/_components/ModalWindow";
+import SummaryForm from "../_components/SummaryForm";
 
 const SummaryDetail: React.FC = () => {
   const params = useParams();
   const { id } = params;
-  const { token } = useSupabaseSession();
+  const { token, session } = useSupabaseSession();
   const [summary, setSummary] = useState<SummaryDetails>();
   const [isLoading, setLoading] = useState<boolean>(true);
+  const [openModal, setOpenModal] = useState(false);
+  const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(()=> {
     if(!token) return;
@@ -31,7 +35,6 @@ const SummaryDetail: React.FC = () => {
 
         const { summary } = await res.json();
         setSummary(summary);
-
       } catch(error) {
         console.log(error);
       } finally {
@@ -39,7 +42,16 @@ const SummaryDetail: React.FC = () => {
       }
     }
     fetchSummary();
-  }, [token, id]);
+  }, [token, id, refresh]);
+
+  const ModalClose = () => {
+    setOpenModal(false);
+    setRefresh(!refresh);
+  }
+
+  const openEditModal = () => {
+    setOpenModal(true);
+  };
 
   return(
     <>
@@ -47,9 +59,17 @@ const SummaryDetail: React.FC = () => {
       <div className="flex justify-center">
         <div className="max-w-64 my-20 flex flex-col">
           <div className="flex justify-end gap-3 my-2">
-            <EditRoundButton />
-            <DeleteRoundButton />
+            {session?.user.id === summary.ownerId && (
+              <>
+                <EditRoundButton EditClick={() => openEditModal()}/>
+                <DeleteRoundButton />
+                <ModalWindow show={openModal} onClose={ModalClose}>
+                  <SummaryForm summary={summary} isEdit={true} onClose={ModalClose} />
+                </ModalWindow>  
+              </>
+            )}
           </div>
+
           <div>
             <p className="text-sm px-1">
               {changeFromISOtoDate(summary.createdAt, "date")}

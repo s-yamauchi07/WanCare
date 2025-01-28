@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { SummaryRequest } from "@/_types/summary";
+import { SummaryDetails, SummaryRequest } from "@/_types/summary";
 import Input from "@/app/_components/Input";
 import Textarea from "@/app/_components/Textarea";
 import Label from "@/app/_components/Label";
@@ -13,15 +13,18 @@ import DiarySelection from "./DiarySelection";
 import { Option } from "../_types/Option";
 
 interface SummaryFormProps {
+  summary?: SummaryDetails;
+  isEdit?: boolean
   onClose: () => void;
 }
 
-const SummaryForm: React.FC<SummaryFormProps> = ({ onClose }) => {
+const SummaryForm: React.FC<SummaryFormProps> = ({ onClose, summary, isEdit }) => {
   useRouteGuard();
   const { token, session } = useSupabaseSession();
   const userId = session?.user.id;
-  const {register, handleSubmit, reset, formState: {errors, isSubmitting}} = useForm<SummaryRequest>();
-  const [selectedDiaryIds, setSelectedDiaryIds] = useState<Option[]>([]);
+  const {register, handleSubmit, reset, setValue, formState: {errors, isSubmitting}} = useForm<SummaryRequest>();
+  const initialSelectedDiaries = isEdit ? summary?.diaries : [];
+  const [selectedDiaryIds, setSelectedDiaryIds] = useState<Option[]>(initialSelectedDiaries || []);
   const [diaryLists, setDiaryLists] = useState<Option[]>([]);
 
   const onSubmit: SubmitHandler<SummaryRequest> = async (data) => {
@@ -34,18 +37,18 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose }) => {
     try {
       if(!token) return;
 
-      const response = await fetch(`api/summaries`, {
+      const response = await fetch(isEdit ? `/api/summaries/${summary?.id}` : "/api/summaries", {
         headers: {
           "Content-Type" : "application/json",
           Authorization: token,
         },
-        method: "POST",
+        method: isEdit ? "PUT" : "POST",
         body: JSON.stringify(req),
       });
 
       if(response.status === 200) {
         reset();
-        toast.success("投稿が完了しました");
+        toast.success(isEdit ? "更新しました" : "投稿が完了しました");
 
         setTimeout(() => {
           onClose();
@@ -53,7 +56,7 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose }) => {
       }
     } catch (error) {
       console.log(error);
-      toast.error("投稿に失敗しました");
+      toast.error(isEdit ? "更新に失敗しました" : "投稿に失敗しました");
     }
   }
 
@@ -65,7 +68,7 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose }) => {
     if(!token) return;
     const fetchDiaryList = async () => {
       try {
-        const response = await fetch(`api/users/${userId}/diaries`, {
+        const response = await fetch(`/api/users/${userId}/diaries`, {
           headers: {
             "Content-Type" : "application/json",
             Authorization: token,
@@ -85,11 +88,20 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose }) => {
     fetchDiaryList();
   },[token, userId]);
 
+  useEffect(() => {
+    if(isEdit && summary) {
+      setValue("title", summary.title);
+      const tagNames = summary.summaryTags.map(tag => tag.tag.name).join(" ") ?? "";
+      setValue("tags", tagNames);
+      setValue("explanation", summary.explanation);
+    }
+  },[isEdit, setValue, summary]);
+
   return(
     <div className="flex justify-center">
       <form className="max-w-64 my-8" onSubmit={handleSubmit(onSubmit)}>
         <h2 className="text-primary text-center text-2xl font-bold mb-10">
-          まとめ投稿
+          {isEdit? "まとめ編集": "まとめ投稿"}
         </h2>
 
         <Input 
@@ -126,6 +138,7 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose }) => {
           <Label id="まとめに登録する記事" />
           <Select 
             options={diaryLists}
+            value={selectedDiaryIds}
             getOptionLabel={(option) => option.title}
             getOptionValue={(option) => option.id}
             closeMenuOnSelect={false}
@@ -153,7 +166,7 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose }) => {
 
         <LoadingButton 
           isSubmitting={isSubmitting}
-          buttonText={"登録"}
+          buttonText={isEdit ? "更新" : "登録"}
         />
       </form>
       <Toaster />
