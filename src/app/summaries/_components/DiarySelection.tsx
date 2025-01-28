@@ -12,7 +12,7 @@ const DiarySelection: React.FC<OptionProps<Option>> = (props) => {
         checked={props.isSelected}
         className="m-2 rounded-full border border-primary"
       />
-      <label htmlFor={props.data.id}>
+      <label htmlFor={props.data.id} className="text-primary">
         {props.data.title}
       </label>
     </div>

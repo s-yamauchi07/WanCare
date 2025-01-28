@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { SummaryDetails } from "@/_types/summary";
 import PageLoading from "@/app/_components/PageLoading";
@@ -11,15 +11,20 @@ import EditRoundButton from "@/app/_components/EditRoundButton";
 import DeleteRoundButton from "@/app/_components/DeleteRoundButton";
 import ModalWindow from "@/app/_components/ModalWindow";
 import SummaryForm from "../_components/SummaryForm";
+import DeleteAlert from "@/app/_components/DeleteAlert";
+import { toast, Toaster } from "react-hot-toast"
 
 const SummaryDetail: React.FC = () => {
   const params = useParams();
+  const router = useRouter();
   const { id } = params;
   const { token, session } = useSupabaseSession();
+  const currentUserId = session?.user.id;
   const [summary, setSummary] = useState<SummaryDetails>();
   const [isLoading, setLoading] = useState<boolean>(true);
   const [openModal, setOpenModal] = useState(false);
   const [refresh, setRefresh] = useState<boolean>(false);
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
   useEffect(()=> {
     if(!token) return;
@@ -50,8 +55,40 @@ const SummaryDetail: React.FC = () => {
   }
 
   const openEditModal = () => {
+    setIsEditMode(true);
     setOpenModal(true);
   };
+
+  const openDeleteModal = () => {
+    setIsEditMode(false);
+    setOpenModal(true);
+  }
+
+  const handleDelete = async() => {
+    if(!token || currentUserId !== summary?.ownerId) return;
+
+    try {
+      const response = await fetch(`/api/summaries/${id}`, {
+        headers: {
+          "Content-Type" : "application/json",
+          Authorization: token,
+        },
+        method: "DELETE",
+      });
+
+      if (response.status === 200) {
+        toast.success("まとめを削除しました")
+        setTimeout(() => {
+          router.push("/summaries");
+        }, 2000);
+      } else {
+        throw new Error("Failed to delete.")
+      }
+    } catch(error) {
+      console.log(error);
+      toast.error("削除に失敗しました");
+    }
+  }
 
   return(
     <>
@@ -62,12 +99,16 @@ const SummaryDetail: React.FC = () => {
             {session?.user.id === summary.ownerId && (
               <>
                 <EditRoundButton EditClick={() => openEditModal()}/>
-                <DeleteRoundButton />
-                <ModalWindow show={openModal} onClose={ModalClose}>
-                  <SummaryForm summary={summary} isEdit={true} onClose={ModalClose} />
-                </ModalWindow>  
+                <DeleteRoundButton DeleteClick={() => openDeleteModal()}/>
               </>
-            )}
+              )}
+              <ModalWindow show={openModal} onClose={ModalClose}>
+                {isEditMode ? (
+                  <SummaryForm summary={summary} isEdit={true} onClose={ModalClose} />
+                ) : (
+                  <DeleteAlert onDelete={handleDelete} onClose={ModalClose} deleteObj="まとめ"/>
+                )}
+              </ModalWindow>  
           </div>
 
           <div>
@@ -129,6 +170,7 @@ const SummaryDetail: React.FC = () => {
       ) : (
         <PageLoading />
       )}
+      <Toaster />
     </>
   )
 }

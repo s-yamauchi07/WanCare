@@ -142,6 +142,7 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose, summary, isEdit }) =
             getOptionLabel={(option) => option.title}
             getOptionValue={(option) => option.id}
             closeMenuOnSelect={false}
+            blurInputOnSelect={false}
             isMulti
             components={{Option: DiarySelection }}
             styles={{

@@ -1,8 +1,21 @@
-import React, { useState }  from "react";
+"use client";
+
+import React, { useEffect, useState }  from "react";
+import { usePathname } from "next/navigation";
 import  Link  from "next/link";
 
 const Tab: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("diaries");
+  const pathName = usePathname();
+  const [activeTab, setActiveTab] = useState<string>("");
+
+  useEffect(() => {
+    const path = pathName;
+    if(path.includes("/diaries")) {
+      setActiveTab("diaries");
+    } else if (path.includes("/summaries")) {
+      setActiveTab("summaries");
+    }
+  }, [pathName]);
 
   return(
   <div className="flex">
