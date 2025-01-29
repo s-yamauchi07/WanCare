@@ -9,7 +9,7 @@ interface LoadingButtonProps {
 
 const LoadingButton: React.FC<LoadingButtonProps> = ({isSubmitting, buttonText}) => {
   return(
-    <div className="flex items-center justify-center mt-10">
+    <div className="flex items-center justify-center mt-8">
       {isSubmitting ? (
         <button disabled type="button" className="rounded-full text-white bg-primary focus:ring-4 focus:ring-blue-300 font-medium text-sm px-5 py-2.5 text-center me-2 inline-flex items-center">
           <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

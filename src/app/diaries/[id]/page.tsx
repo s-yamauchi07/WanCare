@@ -16,6 +16,7 @@ import DeleteAlert from "@/app/_components/DeleteAlert";
 import deleteStorageImage from "@/app/utils/deleteStorageImage";
 import EditRoundButton from "@/app/_components/EditRoundButton";
 import DeleteRoundButton from "@/app/_components/DeleteRoundButton";
+import CommentForm from "../_components/CommentForm";
 
 const DiaryDetail: React.FC = () => {
   const params = useParams();
@@ -28,23 +29,29 @@ const DiaryDetail: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(true);
-  const [isEditMode, setIsEditMode] = useState(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [modalType, setModalType] = useState<string>("");
 
   const ModalClose = () => {
     setOpenModal(false);
     setRefresh(!refresh);
+    setModalType("");
   }
 
   const openEditModal = () => {
-    setIsEditMode(true);
+    setModalType("edit");
     setOpenModal(true);
   };
 
   const openDeleteModal = () => {
-    setIsEditMode(false);
+    setModalType("delete");
     setOpenModal(true);
   };
+
+  const openCommentModal = () => {
+    setModalType("comment");
+    setOpenModal(true);
+  }
 
   const handleDelete = async () => {
     if(!token || currentUserId !== diary?.ownerId) return;
@@ -114,14 +121,6 @@ const DiaryDetail: React.FC = () => {
                   <DeleteRoundButton DeleteClick={() => openDeleteModal()}/>
                 </>
               )}
-              <ModalWindow show={openModal} onClose={ModalClose} >
-                {isEditMode ? (
-                  <DiaryForm diary={diary} isEdit={true} onClose={ModalClose} />
-                ): (
-                  <DeleteAlert onDelete={handleDelete} onClose={ModalClose} deleteObj="日記" isDeleting={isDeleting}/>
-                ) 
-                }
-              </ModalWindow>
             </div>
 
             <div className="mb-6 text-gray-800">
@@ -159,18 +158,27 @@ const DiaryDetail: React.FC = () => {
               )}
             </div>
     
-            <div className="flex my-8">
-              <div className="w-1/2 p-2 text-center border border-primary solid rounded bg-primary text-white flex items-center justify-center gap-1">
+            <div className="flex my-8 text-primary">
+              <button 
+                className="w-1/2 p-2 text-center border border-primary solid rounded flex items-center justify-center gap-1"
+                onClick={() => openCommentModal()}
+              >
                 <span className="i-mdi-chat-processing-outline"></span>
                 <span className="text-sm">コメントする</span>
-              </div>
-              <div className="w-1/2 p-2 text-center border border-primary solid rounded flex items-center justify-center gap-1 text-gray-800">
+              </button>
+              <button className="w-1/2 p-2 text-center border border-primary solid rounded flex items-center justify-center gap-1">
                 <span className="i-material-symbols-bookmark-add-outline"></span>
                 <span className="text-sm">ブックマーク</span>
-              </div>
+              </button>
             </div>
-    
           </div>
+          <ModalWindow show={openModal} onClose={ModalClose} >
+            <>
+              {modalType === "edit" && <DiaryForm diary={diary} isEdit={true} onClose={ModalClose} />}
+              {modalType === "delete" && <DeleteAlert onDelete={handleDelete} onClose={ModalClose} deleteObj="日記" isDeleting={isDeleting}/>}
+              {modalType === "comment" && <CommentForm diary={diary} onClose={ModalClose}/>}
+            </>
+          </ModalWindow>
         </div>
       ) : (
         <PageLoading />
