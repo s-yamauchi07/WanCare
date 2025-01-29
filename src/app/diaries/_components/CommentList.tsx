@@ -3,12 +3,16 @@ import EditRoundButton from "@/app/_components/EditRoundButton";
 import React from "react";
 import { CommentsProps } from "@/_types/comment";
 
-const CommentList: React.FC<CommentsProps> = ({comments}) => {
+interface CommentIndexProps extends CommentsProps {
+  currentUserId?: string;
+}
+
+const CommentList: React.FC<CommentIndexProps> = ({ comments, currentUserId }) => {
   return(
     <>
-    <ul>
+    <ul className="flex flex-col gap-2">
       {comments.map((comment) => (
-        <li className="border-b border-gray-800" key={comment.id}>
+        <li className="shadow-lg rounded-lg p-2" key={comment.id}>
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-1">
               <span className="rounded-full bg-primary text-white px-1">
@@ -17,10 +21,12 @@ const CommentList: React.FC<CommentsProps> = ({comments}) => {
               <span className="text-xs font-bold">{comment.owner.nickname}</span>
             </div>
 
-            <div className="flex gap-2">
-              <EditRoundButton width="w-4" height="h-4" />
-              <DeleteRoundButton width="w-4" height="h-4" />
-            </div>
+            {comment.owner.id === currentUserId && (
+              <div className="flex gap-2">
+                <EditRoundButton width="w-4" height="h-4" />
+                <DeleteRoundButton width="w-4" height="h-4" />
+              </div>
+            )}
           </div>
           <p className="py-0.5">{comment.comment}</p>
         </li>

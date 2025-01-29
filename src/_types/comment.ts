@@ -5,7 +5,7 @@ export interface Comment{
 export interface CommentProps {
   id: string;
   comment: string;
-  owner: { nickname: string };
+  owner: { id: string, nickname: string };
 }
 
 export interface CommentsProps {
