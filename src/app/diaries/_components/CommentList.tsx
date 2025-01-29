@@ -11,7 +11,7 @@ const CommentList: React.FC<CommentIndexProps> = ({ comments, currentUserId }) =
   return(
     <>
     <ul className="flex flex-col gap-2">
-      {comments.map((comment) => (
+      {comments && comments.map((comment) => (
         <li className="shadow-lg rounded-lg p-2" key={comment.id}>
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-1">
