@@ -17,6 +17,7 @@ import deleteStorageImage from "@/app/utils/deleteStorageImage";
 import EditRoundButton from "@/app/_components/EditRoundButton";
 import DeleteRoundButton from "@/app/_components/DeleteRoundButton";
 import CommentForm from "../_components/CommentForm";
+import CommentList from "../_components/CommentList";
 
 const DiaryDetail: React.FC = () => {
   const params = useParams();
@@ -117,8 +118,8 @@ const DiaryDetail: React.FC = () => {
             <div className="flex justify-end gap-3 my-2">
               {session?.user.id === diary.ownerId && (
                 <>
-                  <EditRoundButton EditClick={() => openEditModal()}/>
-                  <DeleteRoundButton DeleteClick={() => openDeleteModal()}/>
+                  <EditRoundButton EditClick={() => openEditModal()} width="w-8" height="h-8"/>
+                  <DeleteRoundButton DeleteClick={() => openDeleteModal()} width="w-8" height="h-8"/>
                 </>
               )}
             </div>
@@ -171,7 +172,13 @@ const DiaryDetail: React.FC = () => {
                 <span className="text-sm">ブックマーク</span>
               </button>
             </div>
+            
+            {/* コメント一覧表示 */}
+            <div>
+              <CommentList comments={diary.comments} currentUserId={currentUserId}/>
+            </div>
           </div>
+          {/* モーダル表示エリア */}
           <ModalWindow show={openModal} onClose={ModalClose} >
             <>
               {modalType === "edit" && <DiaryForm diary={diary} isEdit={true} onClose={ModalClose} />}

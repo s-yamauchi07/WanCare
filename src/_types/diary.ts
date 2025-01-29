@@ -1,4 +1,5 @@
 import { Tag } from "@/_types/tag";
+import { CommentProps } from "./comment";
 
 export interface DiaryRequest {
   title: string;
@@ -21,5 +22,5 @@ export interface BaseDiary {
 
 export interface DiaryDetails extends BaseDiary {
   ownerId: string;
-  comments: {comment: string, nickname: string}
+  comments: CommentProps[];
 }
