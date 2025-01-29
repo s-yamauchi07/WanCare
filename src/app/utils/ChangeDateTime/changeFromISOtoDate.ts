@@ -11,7 +11,7 @@ export const changeFromISOtoDate = (date: string, changeFormat: string) => {
   if (changeFormat === "dateTime") {
     formattedDate = format(zonedDate, 'yyyy/MM/dd HH:mm');
   } else if (changeFormat === "date") {
-    formattedDate = format(zonedDate, 'yyyy/MM/dd');
+    formattedDate = format(zonedDate, 'yyyy-MM-dd');
   } else {
     formattedDate = format(zonedDate, 'HH:mm');
   }
