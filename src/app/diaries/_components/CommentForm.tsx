@@ -1,4 +1,4 @@
-import React from "react";
+import React  from "react";
 import Textarea from "@/app/_components/Textarea";
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -10,9 +10,10 @@ import toast from "react-hot-toast";
 
 interface CommentProps {
   diary: DiaryDetails;
+  onClose: () => void;
 }
 
-const CommentForm:React.FC<CommentProps> = ({ diary }) => {
+const CommentForm:React.FC<CommentProps> = ({ diary, onClose }) => {
   useRouteGuard();
   const { token } = useSupabaseSession();
   const diaryId = diary.id;
@@ -38,11 +39,16 @@ const CommentForm:React.FC<CommentProps> = ({ diary }) => {
       if(response.status === 200) {
         reset();
         toast.success("コメントを投稿しました");
-      }
+
+        setTimeout(() => {
+          onClose();
+        }, 2000);
+      };
+
     } catch(error) {
       console.log(error);
       toast.error("コメント投稿に失敗しました");
-    }
+    } 
   }
 
   return(
