@@ -118,7 +118,7 @@ const DiaryDetail: React.FC = () => {
             <div className="flex justify-end gap-3 my-2">
               {session?.user.id === diary.ownerId && (
                 <>
-                  <EditRoundButton EditClick={() => openEditModal()} width="w-8" height="h-8"/>
+                  <EditRoundButton editClick={() => openEditModal()} width="w-8" height="h-8"/>
                   <DeleteRoundButton DeleteClick={() => openDeleteModal()} width="w-8" height="h-8"/>
                 </>
               )}
