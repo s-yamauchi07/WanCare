@@ -42,6 +42,7 @@ const CareDetail: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   useEffect(() => {
     if (!token) return;
@@ -85,6 +86,7 @@ const CareDetail: React.FC = () => {
 
   const handleDelete = async () => {
     if(!token || currentUserId !== care?.ownerId) return;
+    setIsDeleting(true);
 
     try {
       const response = await fetch(`/api/cares/${id}`, {
@@ -109,6 +111,8 @@ const CareDetail: React.FC = () => {
     } catch(error) {
       console.log(error);
       toast.error("削除に失敗しました");
+    } finally {
+      setIsDeleting(false);
     }
   }
  
@@ -188,7 +192,7 @@ const CareDetail: React.FC = () => {
             {isEditMode ? (
               <CareForm careId={care.careListId} careName={care.careList.name} token={token} onClose={ModalClose} isEdit={true} careInfo={care}/>
             ) : (
-              <DeleteAlert onDelete={handleDelete} onClose={ModalClose} deleteObj="お世話記録"/>
+              <DeleteAlert onDelete={handleDelete} onClose={ModalClose} deleteObj="お世話記録" isDeleting={isDeleting} />
             )}
           </ModalWindow>
         </div>
