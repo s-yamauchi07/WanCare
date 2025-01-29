@@ -101,6 +101,7 @@ const DiaryDetail: React.FC = () => {
 
         const { diary } = await res.json();
         setDiary(diary);
+        console.log(diary)
       } catch(error) {
         console.log(error);
       } finally {
@@ -175,7 +176,7 @@ const DiaryDetail: React.FC = () => {
             
             {/* コメント一覧表示 */}
             <div>
-              <CommentList />
+              <CommentList comments={diary.comments}/>
             </div>
           </div>
           {/* モーダル表示エリア */}

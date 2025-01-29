@@ -28,6 +28,7 @@ export const GET = async(request:NextRequest, { params } : { params: Promise<{id
         },
         comments: {
           select: {
+            id: true,
             comment: true,
             owner: {
               select: {
