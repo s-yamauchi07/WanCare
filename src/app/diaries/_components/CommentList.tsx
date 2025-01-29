@@ -1,16 +1,7 @@
 import DeleteRoundButton from "@/app/_components/DeleteRoundButton";
 import EditRoundButton from "@/app/_components/EditRoundButton";
 import React from "react";
-
-interface CommentProps {
-  id: string;
-  comment: string;
-  owner: { nickname: string };
-}
-
-interface CommentsProps {
-  comments: CommentProps[];
-}
+import { CommentsProps } from "@/_types/comment";
 
 const CommentList: React.FC<CommentsProps> = ({comments}) => {
   return(
