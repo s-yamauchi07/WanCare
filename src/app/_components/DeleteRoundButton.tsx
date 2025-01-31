@@ -10,7 +10,7 @@ const DeleteRoundButton: React.FC<DeleteButtonProps> = ({DeleteClick, width, hei
   return(
   <div>
     <button 
-      className="flex items-center justify-center rounded-full bg-gray-300 p-2"
+      className="flex items-center justify-center rounded-full bg-gray-300 p-2 drop-shadow-lg"
       onClick={DeleteClick}
       >
       <span className={`i-material-symbols-light-delete-outline ${width} ${height}`}></span>

@@ -54,6 +54,10 @@ const DiaryDetail: React.FC = () => {
     setOpenModal(true);
   }
 
+  const refreshComments = () => {
+    setRefresh(!refresh);
+  }
+
   const handleDelete = async () => {
     if(!token || currentUserId !== diary?.ownerId) return;
 
@@ -118,7 +122,7 @@ const DiaryDetail: React.FC = () => {
             <div className="flex justify-end gap-3 my-2">
               {session?.user.id === diary.ownerId && (
                 <>
-                  <EditRoundButton EditClick={() => openEditModal()} width="w-8" height="h-8"/>
+                  <EditRoundButton editClick={() => openEditModal()} width="w-8" height="h-8"/>
                   <DeleteRoundButton DeleteClick={() => openDeleteModal()} width="w-8" height="h-8"/>
                 </>
               )}
@@ -175,7 +179,7 @@ const DiaryDetail: React.FC = () => {
             
             {/* コメント一覧表示 */}
             <div>
-              <CommentList comments={diary.comments} currentUserId={currentUserId}/>
+              <CommentList comments={diary.comments} diary={diary} currentUserId={currentUserId} refreshComments={refreshComments}/>
             </div>
           </div>
           {/* モーダル表示エリア */}
@@ -183,7 +187,7 @@ const DiaryDetail: React.FC = () => {
             <>
               {modalType === "edit" && <DiaryForm diary={diary} isEdit={true} onClose={ModalClose} />}
               {modalType === "delete" && <DeleteAlert onDelete={handleDelete} onClose={ModalClose} deleteObj="日記" isDeleting={isDeleting}/>}
-              {modalType === "comment" && <CommentForm diary={diary} onClose={ModalClose}/>}
+              {modalType === "comment" && <CommentForm diary={diary} onClose={ModalClose} isEdit={false} selectedComment={null} />}
             </>
           </ModalWindow>
         </div>
