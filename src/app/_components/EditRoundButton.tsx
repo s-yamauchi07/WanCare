@@ -10,7 +10,7 @@ const EditRoundButton: React.FC<EditButtonProps> = ({editClick, width, height}) 
   return(
   <div>
     <button 
-      className="flex items-center justify-center rounded-full bg-secondary p-2"
+      className="flex items-center justify-center rounded-full bg-secondary p-2 drop-shadow-lg"
       onClick={editClick}
       >
       <span  className={`i-material-symbols-light-edit-square-outline ${width} ${height}`}></span>
