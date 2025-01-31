@@ -21,11 +21,12 @@ const CommentList: React.FC<CommentIndexProps> = ({ comments, currentUserId, dia
     setOpenModal(true);
   }
 
-  const CloseEditCommentModal = () => {
+  const closeEditCommentModal = () => {
     setOpenModal(false);
     setSelectedComment(null);
     refreshComments();
   }
+
 
   return(
     <ul className="flex flex-col gap-2">
@@ -44,15 +45,17 @@ const CommentList: React.FC<CommentIndexProps> = ({ comments, currentUserId, dia
                 <div onClick={() => openEditCommentModal(comment)}>
                   <EditRoundButton width="w-4" height="h-4" />
                 </div>
-                <DeleteRoundButton width="w-4" height="h-4" />
+                <div >
+                  <DeleteRoundButton width="w-4" height="h-4" />
+                </div>
               </div>
             )}
           </div>
           <p className="py-0.5">{comment.comment}</p>
         </li>
       ))}
-        <ModalWindow show={openModal} onClose={CloseEditCommentModal} >
-          <CommentForm diary={diary} selectedComment={selectedComment} onClose={CloseEditCommentModal} isEdit={true}/>
+        <ModalWindow show={openModal} onClose={closeEditCommentModal} >
+          <CommentForm diary={diary} selectedComment={selectedComment} onClose={closeEditCommentModal} isEdit={true}/>
         </ModalWindow>  
     </ul>
   )
