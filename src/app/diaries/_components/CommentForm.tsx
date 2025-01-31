@@ -1,23 +1,25 @@
-import React  from "react";
+import React, { useEffect }  from "react";
 import Textarea from "@/app/_components/Textarea";
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
 import { useForm, SubmitHandler } from "react-hook-form";
 import LoadingButton from "@/app/_components/LoadingButton";
-import { Comment } from "@/_types/comment";
+import { Comment, CommentProps } from "@/_types/comment";
 import { DiaryDetails } from "@/_types/diary";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import toast from "react-hot-toast";
 
-interface CommentProps {
+interface CommentFormProps {
   diary: DiaryDetails;
   onClose: () => void;
+  isEdit: boolean;
+  comment: CommentProps | null;
 }
 
-const CommentForm:React.FC<CommentProps> = ({ diary, onClose }) => {
+const CommentForm:React.FC<CommentFormProps> = ({ diary, onClose, isEdit, comment }) => {
   useRouteGuard();
   const { token } = useSupabaseSession();
   const diaryId = diary.id;
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting }} = useForm<Comment>();
+  const { register, handleSubmit, reset, setValue, formState: { errors, isSubmitting }} = useForm<Comment>();
 
   const onSubmit: SubmitHandler<Comment> = async(data) => {
     const req = {
@@ -27,18 +29,18 @@ const CommentForm:React.FC<CommentProps> = ({ diary, onClose }) => {
 
     if(!token) return;
     try {
-      const response = await fetch(`/api/diaries/${diaryId}/comments`, {
+      const response = await fetch(isEdit ? `/api/diaries/${diaryId}/comments/${comment?.id}` : `/api/diaries/${diaryId}/comments`, {
         headers: {
           "Content-Type" : "application/json",
           Authorization: token,
         },
-        method: "POST",
+        method: isEdit ? "PUT" : "POST",
         body: JSON.stringify(req),
       });
 
       if(response.status === 200) {
         reset();
-        toast.success("コメントを投稿しました");
+        toast.success(isEdit ? "更新しました" : "コメントを投稿しました");
 
         setTimeout(() => {
           onClose();
@@ -47,9 +49,15 @@ const CommentForm:React.FC<CommentProps> = ({ diary, onClose }) => {
 
     } catch(error) {
       console.log(error);
-      toast.error("コメント投稿に失敗しました");
+      toast.error(isEdit ? "更新に失敗しました" : "コメント投稿に失敗しました");
     } 
   }
+
+  useEffect(() => {
+    if(isEdit && comment) {
+      setValue("comment", comment.comment)
+    }
+  }, [isEdit, setValue, comment]);
 
   return(
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -65,7 +73,7 @@ const CommentForm:React.FC<CommentProps> = ({ diary, onClose }) => {
 
       <LoadingButton 
         isSubmitting={isSubmitting}
-        buttonText="投稿"
+        buttonText={isEdit? "更新" : "投稿"}
       />
     </form>
   )
