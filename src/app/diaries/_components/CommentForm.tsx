@@ -12,10 +12,10 @@ interface CommentFormProps {
   diary: DiaryDetails;
   onClose: () => void;
   isEdit: boolean;
-  comment: CommentProps | null;
+  selectedComment: CommentProps | null;
 }
 
-const CommentForm:React.FC<CommentFormProps> = ({ diary, onClose, isEdit, comment }) => {
+const CommentForm:React.FC<CommentFormProps> = ({ diary, onClose, isEdit, selectedComment }) => {
   useRouteGuard();
   const { token } = useSupabaseSession();
   const diaryId = diary.id;
@@ -29,7 +29,7 @@ const CommentForm:React.FC<CommentFormProps> = ({ diary, onClose, isEdit, commen
 
     if(!token) return;
     try {
-      const response = await fetch(isEdit ? `/api/diaries/${diaryId}/comments/${comment?.id}` : `/api/diaries/${diaryId}/comments`, {
+      const response = await fetch(isEdit ? `/api/diaries/${diaryId}/comments/${selectedComment?.id}` : `/api/diaries/${diaryId}/comments`, {
         headers: {
           "Content-Type" : "application/json",
           Authorization: token,
@@ -54,10 +54,10 @@ const CommentForm:React.FC<CommentFormProps> = ({ diary, onClose, isEdit, commen
   }
 
   useEffect(() => {
-    if(isEdit && comment) {
-      setValue("comment", comment.comment)
+    if(isEdit && selectedComment) {
+      setValue("comment", selectedComment.comment)
     }
-  }, [isEdit, setValue, comment]);
+  }, [isEdit, setValue, selectedComment]);
 
   return(
     <form onSubmit={handleSubmit(onSubmit)}>

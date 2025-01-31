@@ -187,7 +187,7 @@ const DiaryDetail: React.FC = () => {
             <>
               {modalType === "edit" && <DiaryForm diary={diary} isEdit={true} onClose={ModalClose} />}
               {modalType === "delete" && <DeleteAlert onDelete={handleDelete} onClose={ModalClose} deleteObj="日記" isDeleting={isDeleting}/>}
-              {modalType === "comment" && <CommentForm diary={diary} onClose={ModalClose} isEdit={false} comment={null} />}
+              {modalType === "comment" && <CommentForm diary={diary} onClose={ModalClose} isEdit={false} selectedComment={null} />}
             </>
           </ModalWindow>
         </div>
