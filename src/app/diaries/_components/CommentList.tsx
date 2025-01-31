@@ -1,6 +1,6 @@
 import DeleteRoundButton from "@/app/_components/DeleteRoundButton";
 import EditRoundButton from "@/app/_components/EditRoundButton";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { CommentProps, CommentsProps } from "@/_types/comment";
 import CommentForm from "./CommentForm";
 import ModalWindow from "@/app/_components/ModalWindow";
