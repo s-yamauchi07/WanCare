@@ -9,7 +9,7 @@ const menuList = [
   { name: "記録", icon: "i-material-symbols-add-notes-outline", path: "/cares/new"},
   { name: "Calendar", icon: "i-material-symbols-calendar-month", path:"/cares" },
   { name: "日記", icon: "i-material-symbols-book-2-outline", path: "/diaries"},
-  { name: "Mypage", icon: "i-material-symbols-sound-detection-dog-barking-outline", path: "/mypages"},
+  { name: "Mypage", icon: "i-material-symbols-sound-detection-dog-barking-outline", path: "/mypage"},
 ]
 
 const excludedPaths = ["/", "/signup", "/signin", "/dogs/new", "/dogs/form"];
