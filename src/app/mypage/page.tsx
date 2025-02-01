@@ -8,6 +8,7 @@ import Image from "next/image";
 import PageLoading from "../_components/PageLoading";
 import usePreviewImage from "@/_hooks/usePreviewImage";
 import no_registration from "@/public/dog_registration.png";
+import { getAgeInMonths } from "../utils/getAgeInMonths";
 
 interface MypageUser {
   id: string;
@@ -51,19 +52,6 @@ const MyPage: React.FC<MypageUser> = () => {
     }
     loggedInUser();
   }, [token]);
-
-  const getAgeInMonths = (birthday: string) => {
-    const today = new Date();
-    const birthDate = new Date(birthday);
-    let years = today.getFullYear() - birthDate.getFullYear();
-    let months = today.getMonth() - birthDate.getMonth();
-    
-    if(months < 0) {
-      years--;
-      months +=12;
-    }
-    return `${years}歳${months}ヶ月`
-  }
 
   return(
     <div className="flex justify-center text-gray-800">
