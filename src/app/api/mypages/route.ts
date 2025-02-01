@@ -21,6 +21,7 @@ export const GET = async(request: NextRequest) => {
             name: true,
             sex: true,
             birthDate: true,
+            imageKey: true,
           },
         },
         diaries: {
