@@ -179,7 +179,13 @@ const DiaryDetail: React.FC = () => {
             
             {/* コメント一覧表示 */}
             <div>
-              <CommentList comments={diary.comments} diary={diary} currentUserId={currentUserId} refreshComments={refreshComments}/>
+              <CommentList 
+                comments={diary.comments} 
+                diary={diary} 
+                currentUserId={currentUserId}
+                refreshComments={refreshComments}
+                token={token}
+              />
             </div>
           </div>
           {/* モーダル表示エリア */}
