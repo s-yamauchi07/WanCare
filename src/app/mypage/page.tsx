@@ -10,6 +10,10 @@ import usePreviewImage from "@/_hooks/usePreviewImage";
 import no_registration from "@/public/dog_registration.png";
 import { getAgeInMonths } from "../utils/getAgeInMonths";
 
+import { Tabs } from "flowbite-react";
+import { HiAdjustments, HiClipboardList, HiUserCircle } from "react-icons/hi";
+import { MdDashboard } from "react-icons/md";
+
 interface MypageUser {
   id: string;
   nickname: string;
@@ -115,6 +119,24 @@ const MyPage: React.FC<MypageUser> = () => {
               </div>
             </div>
 
+            {/* リスト一覧 */}
+            <div>
+              <ul className="flex text-sm font-medium text-center bg-secondary text-gray-500 rounded-lg dark:text-gray-400">
+                <li className="me-2 w-1/3">
+                    <button className={`inline-block text-gray-800 px-2 py-1.5 rounded-lg active hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white`} aria-current="page">
+                        日記
+                    </button>
+                </li>
+
+                <li className="me-2 w-1/3">
+                    <a href="#"  className="inline-block px-2 py-1.5 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white">まとめ</a>
+                </li>
+                <li className="me-2 w-1/3">
+                    <a href="#" className="inline-block px-2 py-1.5 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white">いいね</a>
+                </li>
+              </ul>
+              
+            </div>
           </>
         ) : (
           <PageLoading />
