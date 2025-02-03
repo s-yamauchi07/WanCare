@@ -21,10 +21,12 @@ export const GET = async(request: NextRequest) => {
             name: true,
             sex: true,
             birthDate: true,
+            imageKey: true,
           },
         },
         diaries: {
           select: {
+            id: true,
             title: true,
             imageKey: true,
             createdAt: true,
@@ -35,6 +37,7 @@ export const GET = async(request: NextRequest) => {
         },
         summaries: {
           select: {
+            id: true,
             title: true,
             createdAt: true,
           },
@@ -46,6 +49,7 @@ export const GET = async(request: NextRequest) => {
           select: {
             diary: {
               select: {
+                id: true,
                 title: true,
                 imageKey: true,
                 createdAt: true,

@@ -16,6 +16,7 @@ import { WeightInfo } from "@/_types/weight";
 import { TodayCareInfo } from "@/_types/care";
 import { DogProfile } from "@/_types/dog";
 import usePreviewImage from "@/_hooks/usePreviewImage";
+import { getAgeInMonths } from "../utils/getAgeInMonths";
 
 interface DogInfo {
   id: string;
@@ -69,15 +70,6 @@ const Home: React.FC = () => {
     }
     fetchDogInfo();
   }, [token, session]);
-
-  const getAgeInMonths = (birthday: string) => {
-    const today = new Date();
-    const birthDate = new Date(birthday);
-    const years = today.getFullYear() - birthDate.getFullYear();
-    const months = today.getMonth() - birthDate.getMonth();
-
-    return `${years}歳${months}ヶ月`
-  }
 
   return(
     <div className="flex justify-center text-gray-800">
