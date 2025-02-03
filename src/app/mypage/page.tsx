@@ -97,7 +97,7 @@ const MyPage: React.FC<MypageUser> = () => {
 
   return (
     <div className="flex justify-center text-gray-800">
-      <div className="w-64 my-20 pb-20 flex flex-col gap-10 overflow-y-auto">
+      <div className="my-20 pb-20 px-4 w-full max-w-screen-lg flex flex-col gap-10 overflow-y-auto">
         {currentUser ? (
           <>
             <h2 className="text-2xl font-bold text-primary text-center">マイページ</h2>
@@ -159,25 +159,25 @@ const MyPage: React.FC<MypageUser> = () => {
 
             <div>
               <ul className="flex text-sm font-medium text-center bg-secondary text-gray-500 rounded-lg dark:text-gray-400">
-                <li className="me-2 w-1/3">
+                <li className="w-1/3 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white rounded-lg">
                   <button
                     onClick={() => selectTab("日記")}
-                    className="inline-block text-gray-800 px-2 py-1.5 rounded-lg active hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white" aria-current="page">
+                    className="inline-block text-gray-800 px-2 py-1.5" aria-current="page">
                       日記
                   </button>
                 </li>
 
-                <li className="me-2 w-1/3">
+                <li className="w-1/3 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white rounded-lg">
                   <button
                     onClick={() => selectTab("まとめ")}
-                    className="inline-block text-gray-800 px-2 py-1.5 rounded-lg active hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white" aria-current="page">
+                    className="inline-block text-gray-800 px-2 py-1.5"  aria-current="page">
                       まとめ
                   </button>
                 </li>
-                <li className="me-2 w-1/3">
+                <li className="w-1/3 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white rounded-lg">
                   <button
                     onClick={() => selectTab("いいね")}
-                    className="inline-block text-gray-800 px-2 py-1.5 rounded-lg active hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white" aria-current="page">
+                    className="inline-block text-gray-800 px-2 py-1.5" aria-current="page">
                       いいね
                   </button>
                 </li>
