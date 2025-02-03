@@ -31,7 +31,7 @@ interface Lists {
   createdAt: string;
 }
 
-const MyPage: React.FC<MypageUser> = () => {
+const MyPage: React.FC = () => {
   useRouteGuard();
   const { token } = useSupabaseSession();
   const [currentUser, setCurrentUser] = useState<MypageUser | null>(null);
