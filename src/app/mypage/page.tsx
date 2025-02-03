@@ -38,6 +38,7 @@ const MyPage: React.FC<MypageUser> = () => {
   const dogImg = usePreviewImage(currentUser?.dog.imageKey ?? null, "profile_img");
   const [defaultImg, setDefaultImg] = useState<StaticImageData>(no_diary_img);
   const [selectedTab, setSelectedTab] = useState<string>("日記"); 
+  const [linkPrefix, setLinkPrefix] = useState<string>("");
   const [showLists, setShowLists] = useState<Lists[]>([]);
 
   useEffect(() => {
@@ -78,12 +79,15 @@ const MyPage: React.FC<MypageUser> = () => {
       if (selectedTab === "日記") {
         setShowLists(currentUser.diaries);
         setDefaultImg(no_diary_img);
+        setLinkPrefix("diaries")
       } else if (selectedTab === "まとめ") {
         setShowLists(currentUser.summaries);
         setDefaultImg(summaryThumbnail);
+        setLinkPrefix("summaries")
       } else if (selectedTab === "いいね") {
         setShowLists(currentUser.bookmarks);
         setDefaultImg(no_diary_img);
+        setLinkPrefix("favorites")
       }
     } catch (error) {
       console.log(error);
@@ -158,8 +162,8 @@ const MyPage: React.FC<MypageUser> = () => {
             </div>
 
             <div>
-              <ul className="flex text-sm font-medium text-center bg-secondary text-gray-500 rounded-lg dark:text-gray-400">
-                <li className="w-1/3 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white rounded-lg">
+              <ul className="flex text-sm font-medium text-center bg-secondary rounded-lg">
+                <li className="w-1/3 rounded-lg">
                   <button
                     onClick={() => selectTab("日記")}
                     className="inline-block text-gray-800 px-2 py-1.5" aria-current="page">
@@ -167,14 +171,14 @@ const MyPage: React.FC<MypageUser> = () => {
                   </button>
                 </li>
 
-                <li className="w-1/3 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white rounded-lg">
+                <li className="w-1/3 border-r border-l border-main">
                   <button
                     onClick={() => selectTab("まとめ")}
                     className="inline-block text-gray-800 px-2 py-1.5"  aria-current="page">
                       まとめ
                   </button>
                 </li>
-                <li className="w-1/3 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white rounded-lg">
+                <li className="w-1/3 rounded-lg">
                   <button
                     onClick={() => selectTab("いいね")}
                     className="inline-block text-gray-800 px-2 py-1.5" aria-current="page">
@@ -199,14 +203,14 @@ const MyPage: React.FC<MypageUser> = () => {
                       title={list.title} 
                       imageKey={list.imageKey} 
                       defaultImage={defaultImg} 
-                      linkPrefix="diaries" />
+                      linkPrefix={linkPrefix} />
                     )
                   })
                   }
                 </div>
               </InfiniteScroll>
             ) : (
-              <p className="text-center">投稿した{selectedTab}はありません</p>
+              <p className="text-center">登録した{selectedTab}はありません</p>
             )}
             </div>
           </>
