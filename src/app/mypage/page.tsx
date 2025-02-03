@@ -101,14 +101,14 @@ const MyPage: React.FC<MypageUser> = () => {
 
   return (
     <div className="flex justify-center text-gray-800">
-      <div className="my-20 pb-20 px-4 w-full max-w-screen-lg flex flex-col gap-10 overflow-y-auto">
+      <div className="my-20 pb-20 px-4 w-full max-w-screen-lg flex flex-col gap-12 overflow-y-auto">
         {currentUser ? (
           <>
             <h2 className="text-2xl font-bold text-primary text-center">マイページ</h2>
             {/* user情報 */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-4">
               <div className="flex flex-col items-center">
-                <span className="i-material-symbols-light-account-circle-outline w-14 h-14"></span>
+                <span className="i-material-symbols-light-account-circle-outline w-20 h-20"></span>
                 <p className="text-xl font-bold text-center">{currentUser?.nickname}</p>
               </div>
 
@@ -135,23 +135,21 @@ const MyPage: React.FC<MypageUser> = () => {
             {/* user情報 */}
 
             {/* ペット情報 */}
-            <div className="flex flex-col gap-3">
-              <h3 className="text-lg text-primary font-bold">マイペット</h3>
+            <div className="flex flex-col gap-3 border border-main shadow-xl p-4 rounded-lg">
+              <h3 className="text-lg text-primary font-bold text-center">マイペット</h3>
 
               <div className="flex justify-around">
-                <div>
-                  <Image 
-                    className="w-14 h-14 rounded-full border border-primary ring-primary ring-offset-1 ring"
-                    src={dogImg ? dogImg : no_registration} 
-                    alt="profile_image" 
-                    width={112} 
-                    height={112}
-                    style={{objectFit: "cover"}}
-                    priority={true}
-                  />
-                </div>
+                <Image 
+                  className="w-20 h-20 rounded-full border border-primary ring-primary ring-offset-1 ring"
+                  src={dogImg ? dogImg : no_registration} 
+                  alt="profile_image" 
+                  width={120} 
+                  height={120}
+                  style={{objectFit: "cover"}}
+                  priority={true}
+                />
 
-                <div>
+                <div className="flex flex-col justify-around">
                   <p className="text-xl font-bold text-center">{currentUser.dog.name}</p>
                   <div className="flex gap-2">
                     <p>{getAgeInMonths(currentUser.dog.birthDate)}</p>
