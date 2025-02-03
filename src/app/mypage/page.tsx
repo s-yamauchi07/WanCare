@@ -3,33 +3,50 @@
 import React, { useEffect, useState } from "react";
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
-import { toast, Toaster } from "react-hot-toast"
-import Image from "next/image";
+import { toast, Toaster } from "react-hot-toast";
+import Image, { StaticImageData } from "next/image";
 import PageLoading from "../_components/PageLoading";
 import usePreviewImage from "@/_hooks/usePreviewImage";
 import no_registration from "@/public/dog_registration.png";
 import { getAgeInMonths } from "../utils/getAgeInMonths";
-
-import { Tabs } from "flowbite-react";
-import { HiAdjustments, HiClipboardList, HiUserCircle } from "react-icons/hi";
-import { MdDashboard } from "react-icons/md";
+import InfiniteScroll from 'react-infinite-scroller';
+import LoadingDiary from "../diaries/_components/LoadingDiary";
+import PostUnit from "../_components/PostUnit";
+import no_diary_img from "@/public/no_diary_img.png";
+import summaryThumbnail from "@/public/summaryThumbnail.png";
 
 interface MypageUser {
   id: string;
   nickname: string;
   dog: { name: string, sex: string, birthDate: string, imageKey: string };
-  diaries: { title: string, imageKey: string, createdAt: string }[];
-  summaries: { title: string, imageKey: string, createdAt: string }[];
-  bookmarks: { title: string, createdAt: string}[];
+  diaries: { id: string, title: string, imageKey: string, createdAt: string }[];
+  summaries: { id: string, title: string, imageKey: string, createdAt: string }[];
+  bookmarks: { id: string, title: string, imageKey: string, createdAt: string }[];
 }
 
+interface Lists {
+  id: string;
+  title: string;
+  imageKey: string;
+  createdAt: string;
+}
+
+interface bookmark {
+  id: string;
+  title: string;
+  imageKey: string;
+  createdAt: string;
+}
 
 const MyPage: React.FC<MypageUser> = () => {
   useRouteGuard();
   const { token } = useSupabaseSession();
   const [currentUser, setCurrentUser] = useState<MypageUser | null>(null);
-  console.log(currentUser)
   const dogImg = usePreviewImage(currentUser?.dog.imageKey ?? null, "profile_img");
+  const [defaultImg, setDefaultImg] = useState<StaticImageData>(no_diary_img);
+  const [selectedTab, setSelectedTab] = useState<string>("diary"); 
+  const [showLists, setShowLists] = useState<Lists[] | bookmark[]>([]);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     if(!token) return;
@@ -50,6 +67,7 @@ const MyPage: React.FC<MypageUser> = () => {
 
         const { userInfo } = await response.json();
         setCurrentUser(userInfo);
+        setShowLists(userInfo.diaries);
       } catch (error) {
         console.log(error);
       }
@@ -57,9 +75,40 @@ const MyPage: React.FC<MypageUser> = () => {
     loggedInUser();
   }, [token]);
 
-  return(
+  const selectTab = (tabName: string) => {
+    setSelectedTab(tabName)
+  }
+
+  const SelectLists = () => {
+    if (!currentUser) return;
+
+    try {
+      if (selectedTab === "diary") {
+        setShowLists(currentUser.diaries);
+        setDefaultImg(no_diary_img);
+        setHasMore(false);
+      } else if (selectedTab === "summary") {
+        setShowLists(currentUser.summaries);
+        setDefaultImg(summaryThumbnail);
+        setHasMore(false)
+      } else if (selectedTab === "favorite") {
+        setShowLists(currentUser.bookmarks);
+        setDefaultImg(no_diary_img);
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    SelectLists();
+  }, [currentUser, selectedTab]);
+
+
+  return (
     <div className="flex justify-center text-gray-800">
-      <div className="w-64 my-20 pb-20 flex flex-col gap-10 overflow-y: auto">
+      <div className="w-64 my-20 pb-20 flex flex-col gap-10 overflow-y-auto">
         {currentUser ? (
           <>
             <h2 className="text-2xl font-bold text-primary text-center">マイページ</h2>
@@ -119,26 +168,57 @@ const MyPage: React.FC<MypageUser> = () => {
               </div>
             </div>
 
-            {/* リスト一覧 */}
             <div>
               <ul className="flex text-sm font-medium text-center bg-secondary text-gray-500 rounded-lg dark:text-gray-400">
                 <li className="me-2 w-1/3">
-                    <button className={`inline-block text-gray-800 px-2 py-1.5 rounded-lg active hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white`} aria-current="page">
+                    <button
+                      onClick={() => selectTab("diary")}
+                      className="inline-block text-gray-800 px-2 py-1.5 rounded-lg active hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white" aria-current="page">
                         日記
                     </button>
                 </li>
 
                 <li className="me-2 w-1/3">
-                    <a href="#"  className="inline-block px-2 py-1.5 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white">まとめ</a>
+                  <button
+                      onClick={() => selectTab("summary")}
+                      className="inline-block text-gray-800 px-2 py-1.5 rounded-lg active hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white" aria-current="page">
+                        まとめ
+                    </button>
                 </li>
                 <li className="me-2 w-1/3">
-                    <a href="#" className="inline-block px-2 py-1.5 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white">いいね</a>
+                  <button
+                      onClick={() => selectTab("favorite")}
+                      className="inline-block text-gray-800 px-2 py-1.5 rounded-lg active hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white" aria-current="page">
+                        いいね
+                  </button>
                 </li>
               </ul>
-              
+            </div>
+
+            <div>
+            <InfiniteScroll 
+              loadMore={SelectLists}
+              hasMore={hasMore}
+              loader={<LoadingDiary key={0} />}
+            >
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {showLists.map((list) => {
+                  return(
+                  <PostUnit 
+                    id={list.id} 
+                    key={list.id}
+                    title={list.title} 
+                    imageKey={list.imageKey} 
+                    defaultImage={defaultImg} 
+                    linkPrefix="diaries" />
+                  )
+                })
+                }
+              </div>
+            </InfiniteScroll>
             </div>
           </>
-        ) : (
+          ) : (
           <PageLoading />
         )}
         <Toaster />
