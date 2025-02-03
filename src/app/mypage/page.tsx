@@ -39,7 +39,7 @@ const MyPage: React.FC<MypageUser> = () => {
   const [defaultImg, setDefaultImg] = useState<StaticImageData>(no_diary_img);
   const [selectedTab, setSelectedTab] = useState<string>("diary"); 
   const [showLists, setShowLists] = useState<Lists[]>([]);
-  const [hasMore, setHasMore] = useState(true);
+  // const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     if(!token) return;
@@ -79,15 +79,12 @@ const MyPage: React.FC<MypageUser> = () => {
       if (selectedTab === "diary") {
         setShowLists(currentUser.diaries);
         setDefaultImg(no_diary_img);
-        setHasMore(false);
       } else if (selectedTab === "summary") {
         setShowLists(currentUser.summaries);
         setDefaultImg(summaryThumbnail);
-        setHasMore(false)
       } else if (selectedTab === "favorite") {
         setShowLists(currentUser.bookmarks);
         setDefaultImg(no_diary_img);
-        setHasMore(false);
       }
     } catch (error) {
       console.log(error);
@@ -164,25 +161,25 @@ const MyPage: React.FC<MypageUser> = () => {
             <div>
               <ul className="flex text-sm font-medium text-center bg-secondary text-gray-500 rounded-lg dark:text-gray-400">
                 <li className="me-2 w-1/3">
-                    <button
-                      onClick={() => selectTab("diary")}
-                      className="inline-block text-gray-800 px-2 py-1.5 rounded-lg active hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white" aria-current="page">
-                        日記
-                    </button>
+                  <button
+                    onClick={() => selectTab("diary")}
+                    className="inline-block text-gray-800 px-2 py-1.5 rounded-lg active hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white" aria-current="page">
+                      日記
+                  </button>
                 </li>
 
                 <li className="me-2 w-1/3">
                   <button
-                      onClick={() => selectTab("summary")}
-                      className="inline-block text-gray-800 px-2 py-1.5 rounded-lg active hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white" aria-current="page">
-                        まとめ
-                    </button>
+                    onClick={() => selectTab("summary")}
+                    className="inline-block text-gray-800 px-2 py-1.5 rounded-lg active hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white" aria-current="page">
+                      まとめ
+                  </button>
                 </li>
                 <li className="me-2 w-1/3">
                   <button
-                      onClick={() => selectTab("favorite")}
-                      className="inline-block text-gray-800 px-2 py-1.5 rounded-lg active hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white" aria-current="page">
-                        いいね
+                    onClick={() => selectTab("favorite")}
+                    className="inline-block text-gray-800 px-2 py-1.5 rounded-lg active hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white" aria-current="page">
+                      いいね
                   </button>
                 </li>
               </ul>
@@ -191,7 +188,6 @@ const MyPage: React.FC<MypageUser> = () => {
             <div>
             <InfiniteScroll 
               loadMore={SelectLists}
-              hasMore={hasMore}
               loader={<LoadingDiary key={0} />}
             >
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
