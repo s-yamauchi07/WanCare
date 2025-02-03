@@ -6,10 +6,10 @@ import usePreviewImage from "@/_hooks/usePreviewImage";
 interface PostUnitUnitProps {
   id: string;
   title: string;
-  content: string;
+  content?: string;
   imageKey: string | null;
   defaultImage: StaticImageData;
-  tags: { id: string; name: string; }[] | null;
+  tags?: { id: string; name: string; }[] | null;
   linkPrefix: string;
 }
 
