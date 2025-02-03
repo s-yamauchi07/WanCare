@@ -37,9 +37,8 @@ const MyPage: React.FC<MypageUser> = () => {
   const [currentUser, setCurrentUser] = useState<MypageUser | null>(null);
   const dogImg = usePreviewImage(currentUser?.dog.imageKey ?? null, "profile_img");
   const [defaultImg, setDefaultImg] = useState<StaticImageData>(no_diary_img);
-  const [selectedTab, setSelectedTab] = useState<string>("diary"); 
+  const [selectedTab, setSelectedTab] = useState<string>("日記"); 
   const [showLists, setShowLists] = useState<Lists[]>([]);
-  // const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     if(!token) return;
@@ -76,13 +75,13 @@ const MyPage: React.FC<MypageUser> = () => {
     if (!currentUser) return;
 
     try {
-      if (selectedTab === "diary") {
+      if (selectedTab === "日記") {
         setShowLists(currentUser.diaries);
         setDefaultImg(no_diary_img);
-      } else if (selectedTab === "summary") {
+      } else if (selectedTab === "まとめ") {
         setShowLists(currentUser.summaries);
         setDefaultImg(summaryThumbnail);
-      } else if (selectedTab === "favorite") {
+      } else if (selectedTab === "いいね") {
         setShowLists(currentUser.bookmarks);
         setDefaultImg(no_diary_img);
       }
@@ -162,7 +161,7 @@ const MyPage: React.FC<MypageUser> = () => {
               <ul className="flex text-sm font-medium text-center bg-secondary text-gray-500 rounded-lg dark:text-gray-400">
                 <li className="me-2 w-1/3">
                   <button
-                    onClick={() => selectTab("diary")}
+                    onClick={() => selectTab("日記")}
                     className="inline-block text-gray-800 px-2 py-1.5 rounded-lg active hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white" aria-current="page">
                       日記
                   </button>
@@ -170,14 +169,14 @@ const MyPage: React.FC<MypageUser> = () => {
 
                 <li className="me-2 w-1/3">
                   <button
-                    onClick={() => selectTab("summary")}
+                    onClick={() => selectTab("まとめ")}
                     className="inline-block text-gray-800 px-2 py-1.5 rounded-lg active hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white" aria-current="page">
                       まとめ
                   </button>
                 </li>
                 <li className="me-2 w-1/3">
                   <button
-                    onClick={() => selectTab("favorite")}
+                    onClick={() => selectTab("いいね")}
                     className="inline-block text-gray-800 px-2 py-1.5 rounded-lg active hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white" aria-current="page">
                       いいね
                   </button>
@@ -186,25 +185,29 @@ const MyPage: React.FC<MypageUser> = () => {
             </div>
 
             <div>
-            <InfiniteScroll 
-              loadMore={SelectLists}
-              loader={<LoadingDiary key={0} />}
-            >
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {showLists.map((list) => {
-                  return(
-                  <PostUnit 
-                    id={list.id} 
-                    key={list.id}
-                    title={list.title} 
-                    imageKey={list.imageKey} 
-                    defaultImage={defaultImg} 
-                    linkPrefix="diaries" />
-                  )
-                })
-                }
-              </div>
-            </InfiniteScroll>
+            {(showLists && showLists.length > 0) ? (
+              <InfiniteScroll 
+                loadMore={SelectLists}
+                loader={<LoadingDiary key={0} />}
+              >
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {showLists.map((list) => {
+                    return(
+                    <PostUnit 
+                      id={list.id} 
+                      key={list.id}
+                      title={list.title} 
+                      imageKey={list.imageKey} 
+                      defaultImage={defaultImg} 
+                      linkPrefix="diaries" />
+                    )
+                  })
+                  }
+                </div>
+              </InfiniteScroll>
+            ) : (
+              <p className="text-center">投稿した{selectedTab}はありません</p>
+            )}
             </div>
           </>
           ) : (
