@@ -19,19 +19,12 @@ interface MypageUser {
   id: string;
   nickname: string;
   dog: { name: string, sex: string, birthDate: string, imageKey: string };
-  diaries: { id: string, title: string, imageKey: string, createdAt: string }[];
-  summaries: { id: string, title: string, imageKey: string, createdAt: string }[];
-  bookmarks: { id: string, title: string, imageKey: string, createdAt: string }[];
+  diaries: Lists[];
+  summaries: Lists[];
+  bookmarks: Lists[];
 }
 
 interface Lists {
-  id: string;
-  title: string;
-  imageKey: string;
-  createdAt: string;
-}
-
-interface bookmark {
   id: string;
   title: string;
   imageKey: string;
@@ -45,7 +38,7 @@ const MyPage: React.FC<MypageUser> = () => {
   const dogImg = usePreviewImage(currentUser?.dog.imageKey ?? null, "profile_img");
   const [defaultImg, setDefaultImg] = useState<StaticImageData>(no_diary_img);
   const [selectedTab, setSelectedTab] = useState<string>("diary"); 
-  const [showLists, setShowLists] = useState<Lists[] | bookmark[]>([]);
+  const [showLists, setShowLists] = useState<Lists[]>([]);
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
