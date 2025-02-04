@@ -34,6 +34,12 @@ export const GET = async(request: NextRequest, {params} : { params : Promise<{ i
             createdAt: true
           },
         },
+        owner: {
+          select: {
+            id: true,
+            nickname: true,
+          },
+        }
       },
     })
 
