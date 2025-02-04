@@ -143,7 +143,7 @@ const UserPage: React.FC = () => {
 
             {/* ペット情報 */}
             <div className="flex flex-col gap-3 border border-main shadow-xl p-4 rounded-lg">
-              <h3 className="text-lg text-primary font-bold text-center">ペット情報</h3>
+              <h3 className="text-lg text-primary font-bold text-center">わんちゃん情報</h3>
 
               <div className="flex justify-around">
                 <Image 

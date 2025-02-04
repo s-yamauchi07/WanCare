@@ -38,6 +38,12 @@ export const GET = async(request:NextRequest, { params } : { params: Promise<{id
             },
           },
         },
+        owner: {
+          select: {
+            id: true,
+            nickname: true,
+          }
+        }
       },
     });
 

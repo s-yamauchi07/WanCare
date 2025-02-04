@@ -21,6 +21,6 @@ export interface BaseDiary {
 }
 
 export interface DiaryDetails extends BaseDiary {
-  ownerId: string;
+  owner: { id: string, nickname: string }
   comments: CommentProps[];
 }
