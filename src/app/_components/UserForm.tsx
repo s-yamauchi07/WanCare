@@ -6,6 +6,7 @@ import { toast, Toaster } from "react-hot-toast"
 import Input from "../_components/Input"
 import LoadingButton from "../_components/LoadingButton"
 import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 
 interface UserInfo{
   userNickname?: string;
@@ -21,6 +22,8 @@ type Owner = {
 
 const UserForm: React.FC<UserInfo> = ({ userNickname, userEmail, isEdit }) => {
   const { register, handleSubmit, reset, setValue, formState: { errors, isSubmitting } } = useForm<Owner>();
+  const router = useRouter();
+
   const onSubmit: SubmitHandler<Owner> = async(data) => {
     const { nickname, email, password } = data
 
@@ -37,7 +40,8 @@ const UserForm: React.FC<UserInfo> = ({ userNickname, userEmail, isEdit }) => {
         toast.error("更新に失敗しました")
       } else { 
         reset()
-        toast.success("ユーザーの更新が完了しました")
+        toast.success("ユーザーの更新が完了しました");
+        router.push('/mypage');
       }
     } else {
       const { error } = await supabase.auth.signUp({ 
