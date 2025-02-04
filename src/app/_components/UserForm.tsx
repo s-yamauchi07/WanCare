@@ -5,10 +5,11 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import { toast, Toaster } from "react-hot-toast"
 import Input from "../_components/Input"
 import LoadingButton from "../_components/LoadingButton"
+import { useEffect } from "react"
 
 interface UserInfo{
-  nickname?: string;
-  email?: string;
+  userNickname?: string;
+  userEmail?: string;
   isEdit: boolean
 }
 
@@ -18,11 +19,12 @@ type Owner = {
   password: string;
 }
 
-const UserForm: React.FC<UserInfo> = ({ nickname, email, isEdit }) => {
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<Owner>();
+const UserForm: React.FC<UserInfo> = ({ userNickname, userEmail, isEdit }) => {
+  const { register, handleSubmit, reset, setValue, formState: { errors, isSubmitting } } = useForm<Owner>();
 
   const onSubmit: SubmitHandler<Owner> = async(data) => {
     const { nickname, email, password } = data
+
     const { error } = await supabase.auth.signUp({ 
       email,
       password,
@@ -41,6 +43,13 @@ const UserForm: React.FC<UserInfo> = ({ nickname, email, isEdit }) => {
       toast.success("確認メールを送信しました。\n登録したメールアドレスからユーザー認証をしてください。")
     }
   }
+
+  useEffect(() => {
+    if(isEdit && userNickname && userEmail) {
+      setValue("nickname", userNickname);
+      setValue("email", userEmail);
+    }
+  }, [isEdit, userNickname, userEmail, setValue])
 
   return(
     <div className="flex justify-center">

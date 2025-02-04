@@ -6,11 +6,11 @@ import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 
 const EditUserProf: React.FC = () => {
   const { session } = useSupabaseSession();
-  const nickname = session?.user.email;
-  const email = session?.user.user_metadata.nickname;
+  const nickname = session?.user.user_metadata.nickname;
+  const email = session?.user.email;
 
   return(
-    <UserForm isEdit={true} nickname={nickname} email={email}/>
+    <UserForm isEdit={true} userNickname={nickname} userEmail={email}/>
   )
 }
 export default EditUserProf;
