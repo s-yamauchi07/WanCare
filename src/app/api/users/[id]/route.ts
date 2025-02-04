@@ -5,12 +5,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async(request: NextRequest, { params } : { params : Promise<{ id: string }>}) => {
   const { id } = await params;
-  const {data, error } = await userAuthentication(request);
+  const { error } = await userAuthentication(request);
   if (error) return handleError(request);
-
-  // 認証ユーザーとparamsで取得したidが同じだったら、マイページに遷移させる。
-  const currentUserId = data.user.id;
-  if (currentUserId == id) return NextResponse.redirect(new URL("api/mypages", request.url));
 
   try {
     const otherUser = await prisma.owner.findUnique({
@@ -23,16 +19,40 @@ export const GET = async(request: NextRequest, { params } : { params : Promise<{
             name: true,
             sex: true,
             birthDate: true,
+            imageKey: true,
           },
         },
         diaries: {
           select: {
+            id: true,
             title: true,
             imageKey: true,
             createdAt: true,
           },
           orderBy: {
             createdAt: "desc",
+          },
+        },
+        summaries: {
+          select: {
+            id: true,
+            title: true,
+            createdAt: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+        bookmarks: {
+          select: {
+            diary: {
+              select: {
+                id: true,
+                title: true,
+                imageKey: true,
+                createdAt: true,
+              },
+            },
           },
         },
       }
