@@ -21,27 +21,44 @@ type Owner = {
 
 const UserForm: React.FC<UserInfo> = ({ userNickname, userEmail, isEdit }) => {
   const { register, handleSubmit, reset, setValue, formState: { errors, isSubmitting } } = useForm<Owner>();
-
   const onSubmit: SubmitHandler<Owner> = async(data) => {
     const { nickname, email, password } = data
 
-    const { error } = await supabase.auth.signUp({ 
-      email,
-      password,
-      options: {
+    if(isEdit) {
+      const { error } = await supabase.auth.updateUser({
+        email,
+        password,
         data: {
           nickname,
         },
-        emailRedirectTo: `http://localhost:3000/signin`,
-      },
-    })
+      })
 
-    if (error) {
-      toast.error("登録に失敗しました")
-    } else { 
-      reset()
-      toast.success("確認メールを送信しました。\n登録したメールアドレスからユーザー認証をしてください。")
+      if (error) {
+        toast.error("更新に失敗しました")
+      } else { 
+        reset()
+        toast.success("ユーザーの更新が完了しました")
+      }
+    } else {
+      const { error } = await supabase.auth.signUp({ 
+        email,
+        password,
+        options: {
+          data: {
+            nickname,
+          },
+          emailRedirectTo: `http://localhost:3000/signin`,
+        },
+      });
+
+      if (error) {
+        toast.error("登録に失敗しました")
+      } else { 
+        reset()
+        toast.success("確認メールを送信しました。\n登録したメールアドレスからユーザー認証をしてください。")
+      }
     }
+
   }
 
   useEffect(() => {
