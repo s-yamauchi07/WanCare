@@ -153,14 +153,14 @@ const DiaryDetail: React.FC = () => {
               {diary.content}  
             </div>
 
-            <Link href={`/users/${diary.owner.id}`}>
-              <p className="text-sm flex justify-end mb-4">
-                <span className="i-material-symbols-account-circle-outline w-5 h-5 bg-primary"></span>
-                <span className="text-primary text-md font-bold">
-                  {diary.owner.nickname}
-                </span>
-              </p>
-            </Link>
+            <div className="mb-4 text-sm flex justify-end items-center">
+              <span className="i-material-symbols-account-circle-outline w-5 h-5 bg-primary"></span>
+              <Link href={`/users/${diary.owner.id}`} >
+                  <span className="text-primary text-sm font-bold">
+                    {diary.owner.nickname}
+                  </span>
+              </Link>
+            </div>
     
             <div className="min-h-6 text-primary font-bold text-gray-700">
               {diary.diaryTags && diary.diaryTags.length > 0 && (
