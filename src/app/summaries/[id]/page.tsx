@@ -40,6 +40,7 @@ const SummaryDetail: React.FC = () => {
         });
 
         const { summary } = await res.json();
+        console.log(summary)
         setSummary(summary);
       } catch(error) {
         console.log(error);
@@ -66,7 +67,7 @@ const SummaryDetail: React.FC = () => {
   }
 
   const handleDelete = async() => {
-    if(!token || currentUserId !== summary?.ownerId) return;
+    if(!token || currentUserId !== summary?.owner.id) return;
 
     setIsDeleting(true);
     try {
@@ -100,7 +101,7 @@ const SummaryDetail: React.FC = () => {
       <div className="flex justify-center dark: text-gray-700">
         <div className="max-w-64 my-20 flex flex-col">
           <div className="flex justify-end gap-3 my-2">
-            {session?.user.id === summary.ownerId && (
+            {session?.user.id === summary.owner.id && (
               <>
                 <EditRoundButton editClick={() => openEditModal()} width="w-8" height="h-8"/>
                 <DeleteRoundButton DeleteClick={() => openDeleteModal()} width="w-8" height="h-8"/>
@@ -128,6 +129,15 @@ const SummaryDetail: React.FC = () => {
           <p className="bg-white min-w-64 min-h-24 p-2 mt-6 mb-2 rounded-lg">
             {summary.explanation}
           </p>
+
+          <div className="mb-4 text-sm flex justify-end items-center">
+            <span className="i-material-symbols-sound-detection-dog-barking-outline w-5 h-5 bg-primary"></span>
+            <Link href={`/users/${summary.owner.id}`} >
+              <span className="text-primary text-sm font-bold">
+                by {summary.owner.nickname}
+              </span>
+            </Link>
+          </div>
 
           {/* タグエリア */}
           <div>

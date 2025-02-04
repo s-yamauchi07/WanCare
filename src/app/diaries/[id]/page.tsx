@@ -18,6 +18,7 @@ import EditRoundButton from "@/app/_components/EditRoundButton";
 import DeleteRoundButton from "@/app/_components/DeleteRoundButton";
 import CommentForm from "../_components/CommentForm";
 import CommentList from "../_components/CommentList";
+import Link from "next/link";
 
 const DiaryDetail: React.FC = () => {
   const params = useParams();
@@ -59,7 +60,7 @@ const DiaryDetail: React.FC = () => {
   }
 
   const handleDelete = async () => {
-    if(!token || currentUserId !== diary?.ownerId) return;
+    if(!token || currentUserId !== diary?.owner.id) return;
 
     setIsDeleting(true);
     try {
@@ -114,13 +115,15 @@ const DiaryDetail: React.FC = () => {
     fetchDiary()
   }, [id, token, refresh]);
 
+  console.log(diary)
+
   return(
     <>
       {(diary && !isLoading) ? (
         <div className="flex justify-center dark: text-gray-700">
-          <div className="max-w-64 my-20 flex flex-col">
+          <div className="w-full max-w-screen-lg px-6 my-20 flex flex-col">
             <div className="flex justify-end gap-3 my-2">
-              {session?.user.id === diary.ownerId && (
+              {(session?.user.id === diary.owner.id) && (
                 <>
                   <EditRoundButton editClick={() => openEditModal()} width="w-8" height="h-8"/>
                   <DeleteRoundButton DeleteClick={() => openDeleteModal()} width="w-8" height="h-8"/>
@@ -148,6 +151,15 @@ const DiaryDetail: React.FC = () => {
 
             <div className="min-h-20 p-2 mt-6 mb-2 bg-white rounded-lg">
               {diary.content}  
+            </div>
+
+            <div className="mb-4 text-sm flex justify-end items-center">
+              <span className="i-material-symbols-sound-detection-dog-barking-outline w-5 h-5 bg-primary"></span>
+              <Link href={`/users/${diary.owner.id}`} >
+                <span className="text-primary text-sm font-bold">
+                  by {diary.owner.nickname}
+                </span>
+              </Link>
             </div>
     
             <div className="min-h-6 text-primary font-bold text-gray-700">

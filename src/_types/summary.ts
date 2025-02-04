@@ -31,9 +31,9 @@ export interface SummaryDetails {
   id: string
   title: string
   explanation: string
-  ownerId: string
   summaryTags: Tag[]
   diaries: { id: string, title: string, createdAt: string }[]
+  owner: { id: string, nickname: string }
   createdAt: string
   updatedAt: string
 }
