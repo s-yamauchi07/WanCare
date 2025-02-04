@@ -121,9 +121,9 @@ const DiaryDetail: React.FC = () => {
     <>
       {(diary && !isLoading) ? (
         <div className="flex justify-center dark: text-gray-700">
-          <div className="max-w-64 my-20 flex flex-col">
+          <div className="w-full max-w-screen-lg px-6 my-20 flex flex-col">
             <div className="flex justify-end gap-3 my-2">
-              {session?.user.id === diary.owner.id && (
+              {(session?.user.id === diary.owner.id) && (
                 <>
                   <EditRoundButton editClick={() => openEditModal()} width="w-8" height="h-8"/>
                   <DeleteRoundButton DeleteClick={() => openDeleteModal()} width="w-8" height="h-8"/>
@@ -154,11 +154,11 @@ const DiaryDetail: React.FC = () => {
             </div>
 
             <div className="mb-4 text-sm flex justify-end items-center">
-              <span className="i-material-symbols-account-circle-outline w-5 h-5 bg-primary"></span>
+              <span className="i-material-symbols-sound-detection-dog-barking-outline w-5 h-5 bg-primary"></span>
               <Link href={`/users/${diary.owner.id}`} >
-                  <span className="text-primary text-sm font-bold">
-                    {diary.owner.nickname}
-                  </span>
+                <span className="text-primary text-sm font-bold">
+                  by {diary.owner.nickname}
+                </span>
               </Link>
             </div>
     
