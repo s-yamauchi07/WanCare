@@ -14,6 +14,7 @@ import LoadingDiary from "../diaries/_components/LoadingDiary";
 import PostUnit from "../_components/PostUnit";
 import no_diary_img from "@/public/no_diary_img.png";
 import summaryThumbnail from "@/public/summaryThumbnail.png";
+import Link from "next/link";
 
 interface MypageUser {
   id: string;
@@ -129,7 +130,11 @@ const MyPage: React.FC = () => {
 
               <div className="bg-primary rounded-lg text-white flex items-center justify-center py-1">
                 <span className="i-material-symbols-light-edit-square-outline w-5 h-5"></span>
-                <button>プロフィール編集</button>
+                <button>
+                  <Link href={`/users/${currentUser.id}/edit`}>
+                    プロフィール編集
+                  </Link>
+                </button>
               </div>
             </div>
             {/* user情報 */}
