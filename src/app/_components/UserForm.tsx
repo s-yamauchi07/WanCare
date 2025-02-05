@@ -7,6 +7,7 @@ import Input from "../_components/Input"
 import LoadingButton from "../_components/LoadingButton"
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 
 interface UserInfo{
   userNickname?: string;
@@ -111,7 +112,15 @@ const UserForm: React.FC<UserInfo> = ({ userNickname, userEmail, isEdit }) => {
           error={errors.email?.message}
         />
         
-        {!isEdit && (
+        {isEdit ? (
+          <p className="text-sm text-center">
+            パスワードの変更は
+              <Link href={`/users/772cd76c-fe3a-4016-8c25-e5f53151e973/password-change`} className="text-primary font-bold">
+                こちら
+              </Link>
+            から 
+          </p>
+        ) : (
           <Input
             id="password"
             labelName="password"
