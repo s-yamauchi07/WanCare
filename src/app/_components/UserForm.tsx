@@ -25,6 +25,7 @@ const UserForm: React.FC<UserInfo> = ({ userNickname, userEmail, isEdit }) => {
   const { register, handleSubmit, reset, setValue, formState: { errors, isSubmitting } } = useForm<Owner>();
   const router = useRouter();
   const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+  console.log(baseURL)
 
   const onSubmit: SubmitHandler<Owner> = async(data) => {
     const { nickname, email, password } = data
