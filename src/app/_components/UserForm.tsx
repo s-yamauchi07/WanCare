@@ -24,6 +24,7 @@ type Owner = {
 const UserForm: React.FC<UserInfo> = ({ userNickname, userEmail, isEdit }) => {
   const { register, handleSubmit, reset, setValue, formState: { errors, isSubmitting } } = useForm<Owner>();
   const router = useRouter();
+  const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
   const onSubmit: SubmitHandler<Owner> = async(data) => {
     const { nickname, email, password } = data
@@ -35,7 +36,7 @@ const UserForm: React.FC<UserInfo> = ({ userNickname, userEmail, isEdit }) => {
           nickname,
         }
       }, {
-        emailRedirectTo: `http://localhost:3000/mypage`
+        emailRedirectTo: `${baseURL}/mypage`
       });
 
       if (error) {
@@ -57,7 +58,7 @@ const UserForm: React.FC<UserInfo> = ({ userNickname, userEmail, isEdit }) => {
           data: {
             nickname,
           },
-          emailRedirectTo: `http://localhost:3000/signin`,
+          emailRedirectTo: `${baseURL}/signin`,
         },
       });
 
