@@ -26,22 +26,27 @@ const UserForm: React.FC<UserInfo> = ({ userNickname, userEmail, isEdit }) => {
 
   const onSubmit: SubmitHandler<Owner> = async(data) => {
     const { nickname, email, password } = data
-
+    
     if(isEdit) {
       const { error } = await supabase.auth.updateUser({
         email,
-        password,
         data: {
           nickname,
-        },
-      })
+        }
+      }, {
+        emailRedirectTo: `http://localhost:3000/mypage`
+      });
 
       if (error) {
         toast.error("更新に失敗しました")
       } else { 
         reset()
-        toast.success("ユーザーの更新が完了しました");
-        router.push('/mypage');
+        if(userEmail !== email) {
+          toast.success("変更後のアドレスに認証メールを送信しました。");
+        } else {
+          toast.success("ユーザーの更新が完了しました");
+          router.push("/mypage");
+        }
       }
     } else {
       const { error } = await supabase.auth.signUp({ 
@@ -106,24 +111,26 @@ const UserForm: React.FC<UserInfo> = ({ userNickname, userEmail, isEdit }) => {
           error={errors.email?.message}
         />
         
-        <Input
-          id="password"
-          labelName="password"
-          type="password"
-          placeholder="*******"
-          register={{...register("password", {
-            required: "passwordは必須です。",
-            pattern: { 
-              value: /^(?=.*?[a-z])(?=.*?\d)[a-z\d]+$/i,
-              message: "passwordは英数字混合で入力してください。"
-            },
-            minLength: {
-              value: 6,
-              message: "passwordは6文字以上で入力してください。"  
-            }
-          })}} 
-          error={errors.password?.message}
-        />
+        {!isEdit && (
+          <Input
+            id="password"
+            labelName="password"
+            type="password"
+            placeholder="*******"
+            register={{...register("password", {
+              required: "passwordは必須です。",
+              pattern: { 
+                value: /^(?=.*?[a-z])(?=.*?\d)[a-z\d]+$/i,
+                message: "passwordは英数字混合で入力してください。"
+              },
+              minLength: {
+                value: 6,
+                message: "passwordは6文字以上で入力してください。"  
+              }
+            })}} 
+            error={errors.password?.message}
+          />
+        )}
         <LoadingButton 
           isSubmitting={isSubmitting}
           buttonText={isEdit ? "更新" : "新規登録"}
