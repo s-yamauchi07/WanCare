@@ -80,7 +80,7 @@ const UserPage: React.FC = () => {
         setShowLists(otherUser.summaries);
         setDefaultImg(summaryThumbnail);
         setLinkPrefix("summaries")
-      } else if (selectedTab === "いいね") {
+      } else if (selectedTab === "お気に入り") {
         setShowLists(otherUser.bookmarks);
         setDefaultImg(no_diary_img);
         setLinkPrefix("favorites")

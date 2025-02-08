@@ -24,7 +24,7 @@ const TabNavigation: React.FC<showListsProps> = ({ user, showLists, defaultImg, 
   return(
     <>
       <div>
-        <p className="text-lg font-bold text-primary">{user.nickname}さんの投稿</p>
+        <p className="text-lg font-bold text-primary">{user.nickname}さんの投稿/お気に入り</p>
         <ul className="flex text-sm font-medium text-center bg-secondary rounded-lg">
           <li className="w-1/3 rounded-lg">
             <button
@@ -44,9 +44,9 @@ const TabNavigation: React.FC<showListsProps> = ({ user, showLists, defaultImg, 
           
           <li className="w-1/3 rounded-lg">
             <button
-              onClick={() => selectTab("いいね")}
+              onClick={() => selectTab("お気に入り")}
               className="inline-block text-gray-800 px-2 py-1.5" aria-current="page">
-                いいね
+                お気に入り
             </button>
           </li>
         </ul>
