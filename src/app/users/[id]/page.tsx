@@ -10,9 +10,6 @@ import usePreviewImage from "@/_hooks/usePreviewImage";
 import no_diary_img from "@/public/no_diary_img.png";
 import summaryThumbnail from "@/public/summaryThumbnail.png";
 import PageLoading from "@/app/_components/PageLoading";
-import InfiniteScroll from 'react-infinite-scroller';
-import LoadingDiary from "@/app/diaries/_components/LoadingDiary";
-import PostUnit from "@/app/_components/PostUnit";
 import { useRouter } from "next/navigation";
 import UserInfo from "./_components/UserInfo";
 import { UserMyPage } from "@/_types/user";
@@ -20,6 +17,7 @@ import { MypageDiaryLists } from "@/_types/diary";
 import { MypageSummaryLists } from "@/_types/summary";
 import { MypageBookmarkLists } from "@/_types/bookmark";
 import UserDogInfo from "./_components/UserDogInfo";
+import TabNavigation from "./_components/TabNavigation";
 
 const UserPage: React.FC = () => {
   useRouteGuard();
@@ -103,63 +101,16 @@ const UserPage: React.FC = () => {
           <>
           <UserInfo user={otherUser} isMypage={false}/>
           <UserDogInfo user={otherUser} dogImg={dogImg} />
-
-            {/* タブの実装 */}
-            <div>
-              <p className="text-lg font-bold text-primary">{otherUser.nickname}さんの投稿</p>
-              <ul className="flex text-sm font-medium text-center bg-secondary rounded-lg">
-                <li className="w-1/3 rounded-lg">
-                  <button
-                    onClick={() => selectTab("日記")}
-                    className="inline-block text-gray-800 px-2 py-1.5" aria-current="page">
-                      日記
-                  </button>
-                </li>
-
-                <li className="w-1/3 border-r border-l border-main">
-                  <button
-                    onClick={() => selectTab("まとめ")}
-                    className="inline-block text-gray-800 px-2 py-1.5"  aria-current="page">
-                      まとめ
-                  </button>
-                </li>
-                <li className="w-1/3 rounded-lg">
-                  <button
-                    onClick={() => selectTab("いいね")}
-                    className="inline-block text-gray-800 px-2 py-1.5" aria-current="page">
-                      いいね
-                  </button>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-            {(showLists && showLists.length > 0) ? (
-              <InfiniteScroll 
-                loadMore={SelectLists}
-                loader={<LoadingDiary key={0} />}
-              >
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {showLists.map((list) => {
-                    return(
-                    <PostUnit 
-                      id={list.id} 
-                      key={list.id}
-                      title={list.title} 
-                      imageKey={list.imageKey} 
-                      defaultImage={defaultImg} 
-                      linkPrefix={linkPrefix} />
-                    )
-                  })
-                  }
-                </div>
-              </InfiniteScroll>
-            ) : (
-              <p className="text-center">登録した{selectedTab}はありません</p>
-            )}
-            </div>
+          <TabNavigation 
+            user={otherUser}
+            showLists={showLists}
+            defaultImg={defaultImg}
+            selectTab={selectTab}
+            SelectLists={SelectLists}
+            linkPrefix={linkPrefix}
+            selectedTab={selectedTab}
+          />            
           </>
-
         ) : (
           <PageLoading />
         )}
