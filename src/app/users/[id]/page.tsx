@@ -16,22 +16,11 @@ import InfiniteScroll from 'react-infinite-scroller';
 import LoadingDiary from "@/app/diaries/_components/LoadingDiary";
 import PostUnit from "@/app/_components/PostUnit";
 import { useRouter } from "next/navigation";
-
-interface OtherUser {
-  id: string;
-  nickname: string;
-  dog: { name: string, sex: string, birthDate: string, imageKey: string };
-  diaries: Lists[];
-  summaries: Lists[];
-  bookmarks: Lists[];
-}
-
-interface Lists {
-  id: string;
-  title: string;
-  imageKey: string;
-  createdAt: string;
-}
+import UserInfo from "./_components/UserInfo";
+import { UserMyPage } from "@/_types/user";
+import { MypageDiaryLists } from "@/_types/diary";
+import { MypageSummaryLists } from "@/_types/summary";
+import { MypageBookmarkLists } from "@/_types/bookmark";
 
 const UserPage: React.FC = () => {
   useRouteGuard();
@@ -40,9 +29,9 @@ const UserPage: React.FC = () => {
   const { id } = params;
   const { token, session } = useSupabaseSession();
   const currentUserId = session?.user.id;
-  const [otherUser, setOtherUser] = useState<OtherUser | null>(null);
+  const [otherUser, setOtherUser] = useState<UserMyPage | null>(null);
   const dogImg = usePreviewImage(otherUser?.dog.imageKey ?? null, "profile_img");
-  const [showLists, setShowLists] = useState<Lists[]>([]);
+  const [showLists, setShowLists] = useState<MypageDiaryLists[] | MypageSummaryLists[] | MypageBookmarkLists[]>([]);
   const [selectedTab, setSelectedTab] = useState<string>("日記"); 
   const [linkPrefix, setLinkPrefix] = useState<string>("");
   const [defaultImg, setDefaultImg] = useState<StaticImageData>(no_diary_img);
@@ -113,33 +102,7 @@ const UserPage: React.FC = () => {
       <div className="my-20 pb-20 px-4 w-full max-w-screen-lg flex flex-col gap-12 overflow-y-auto">
         {otherUser ? (
           <>
-            <h2 className="text-2xl font-bold text-primary text-center">{otherUser?.nickname}さんのページ</h2>
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-col items-center">
-                <span className="i-material-symbols-light-account-circle-outline w-20 h-20"></span>
-                <p className="text-xl font-bold text-center">{otherUser?.nickname}</p>
-              </div>
-
-              <ul className="flex">
-                <li className="text-center w-1/3">
-                  <p className="font-bold">{otherUser.diaries.length}</p>
-                  <p className="text-xs">投稿</p>
-                </li>
-                <li className="text-center w-1/3">
-                  <p className="font-bold">{otherUser.diaries.length}</p>
-                  <p className="text-xs">フォロー</p>
-                </li>
-                <li className="text-center w-1/3">
-                  <p className="font-bold">{otherUser.diaries.length}</p>
-                  <p className="text-xs">フォロワー</p>
-                </li>
-              </ul>
-
-              <div className="bg-primary rounded-lg text-white flex items-center justify-center py-1">
-                <span className="i-ri-user-follow-line w-5 h-5"></span>
-                <button>フォローする</button>
-              </div>
-            </div>
+          <UserInfo user={otherUser} isMypage={false}/>
 
             {/* ペット情報 */}
             <div className="flex flex-col gap-3 border border-main shadow-xl p-4 rounded-lg">

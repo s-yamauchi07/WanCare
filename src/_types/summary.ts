@@ -37,3 +37,10 @@ export interface SummaryDetails {
   createdAt: string
   updatedAt: string
 }
+
+export interface MypageSummaryLists {
+  id: string;
+  title: string;
+  imageKey: string;
+  createdAt: string;
+}
