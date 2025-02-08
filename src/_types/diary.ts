@@ -24,3 +24,10 @@ export interface DiaryDetails extends BaseDiary {
   owner: { id: string, nickname: string }
   comments: CommentProps[];
 }
+
+export interface MypageDiaryLists {
+  id: string;
+  title: string;
+  imageKey: string;
+  createdAt: string;
+}

@@ -114,7 +114,7 @@ const UserForm: React.FC<UserInfo> = ({ userNickname, userEmail, isEdit }) => {
         />
         
         {isEdit ? (
-          <p className="text-sm text-center">
+          <p className="text-sm text-center text-gray-800">
             パスワードの変更は
               <Link href={`/users/772cd76c-fe3a-4016-8c25-e5f53151e973/password-change`} className="text-primary font-bold">
                 こちら
