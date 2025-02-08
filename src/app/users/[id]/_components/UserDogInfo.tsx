@@ -13,7 +13,7 @@ interface DogInfoProps {
 const UserDogInfo: React.FC<DogInfoProps> = ({ user, dogImg }) => {
   return(
     <div className="flex flex-col gap-3 border border-main shadow-xl p-4 rounded-lg">
-      <h3 className="text-lg text-primary font-bold text-center">マイペット</h3>
+      <h3 className="text-lg text-primary font-bold text-center">わんちゃん情報</h3>
 
       <div className="flex justify-around">
         <Image 
