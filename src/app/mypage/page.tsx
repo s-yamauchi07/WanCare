@@ -7,9 +7,6 @@ import { toast, Toaster } from "react-hot-toast";
 import { StaticImageData } from "next/image";
 import PageLoading from "../_components/PageLoading";
 import usePreviewImage from "@/_hooks/usePreviewImage";
-import InfiniteScroll from 'react-infinite-scroller';
-import LoadingDiary from "../diaries/_components/LoadingDiary";
-import PostUnit from "../_components/PostUnit";
 import no_diary_img from "@/public/no_diary_img.png";
 import summaryThumbnail from "@/public/summaryThumbnail.png";
 import { UserMyPage } from "@/_types/user";
@@ -18,7 +15,7 @@ import { MypageSummaryLists } from "@/_types/summary";
 import { MypageBookmarkLists } from "@/_types/bookmark";
 import UserInfo from "../users/[id]/_components/UserInfo";
 import UserDogInfo from "../users/[id]/_components/UserDogInfo";
-
+import TabNavigation from "../users/[id]/_components/TabNavigation";
 
 const MyPage: React.FC = () => {
   useRouteGuard();
@@ -95,59 +92,15 @@ const MyPage: React.FC = () => {
           <>
           <UserInfo user={currentUser} isMypage={true}/>
           <UserDogInfo user={currentUser} dogImg={dogImg}/>
-
-            <div>
-              <ul className="flex text-sm font-medium text-center bg-secondary rounded-lg">
-                <li className="w-1/3 rounded-lg">
-                  <button
-                    onClick={() => selectTab("日記")}
-                    className="inline-block text-gray-800 px-2 py-1.5" aria-current="page">
-                      日記
-                  </button>
-                </li>
-
-                <li className="w-1/3 border-r border-l border-main">
-                  <button
-                    onClick={() => selectTab("まとめ")}
-                    className="inline-block text-gray-800 px-2 py-1.5"  aria-current="page">
-                      まとめ
-                  </button>
-                </li>
-                <li className="w-1/3 rounded-lg">
-                  <button
-                    onClick={() => selectTab("いいね")}
-                    className="inline-block text-gray-800 px-2 py-1.5" aria-current="page">
-                      いいね
-                  </button>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-            {(showLists && showLists.length > 0) ? (
-              <InfiniteScroll 
-                loadMore={SelectLists}
-                loader={<LoadingDiary key={0} />}
-              >
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {showLists.map((list) => {
-                    return(
-                    <PostUnit 
-                      id={list.id} 
-                      key={list.id}
-                      title={list.title} 
-                      imageKey={list.imageKey} 
-                      defaultImage={defaultImg} 
-                      linkPrefix={linkPrefix} />
-                    )
-                  })
-                  }
-                </div>
-              </InfiniteScroll>
-            ) : (
-              <p className="text-center">登録した{selectedTab}はありません</p>
-            )}
-            </div>
+          <TabNavigation 
+            user={currentUser}
+            showLists={showLists}
+            defaultImg={defaultImg}
+            selectTab={selectTab}
+            SelectLists={SelectLists}
+            linkPrefix={linkPrefix}
+            selectedTab={selectedTab}
+          />
           </>
           ) : (
           <PageLoading />
