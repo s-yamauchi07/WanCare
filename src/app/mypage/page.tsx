@@ -4,11 +4,9 @@ import React, { useEffect, useState } from "react";
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { toast, Toaster } from "react-hot-toast";
-import Image, { StaticImageData } from "next/image";
+import { StaticImageData } from "next/image";
 import PageLoading from "../_components/PageLoading";
 import usePreviewImage from "@/_hooks/usePreviewImage";
-import no_registration from "@/public/dog_registration.png";
-import { getAgeInMonths } from "../utils/getAgeInMonths";
 import InfiniteScroll from 'react-infinite-scroller';
 import LoadingDiary from "../diaries/_components/LoadingDiary";
 import PostUnit from "../_components/PostUnit";
@@ -19,6 +17,7 @@ import { MypageDiaryLists } from "@/_types/diary";
 import { MypageSummaryLists } from "@/_types/summary";
 import { MypageBookmarkLists } from "@/_types/bookmark";
 import UserInfo from "../users/[id]/_components/UserInfo";
+import UserDogInfo from "../users/[id]/_components/UserDogInfo";
 
 
 const MyPage: React.FC = () => {
@@ -95,32 +94,7 @@ const MyPage: React.FC = () => {
         {currentUser ? (
           <>
           <UserInfo user={currentUser} isMypage={true}/>
-
-
-            {/* ペット情報 */}
-            <div className="flex flex-col gap-3 border border-main shadow-xl p-4 rounded-lg">
-              <h3 className="text-lg text-primary font-bold text-center">マイペット</h3>
-
-              <div className="flex justify-around">
-                <Image 
-                  className="w-20 h-20 rounded-full border border-primary ring-primary ring-offset-1 ring"
-                  src={dogImg ? dogImg : no_registration} 
-                  alt="profile_image" 
-                  width={120} 
-                  height={120}
-                  style={{objectFit: "cover"}}
-                  priority={true}
-                />
-
-                <div className="flex flex-col justify-around">
-                  <p className="text-xl font-bold text-center">{currentUser.dog.name}</p>
-                  <div className="flex gap-2">
-                    <p>{getAgeInMonths(currentUser.dog.birthDate)}</p>
-                    <p>{currentUser.dog.sex}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <UserDogInfo user={currentUser} dogImg={dogImg}/>
 
             <div>
               <ul className="flex text-sm font-medium text-center bg-secondary rounded-lg">
