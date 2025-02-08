@@ -12,7 +12,7 @@ interface DogInfoProps {
 
 const UserDogInfo: React.FC<DogInfoProps> = ({ user, dogImg }) => {
   return(
-    <div className="flex flex-col gap-3 border border-main shadow-xl p-4 rounded-lg">
+    <div className="flex flex-col gap-3 border border-main shadow-[0_2px_5px_rgb(0,0,0,0.2)] pt-4 pb-6 px-4 rounded-lg">
       <h3 className="text-lg text-primary font-bold text-center">わんちゃん情報</h3>
 
       <div className="flex justify-around">
