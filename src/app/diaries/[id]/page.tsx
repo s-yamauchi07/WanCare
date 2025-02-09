@@ -33,6 +33,7 @@ const DiaryDetail: React.FC = () => {
   const [refresh, setRefresh] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [isBookmarking, setIsBookmarking] = useState<boolean>(false);
   const [modalType, setModalType] = useState<string>("");
 
   const ModalClose = () => {
@@ -95,6 +96,7 @@ const DiaryDetail: React.FC = () => {
 
   const changeFavorite = async() => {
     if (!token) return;
+    setIsBookmarking(true);
 
     try {
       const response = await fetch(`/api/diaries/${id}/bookmarks`, {
@@ -116,6 +118,8 @@ const DiaryDetail: React.FC = () => {
     } catch(error) {
       console.log(error);
       toast.error("お気に入り登録に失敗しました");
+    } finally {
+      setIsBookmarking(false);
     }
   }
   
@@ -224,7 +228,10 @@ const DiaryDetail: React.FC = () => {
                 }></span>
 
                 <span className="text-sm">
-                  {isBookmarked ? "お気に入り済" : "お気に入り登録" }
+                  {isBookmarking 
+                    ? "Loading..." 
+                    :(isBookmarked ? "お気に入り済" : "お気に入り登録" )
+                  }
                 </span>
               </button>
             </div>
