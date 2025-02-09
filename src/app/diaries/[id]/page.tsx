@@ -133,7 +133,10 @@ const DiaryDetail: React.FC = () => {
 
         const { diary } = await res.json();
         setDiary(diary);
-        setIsBookmarked(diary.bookmarks && diary.bookmarks.length > 0);
+        // ログインユーザーに紐づいたbookmarkが1つでも存在すればtrue, なければfalseを返す。
+        const UserBookmarked = diary.bookmarks.some((b: {id: string, ownerId: string}) => b.ownerId === currentUserId);
+        setIsBookmarked(UserBookmarked);
+
       } catch(error) {
         console.log(error);
       } finally {
@@ -142,6 +145,7 @@ const DiaryDetail: React.FC = () => {
     }
     fetchDiary()
   }, [id, token, refresh]);
+
 
   return(
     <>

@@ -47,6 +47,7 @@ export const GET = async(request:NextRequest, { params } : { params: Promise<{id
         bookmarks: {
           select: {
             id: true,
+            ownerId: true,
           }
         }
       },
