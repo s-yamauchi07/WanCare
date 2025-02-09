@@ -43,6 +43,11 @@ export const GET = async(request:NextRequest, { params } : { params: Promise<{id
             id: true,
             nickname: true,
           }
+        },
+        bookmarks: {
+          select: {
+            id: true,
+          }
         }
       },
     });
