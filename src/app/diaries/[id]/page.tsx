@@ -27,6 +27,7 @@ const DiaryDetail: React.FC = () => {
   const { token, session } = useSupabaseSession();
   const currentUserId = session?.user.id;
   const [diary, setDiary] = useState<DiaryDetails | null >(null);
+  const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
   const thumbnailImage = usePreviewImage(diary?.imageKey ?? null, "diary_img")
   const [openModal, setOpenModal] = useState(false);
   const [refresh, setRefresh] = useState<boolean>(false);
@@ -101,11 +102,16 @@ const DiaryDetail: React.FC = () => {
           "Content-Type" : "application/json",
           Authorization: token,
         },
-        method: "POST",
+        method: isBookmarked ? "DELETE" : "POST",
       });
 
       if(response.status === 200) {
-        toast.success("お気に入り登録しました");
+        setIsBookmarked(!isBookmarked);
+        if(isBookmarked) {
+          toast.success("お気に入りの解除をしました");
+        } else {
+          toast.success("お気に入り登録をしました");
+        } 
       }
     } catch(error) {
       console.log(error);
@@ -127,6 +133,7 @@ const DiaryDetail: React.FC = () => {
 
         const { diary } = await res.json();
         setDiary(diary);
+        setIsBookmarked(diary.bookmarks && diary.bookmarks.length > 0);
       } catch(error) {
         console.log(error);
       } finally {
@@ -135,8 +142,6 @@ const DiaryDetail: React.FC = () => {
     }
     fetchDiary()
   }, [id, token, refresh]);
-
-  console.log(diary)
 
   return(
     <>
@@ -204,12 +209,19 @@ const DiaryDetail: React.FC = () => {
                 <span className="i-mdi-chat-processing-outline"></span>
                 <span className="text-sm">コメントする</span>
               </button>
+
               <button 
-                className="w-1/2 p-2 text-center border border-primary solid rounded flex items-center justify-center gap-1"
+                className={`w-1/2 p-2 text-center border border-primary solid rounded flex items-center justify-center gap-1 ${isBookmarked && "bg-primary text-white"}`}
                 onClick={() => changeFavorite()}
               >
-                <span className="i-material-symbols-bookmark-add-outline"></span>
-                <span className="text-sm">お気に入り</span>
+                <span className={isBookmarked 
+                ? `i-material-symbols-bookmark-remove-outline`
+                : `i-material-symbols-bookmark-add-outline`
+                }></span>
+
+                <span className="text-sm">
+                  {isBookmarked ? "お気に入り済" : "お気に入り登録" }
+                </span>
               </button>
             </div>
             
