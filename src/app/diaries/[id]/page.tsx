@@ -95,7 +95,7 @@ const DiaryDetail: React.FC = () => {
   }
 
   const changeFavorite = async() => {
-    if (!token) return;
+    if (!token || isBookmarking) return;
     setIsBookmarking(true);
 
     try {
