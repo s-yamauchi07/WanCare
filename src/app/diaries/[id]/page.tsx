@@ -91,6 +91,27 @@ const DiaryDetail: React.FC = () => {
       setIsDeleting(false);
     }
   }
+
+  const changeFavorite = async() => {
+    if (!token) return;
+
+    try {
+      const response = await fetch(`/api/diaries/${id}/bookmarks`, {
+        headers: {
+          "Content-Type" : "application/json",
+          Authorization: token,
+        },
+        method: "POST",
+      });
+
+      if(response.status === 200) {
+        toast.success("お気に入り登録しました");
+      }
+    } catch(error) {
+      console.log(error);
+      toast.error("お気に入り登録に失敗しました");
+    }
+  }
   
   useEffect(() => {
     if (!token) return;
@@ -183,13 +204,15 @@ const DiaryDetail: React.FC = () => {
                 <span className="i-mdi-chat-processing-outline"></span>
                 <span className="text-sm">コメントする</span>
               </button>
-              <button className="w-1/2 p-2 text-center border border-primary solid rounded flex items-center justify-center gap-1">
+              <button 
+                className="w-1/2 p-2 text-center border border-primary solid rounded flex items-center justify-center gap-1"
+                onClick={() => changeFavorite()}
+              >
                 <span className="i-material-symbols-bookmark-add-outline"></span>
-                <span className="text-sm">ブックマーク</span>
+                <span className="text-sm">お気に入り</span>
               </button>
             </div>
             
-            {/* コメント一覧表示 */}
             <div>
               <CommentList 
                 comments={diary.comments} 
@@ -200,7 +223,7 @@ const DiaryDetail: React.FC = () => {
               />
             </div>
           </div>
-          {/* モーダル表示エリア */}
+
           <ModalWindow show={openModal} onClose={ModalClose} >
             <>
               {modalType === "edit" && <DiaryForm diary={diary} isEdit={true} onClose={ModalClose} />}
