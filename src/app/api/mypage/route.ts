@@ -64,7 +64,11 @@ export const GET = async(request: NextRequest) => {
       return NextResponse.json({ status: "Not found" , message: "User information Not found."}, { status: 404});
     }
 
-    return NextResponse.json( { status: "OK", userInfo: userInfo }, { status: 200 });
+    const formattedUserInfo = {
+      ...userInfo,
+      bookmarks: userInfo.bookmarks.map((b) => b.diary),
+    }
+    return NextResponse.json( { status: "OK", userInfo: formattedUserInfo }, { status: 200 });
   } catch(error) {
     return handleError(error);
   }

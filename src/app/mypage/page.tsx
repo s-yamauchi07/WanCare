@@ -73,7 +73,7 @@ const MyPage: React.FC = () => {
       } else if (selectedTab === "お気に入り") {
         setShowLists(currentUser.bookmarks);
         setDefaultImg(no_diary_img);
-        setLinkPrefix("favorites")
+        setLinkPrefix("diaries")
       }
     } catch (error) {
       console.log(error);
@@ -83,7 +83,6 @@ const MyPage: React.FC = () => {
   useEffect(() => {
     SelectLists();
   }, [currentUser, selectedTab]);
-
 
   return (
     <div className="flex justify-center text-gray-800">

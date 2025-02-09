@@ -62,7 +62,12 @@ export const GET = async(request: NextRequest, { params } : { params : Promise<{
       return NextResponse.json({ status: "Not found.", message: "User Not found"}, { status: 404});
     }
 
-    return NextResponse.json({ status: "OK", otherUser: otherUser }, { status: 200 });
+    const formattedUserInfo = {
+      ...otherUser,
+      bookmarks: otherUser.bookmarks.map((b) => b.diary),
+    }
+
+    return NextResponse.json({ status: "OK", otherUser: formattedUserInfo }, { status: 200 });
   } catch(error) {
     return handleError(error);
   }

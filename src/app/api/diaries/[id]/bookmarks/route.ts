@@ -3,7 +3,7 @@ import { userAuthentication } from "@/app/utils/userAuthentication";
 import prisma from "@/libs/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-// ブックマーク登録
+// お気に入り登録
 export const POST = async(request: NextRequest, { params } : { params : Promise<{ id: string }>}) => {
   const { id } = await params
   const { data, error } = await userAuthentication(request);
@@ -19,13 +19,13 @@ export const POST = async(request: NextRequest, { params } : { params : Promise<
       },
     });
 
-    return NextResponse.json({ status: "OK", message: "ブックマーク登録しました" }, { status: 200 });
+    return NextResponse.json({ status: "OK", message: "お気に入り登録しました" }, { status: 200 });
   } catch(error) {
     return handleError(error);
   }
 }; 
 
-// ブックマーク削除
+// お気に入り削除
 export const DELETE = async(request: NextRequest, { params } : { params : Promise<{ id: string }>}) => {
   const { id } = await params
   const { data, error } = await userAuthentication(request);
@@ -42,7 +42,7 @@ export const DELETE = async(request: NextRequest, { params } : { params : Promis
     });
 
     if(!deleteBookmark) {
-      return NextResponse.json({ status: "Not found.", message: "ブックマークデータが確認できませんでした"}, { status: 404});
+      return NextResponse.json({ status: "Not found.", message: "データの確認ができませんでした"}, { status: 404});
     }
 
     await prisma.bookMark.delete({
@@ -51,7 +51,7 @@ export const DELETE = async(request: NextRequest, { params } : { params : Promis
       },
     });
 
-    return NextResponse.json({ status: "OK", message: "ブックマークを解除しました"}, { status: 200 });
+    return NextResponse.json({ status: "OK", message: "お気に入りを解除しました"}, { status: 200 });
   } catch(error) {
     return handleError(error);
   }
