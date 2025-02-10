@@ -3,13 +3,38 @@
 import React from "react";
 import { UserMyPage } from "@/_types/user";
 import Link from "next/link";
+import { toast } from "react-hot-toast";
 
 interface UserInfoProps {
   user: UserMyPage;
   isMypage: boolean;
+  isFollowed: boolean;
+  token: string | null;
 }
 
-const UserInfo: React.FC<UserInfoProps> = ({ user, isMypage }) => {
+const UserInfo: React.FC<UserInfoProps> = ({ user, isMypage, isFollowed, token }) => {
+
+  const changeFollow = async() => {
+    if(!token) return;
+
+    try {
+      const response = await fetch(`/api/follows/${user.id}`, {
+        headers: {
+          "Content-Type" : "application/json",
+          Authorization: token,
+        },
+        method: "POST",
+      });
+
+      if(response.status == 200) {
+        toast.success("フォローしました");
+      }
+    } catch(error) {
+      console.log(error);
+      toast.error("フォローできませんでした");
+    }
+  }
+
   return(
     <>
       <h2 className="text-2xl font-bold text-primary text-center">{isMypage ? "マイページ" : `${user?.nickname}さんのページ`}</h2>
@@ -25,11 +50,11 @@ const UserInfo: React.FC<UserInfoProps> = ({ user, isMypage }) => {
             <p className="text-xs">投稿</p>
           </li>
           <li className="text-center w-1/3">
-            <p className="font-bold">{user.diaries.length}</p>
+            <p className="font-bold">{user.following.length}</p>
             <p className="text-xs">フォロー</p>
           </li>
           <li className="text-center w-1/3">
-            <p className="font-bold">{user.diaries.length}</p>
+            <p className="font-bold">{user.follower.length}</p>
             <p className="text-xs">フォロワー</p>
           </li>
         </ul>
@@ -43,11 +68,13 @@ const UserInfo: React.FC<UserInfoProps> = ({ user, isMypage }) => {
               </Link>
               </button>
           ) : (
-            <button>フォローする</button>
+            <button onClick={() => changeFollow()}>
+                {isFollowed ? "フォロー解除" : "フォローする"}
+            </button>
           )}
         </div>
       </div>
-  </>
+    </>
   )
 }
 export default UserInfo;
