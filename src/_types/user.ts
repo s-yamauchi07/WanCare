@@ -9,4 +9,6 @@ export interface UserMyPage {
   diaries: MypageDiaryLists[];
   summaries: MypageSummaryLists[];
   bookmarks: MypageBookmarkLists[];
+  follower: { followerId: string }[];
+  following: { followingId: string }[];
 }
