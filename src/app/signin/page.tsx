@@ -35,7 +35,7 @@ const SignIn = () =>  {
         headers: {
           "Content-Type" : "application/json",
         },
-        body: JSON.stringify(userId)
+        body: JSON.stringify({userId})
       })
       
       const { dog } = await response.json();
