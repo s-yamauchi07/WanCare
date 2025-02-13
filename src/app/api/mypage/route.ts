@@ -57,6 +57,18 @@ export const GET = async(request: NextRequest) => {
             },
           },
         },
+        // 自分がフォローしているユーザー
+        follower: {
+          select: {
+            followerId: true,
+          }
+        },
+        // 自分がフォローされているユーザー
+        following: {
+          select: {
+            followingId: true,
+          }
+        }
       },
     })
 
