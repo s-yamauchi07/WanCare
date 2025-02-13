@@ -24,17 +24,23 @@ const UserInfo: React.FC<UserInfoProps> = ({ user, isMypage, token }) => {
           "Content-Type" : "application/json",
           Authorization: token,
         },
-        method: "POST",
+        method: isFollowed ? "DELETE" : "POST",
       });
 
       if(response.status == 200) {
-        toast.success("フォローしました");
-        setIsFollowed(true);
-        setFollowingCount(followingCount + 1);
+        if(isFollowed) {
+          toast.success("フォロー解除しました");
+          setIsFollowed(false);
+          setFollowingCount(followingCount - 1);
+        } else {
+          toast.success("フォローしました");
+          setIsFollowed(true);
+          setFollowingCount(followingCount + 1);
+        }
       }
     } catch(error) {
       console.log(error);
-      toast.error("フォローできませんでした");
+      toast.error(isFollowed ? "フォロー解除に失敗しました" : "フォローできませんでした");
     }
   }
 
