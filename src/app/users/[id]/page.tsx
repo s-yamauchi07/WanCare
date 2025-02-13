@@ -99,7 +99,7 @@ const UserPage: React.FC = () => {
       <div className="my-20 pb-20 px-4 w-full max-w-screen-lg flex flex-col gap-12 overflow-y-auto">
         {otherUser ? (
           <>
-          <UserInfo user={otherUser} isMypage={false}/>
+          <UserInfo user={otherUser} isMypage={false} token={token}/>
           <UserDogInfo user={otherUser} dogImg={dogImg} />
           <TabNavigation 
             user={otherUser}
