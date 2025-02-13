@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 
@@ -10,6 +11,7 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
+  schemas  = ["auth", "public"]
 }
 
 model Owner {
@@ -27,6 +29,7 @@ model Owner {
   updatedAt     DateTime    @updatedAt
 
   @@map("owners")
+  @@schema("public")
 }
 
 model Dog {
@@ -44,6 +47,7 @@ model Dog {
   updatedAt     DateTime    @updatedAt
 
   @@map("dogs")
+  @@schema("public")
 }
 
 model Breed {
@@ -54,6 +58,8 @@ model Breed {
   updatedAt     DateTime @updatedAt
   order         Int
   @@map("breeds")
+
+  @@schema("public")
 }
 
 model Care {
@@ -70,6 +76,7 @@ model Care {
   updatedAt     DateTime  @updatedAt
 
   @@map("cares")
+  @@schema("public")
 }
 
 model CareList {
@@ -82,6 +89,7 @@ model CareList {
   order         Int
   
   @@map("care_lists")
+  @@schema("public")
 }
 
 model Summary {
@@ -94,6 +102,9 @@ model Summary {
   summaryTags   SummaryTag[]
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
+
+  @@map("summary")
+  @@schema("public")
 }
 
 model SummaryTag {
@@ -106,6 +117,7 @@ model SummaryTag {
   updatedAt     DateTime @updatedAt
 
   @@map("summary_tags")
+  @@schema("public")
 }
 
 model Diary {
@@ -124,6 +136,7 @@ model Diary {
   updatedAt     DateTime    @updatedAt
 
   @@map("diaries")
+  @@schema("public")
 }
 
 model DiaryTag {
@@ -136,6 +149,7 @@ model DiaryTag {
   updatedAt     DateTime @updatedAt
 
   @@map("diary_tags")
+  @@schema("public")
 }
 
 model Tag {
@@ -147,6 +161,7 @@ model Tag {
   updatedAt     DateTime      @updatedAt
 
   @@map("tags")
+  @@schema("public")
 }
 
 model BookMark {
@@ -159,6 +174,7 @@ model BookMark {
   updatedAt     DateTime @updatedAt
 
   @@map("bookmarks")
+  @@schema("public")
 }
 
 model Comment {
@@ -172,6 +188,7 @@ model Comment {
   updatedAt     DateTime @updatedAt
 
   @@map("comments")
+  @@schema("public")
 }
 
 model Follow {
@@ -184,4 +201,5 @@ model Follow {
 
   @@id([followingId, followerId])
   @@map("follows")
+  @@schema("public")
 }

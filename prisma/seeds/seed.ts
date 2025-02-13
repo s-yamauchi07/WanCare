@@ -1,6 +1,6 @@
 import { breedSeed }from "./breedSeed";
 import { careSeed } from "./careSeed";
-import prisma from "@/libs/prisma";
+import prisma from "../../src/libs/prisma.js";
 
 async function main() {
   try {
