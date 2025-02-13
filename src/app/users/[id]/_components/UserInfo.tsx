@@ -50,11 +50,11 @@ const UserInfo: React.FC<UserInfoProps> = ({ user, isMypage, isFollowed, token }
             <p className="text-xs">投稿</p>
           </li>
           <li className="text-center w-1/3">
-            <p className="font-bold">{user.following.length}</p>
+            <p className="font-bold">{user.follower.length}</p>
             <p className="text-xs">フォロー</p>
           </li>
           <li className="text-center w-1/3">
-            <p className="font-bold">{user.follower.length}</p>
+            <p className="font-bold">{user.following.length}</p>
             <p className="text-xs">フォロワー</p>
           </li>
         </ul>
