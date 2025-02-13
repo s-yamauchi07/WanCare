@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 interface UserInfoProps {
   user: UserMyPage;
   isMypage: boolean;
-  token: string | null;
+  token?: string | null;
 }
 
 const UserInfo: React.FC<UserInfoProps> = ({ user, isMypage, token }) => {
