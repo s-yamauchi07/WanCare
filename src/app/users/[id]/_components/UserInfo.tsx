@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react";
+import React, { useState } from "react";
 import { UserMyPage } from "@/_types/user";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
@@ -8,11 +8,12 @@ import { toast } from "react-hot-toast";
 interface UserInfoProps {
   user: UserMyPage;
   isMypage: boolean;
-  isFollowed: boolean;
   token: string | null;
 }
 
-const UserInfo: React.FC<UserInfoProps> = ({ user, isMypage, isFollowed, token }) => {
+const UserInfo: React.FC<UserInfoProps> = ({ user, isMypage, token }) => {
+  const [isFollowed, setIsFollowed] = useState<boolean>(user.following.length > 0);
+  const [followingCount, setFollowingCount] = useState<number>(user.following.length);
 
   const changeFollow = async() => {
     if(!token) return;
@@ -28,6 +29,8 @@ const UserInfo: React.FC<UserInfoProps> = ({ user, isMypage, isFollowed, token }
 
       if(response.status == 200) {
         toast.success("フォローしました");
+        setIsFollowed(true);
+        setFollowingCount(followingCount + 1);
       }
     } catch(error) {
       console.log(error);
@@ -54,7 +57,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ user, isMypage, isFollowed, token }
             <p className="text-xs">フォロー</p>
           </li>
           <li className="text-center w-1/3">
-            <p className="font-bold">{user.following.length}</p>
+            <p className="font-bold">{followingCount}</p>
             <p className="text-xs">フォロワー</p>
           </li>
         </ul>
