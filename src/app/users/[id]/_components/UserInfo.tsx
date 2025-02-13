@@ -13,11 +13,12 @@ interface UserInfoProps {
 
 const UserInfo: React.FC<UserInfoProps> = ({ user, isMypage, token }) => {
   const [isFollowed, setIsFollowed] = useState<boolean>(user.following.length > 0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [followingCount, setFollowingCount] = useState<number>(user.following.length);
 
   const changeFollow = async() => {
     if(!token) return;
-
+    setIsLoading(true);
     try {
       const response = await fetch(`/api/follows/${user.id}`, {
         headers: {
@@ -41,6 +42,8 @@ const UserInfo: React.FC<UserInfoProps> = ({ user, isMypage, token }) => {
     } catch(error) {
       console.log(error);
       toast.error(isFollowed ? "フォロー解除に失敗しました" : "フォローできませんでした");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -69,7 +72,11 @@ const UserInfo: React.FC<UserInfoProps> = ({ user, isMypage, token }) => {
         </ul>
 
         <div className="bg-primary rounded-lg text-white flex items-center justify-center py-1">
-          <span className="i-ri-user-follow-line w-5 h-5"></span>
+          <span className={isFollowed 
+            ? "i-ri-user-unfollow-line w-5 h-5"
+            : "i-ri-user-follow-line w-5 h-5"}
+          >
+          </span>
           {isMypage ? (
             <button>
               <Link href={`/users/${user.id}/edit`}>
@@ -78,7 +85,10 @@ const UserInfo: React.FC<UserInfoProps> = ({ user, isMypage, token }) => {
               </button>
           ) : (
             <button onClick={() => changeFollow()}>
-                {isFollowed ? "フォロー解除" : "フォローする"}
+              {isLoading 
+                ? "Loading..."
+                : (isFollowed ? "フォロー解除" : "フォローする")
+              }
             </button>
           )}
         </div>
