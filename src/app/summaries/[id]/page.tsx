@@ -40,7 +40,6 @@ const SummaryDetail: React.FC = () => {
         });
 
         const { summary } = await res.json();
-        console.log(summary)
         setSummary(summary);
       } catch(error) {
         console.log(error);
