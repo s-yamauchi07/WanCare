@@ -68,7 +68,7 @@ const DiaryIndex: React.FC = () => {
     <div className="flex justify-center">
       <div className="my-20 pb-10 px-4 relative w-full max-w-screen-lg">
         <Tab />
-        <SearchForm />
+        <SearchForm token={token} />
         <InfiniteScroll 
           loadMore={fetchDiary}
           hasMore={hasMore}
