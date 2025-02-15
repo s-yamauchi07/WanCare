@@ -63,12 +63,17 @@ const DiaryIndex: React.FC = () => {
     fetchDiary();
   }, []);
 
+  const handleSearchResults = (diaries: DiaryDetails[]) => {
+    setDiaryList(diaries);
+    setPage(0);
+    setHasMore(false);
+  }
 
   return(
     <div className="flex justify-center">
       <div className="my-20 pb-10 px-4 relative w-full max-w-screen-lg">
         <Tab />
-        <SearchForm token={token} />
+        <SearchForm token={token} onSearchResults={handleSearchResults}/>
         <InfiniteScroll 
           loadMore={fetchDiary}
           hasMore={hasMore}
