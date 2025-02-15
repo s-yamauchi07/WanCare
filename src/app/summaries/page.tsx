@@ -62,12 +62,18 @@ const SummaryIndex: React.FC = () => {
   useEffect(() => {
     fetchSummary();
   },[]);
+
+  const handleSearchResults = (summaries: AllSummary[]) => {
+    setSummaryList(summaries);
+    setPage(0);
+    setHasMore(false);
+  }
  
   return(
     <div className="flex justify-center">
       <div className="my-20 pb-10 px-4 relative w-full max-w-screen-lg">
         <Tab />
-        <SearchForm />
+        <SearchForm token={token} onSearchResults={handleSearchResults} searchType="summaries"/>
         <InfiniteScroll
           loadMore={fetchSummary}
           hasMore={hasMore}

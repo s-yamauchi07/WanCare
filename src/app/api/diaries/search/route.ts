@@ -48,7 +48,7 @@ export const GET = async(request: NextRequest) => {
       },
     });
 
-    return NextResponse.json({ status: "OK", diaries: diaries }, { status: 200});
+    return NextResponse.json({ status: "OK", lists: diaries }, { status: 200});
   } catch(error) {
     return handleError(error);
   }

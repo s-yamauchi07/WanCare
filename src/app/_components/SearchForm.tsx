@@ -1,4 +1,4 @@
-import { DiaryDetails } from "@/_types/diary";
+
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
@@ -7,12 +7,13 @@ interface SearchValue {
   keywords: string;
 }
 
-interface searchProps {
+interface SearchProps<T> {
   token: string | null;
-  onSearchResults: (diaries: DiaryDetails[]) => void;
+  onSearchResults: (results: T[]) => void;
+  searchType: "diaries" | "summaries";
 }
 
-const SearchForm: React.FC<searchProps> = ({ token, onSearchResults}) => {
+const SearchForm = <T,>({ token, onSearchResults, searchType }: SearchProps<T>) => {
   const { register, handleSubmit, reset,} = useForm<SearchValue>();
 
   const onSubmit: SubmitHandler<SearchValue> = async(data) => {
@@ -20,18 +21,19 @@ const SearchForm: React.FC<searchProps> = ({ token, onSearchResults}) => {
     
     if(!token) return;
     try {
-      const response = await fetch(`/api/diaries/search?keywords=${searchWords}`, {
+      const response = await fetch(`/api/${searchType}/search?keywords=${searchWords}`, {
         headers: {
           "Content-Type" : "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
-      const { diaries } = await response.json();
-      if(diaries.length > 0) {
-        toast.success(`${diaries.length}件ヒットしました`)
-        onSearchResults(diaries);
+
+      const { lists } = await response.json();
+      if(lists.length > 0) {
+        toast.success(`${lists.length}件ヒットしました`)
+        onSearchResults(lists);
       } else {
-        toast.error(`ヒットする日記がありませんでした`)
+        toast.error("検索結果が見つかりませんでした")
       }
       reset();
     } catch(error) {
