@@ -46,7 +46,8 @@ const SearchForm = <T,>({ token, onSearchResults, searchType }: SearchProps<T>) 
   }, [token]);
 
   const handleChange = (text: string) => {
-    setText(text);
+    const normalizedText = text.replace(/　/g, " ");
+    setText(normalizedText);
     const keywords = text.split(" "); // 入力されたkeywordを半角スペースで分割
     const lastKeyword = keywords[keywords.length - 1]; // keywordsの配列の最後の要素を取得して変数化。
     if (lastKeyword.length > 0) {
@@ -106,6 +107,7 @@ const SearchForm = <T,>({ token, onSearchResults, searchType }: SearchProps<T>) 
             className="text-white absolute end-2.5 bottom-2.5 bg-primary hover:bg-primary focus:ring-2 focus:outline-none font-medium rounded-full text-sm px-4 py-2">検索
           </button>
         </div>
+        <div className="px-4 mt-2 shadow-lg bg-gray-50 rounded-lg">
         {isFocus && (
           suggestions?.map((suggestion, i) => (
             <p
@@ -116,11 +118,13 @@ const SearchForm = <T,>({ token, onSearchResults, searchType }: SearchProps<T>) 
                 setText(currentKeywords.join(" ")); // 入力値を再度スペース区切りの形式に変換
                 setIsFocus(false);
               }}
+              className="text-sm py-1"
             >
-              {suggestion.name}
+              # {suggestion.name}
             </p>
           ))
         )}
+        </div>
       </form>
       <Toaster />
     </>
