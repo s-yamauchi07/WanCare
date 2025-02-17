@@ -13,17 +13,31 @@ export const GET = async(request: NextRequest) => {
   try {
     const summaries = await prisma.summary.findMany({
       where: {
-        OR: keywords.map(keyword => ({
-          summaryTags: {
-            some: {
-              tag: {
-                name: {
-                  contains: keyword
+        OR: [
+          ...keywords.map(keyword => ({
+            summaryTags: {
+              some: {
+                tag: {
+                  name: {
+                    contains: keyword
+                  },
                 },
               },
             },
-          },
-        })),
+          })),
+          ...keywords.map(keyword => ({
+            title: {
+              contains: keyword,
+              mode: 'insensitive' as const,
+            }
+          })),
+          ...keywords.map(keyword => ({
+            explanation: {
+              contains: keyword,
+              mode: 'insensitive' as const,
+            }
+          })),
+        ]
       },
       include: {
         summaryTags: {
@@ -34,7 +48,7 @@ export const GET = async(request: NextRequest) => {
       },
     });
     
-    return NextResponse.json({ status: "OK", summaries: summaries }, { status: 200 });
+    return NextResponse.json({ status: "OK", lists: summaries }, { status: 200 });
   } catch(error) {
     return handleError(error);
   }
