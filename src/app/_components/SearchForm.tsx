@@ -118,7 +118,7 @@ const SearchForm = <T,>({ token, onSearchResults, searchType }: SearchProps<T>) 
                 setText(currentKeywords.join(" ")); // 入力値を再度スペース区切りの形式に変換
                 setIsFocus(false);
               }}
-              className="text-sm py-1"
+              className="text-sm py-1 text-gray-700"
             >
               # {suggestion.name}
             </p>
