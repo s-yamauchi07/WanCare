@@ -19,7 +19,7 @@ export default function WelcomePage() {
       </header>
 
       {/* firstViewエリア */}
-      <div className="bg-first-view h-16">
+      <div className="bg-first-view bg-contain bg-no-repeat bg-center h-96 p-4">
         <div>
           <h2>愛犬の小さな変化を</h2>
           <h2>見逃さない</h2>
