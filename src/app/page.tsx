@@ -1,12 +1,21 @@
 import Image from "next/image";
+import Link from "next/link";
+import IconButton from "./_components/IconButton";
 
 export default function WelcomePage() {
   return (
     <>
       {/* ヘッダーエリア */}
-      <header>
-        <p>WanCare</p>
-        <p>ログイン</p>
+      <header className="h-16 bg-primary flex items-center justify-between px-4">
+        <p className="text-2xl font-bold text-main">WanCare</p>
+        <Link href="/signin">
+          <IconButton 
+            iconName="i-material-symbols-login"
+            buttonText="Login"
+            color="bg-primary"
+            textColor="text-main"
+          />
+        </Link>
       </header>
 
       {/* firstViewエリア */}
