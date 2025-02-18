@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { UserMyPage } from "@/_types/user";
 import { getAgeInMonths } from "@/app/utils/getAgeInMonths";
-import no_registration from "@/public/dog_registration.png";
+import no_registration from "/public/dog_registration.png";
 interface DogInfoProps {
   user: UserMyPage;
   dogImg: string | null;

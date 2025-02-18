@@ -19,7 +19,7 @@ export default function WelcomePage() {
       </header>
 
       {/* firstViewエリア */}
-      <div>
+      <div className="bg-first-view h-16">
         <div>
           <h2>愛犬の小さな変化を</h2>
           <h2>見逃さない</h2>
@@ -50,7 +50,7 @@ export default function WelcomePage() {
 
         <div>
           <h3>お世話の記録</h3>
-          <Image />
+          {/* <Image /> */}
           <div>
             <p>項目ごとにお世話の記録ができます。</p>
             <p>さんぼやトイレの回数、ごはんの量など記録の一元管理が可能です。</p>
@@ -59,7 +59,7 @@ export default function WelcomePage() {
 
         <div>
           <h3>日記投稿</h3>
-          <Image />
+          {/* <Image /> */}
           <div>
             <p>愛犬の気になる症状や日々の変化を簡単に投稿できます。</p>
             <p>テキストや写真を使って、愛犬の健康状態を記録しておきましょう。</p>
@@ -68,7 +68,7 @@ export default function WelcomePage() {
 
         <div>
           <h3>情報収集</h3>
-          <Image />
+          {/* <Image /> */}
           <div>
             <p>他のユーザーが投稿した日記をタグで効率的に検索できます。</p>
             <p>愛犬の症状や状態に適した記事から、最適なケア方法を探しましょう。</p>
@@ -83,7 +83,7 @@ export default function WelcomePage() {
           <h2>に日の記録から。</h2>
         </div>
 
-        <Image/>
+        {/* <Image/> */}
 
         <button>
           使ってみる

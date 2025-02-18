@@ -10,7 +10,7 @@ import DiaryForm from "./_components/DiaryForm";
 import  Tab  from "@/app/_components/Tab";
 import  SearchForm  from "@/app/_components/SearchForm";
 import PostUnit from "../_components/PostUnit";
-import no_diary_img from "@/public/no_diary_img.png";
+import no_diary_img from "/public/no_diary_img.png";
 
 const DiaryIndex: React.FC = () => {
   const { token } = useSupabaseSession();
