@@ -38,6 +38,9 @@ const config: Config = {
       },
       width: {
         'main': '450px',
+      },
+      backgroundImage : {
+        "first-view" : "url('/first_view.png')"
       }
     },
   },
