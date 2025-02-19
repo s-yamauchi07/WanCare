@@ -76,45 +76,74 @@ export default function WelcomePage() {
       </div>
 
       {/* アプリでできることの説明 */}
-      <div>
-        <h2>WanCareでできること</h2>
+      <div className="text-center py-8 px-4">
+        <h2 className="text-xl font-bold mb-4">WanCareでできること</h2>
 
-        <div>
-          <h3>お世話の記録</h3>
-          {/* <Image /> */}
+        <div className="flex flex-col gap-6">
           <div>
-            <p>項目ごとにお世話の記録ができます。</p>
-            <p>さんぼやトイレの回数、ごはんの量など記録の一元管理が可能です。</p>
+            <h3 className="text-lg font-bold">お世話の記録</h3>
+            <Image 
+              src="/care_record.png"
+              width={250}
+              height={250}
+              alt="お世話の登録"
+              className="m-auto my-3"
+            />
+            <div className="text-xs min-w-64 m-auto">
+              <p>項目ごとにお世話の記録ができます。</p>
+              <p>さんぼやトイレの回数、ごはんの量など記録の一元管理が可能です。</p>
+            </div>
           </div>
-        </div>
 
-        <div>
-          <h3>日記投稿</h3>
-          {/* <Image /> */}
           <div>
-            <p>愛犬の気になる症状や日々の変化を簡単に投稿できます。</p>
-            <p>テキストや写真を使って、愛犬の健康状態を記録しておきましょう。</p>
+            <h3 className="text-lg font-bold">日記投稿</h3>
+            <Image 
+              src="/add_diary.png"
+              width={200}
+              height={200}
+              alt="お世話の登録"
+              className="m-auto my-3"
+            />
+            <div className="text-xs min-w-64 m-auto">
+              <p>
+                愛犬の気になる症状や日々の変化を簡単に投稿できます。
+                テキストや写真を使って、愛犬の健康状態を記録しておきましょう。
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div>
-          <h3>情報収集</h3>
-          {/* <Image /> */}
           <div>
-            <p>他のユーザーが投稿した日記をタグで効率的に検索できます。</p>
-            <p>愛犬の症状や状態に適した記事から、最適なケア方法を探しましょう。</p>
+            <h3 className="text-lg font-bold">情報収集</h3>
+            <Image 
+              src="/search_info.png"
+              width={200}
+              height={200}
+              alt="お世話の登録"
+              className="m-auto my-3"
+            />
+            <div className="text-xs min-w-64 m-auto">
+              <p>
+                他のユーザーが投稿した日記をタグで効率的に検索できます。
+                愛犬の症状や状態に適した記事から、最適なケア方法を探しましょう。
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
       {/* buttonエリア */}
-      <div>
+      <div className="bg-primary">
         <div>
           <h2>大切な家族の健康は</h2>
           <h2>に日の記録から。</h2>
         </div>
 
-        {/* <Image/> */}
+        <Image 
+          src="/bottom_img.png"
+          width={200}
+          height={200}
+          alt="サービス紹介画像"
+        />
 
         <button>
           使ってみる
