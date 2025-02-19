@@ -35,7 +35,7 @@ export default function WelcomePage() {
         </div>
 
         <div className="mt-4 text-center">
-          <Link href="/signin">
+          <Link href="/signup">
             <IconButton 
               iconName="i-material-symbols-check-circle-outline"
               buttonText="新規登録"
@@ -51,7 +51,7 @@ export default function WelcomePage() {
         <h2 className="text-xl font-bold mb-4">WanCareとは?</h2>
 
         <div className="flex flex-col gap-2">
-          <p className="text-sm font-bold">
+          <p className="text-sm font-bold text-primary">
             「ご飯を食べない...」<br />
             「いつから症状が出ていたの?」<br />
             「この病気の具体的な治療法は?」<br />
@@ -66,10 +66,11 @@ export default function WelcomePage() {
           />
 
           <p className="text-sm">
-            WanCareは日々の記録を通じて、愛犬の病気の早期発見をサポートします。
+            WanCareは日々の記録を通じて、愛犬の病気の早期発見をサポートする
+            <span className="text-primary font-bold">愛犬家のための健康管理アプリ</span>です。
           </p>
           <p className="text-sm">
-            またオーナーの皆さまが記録を投稿することは、同じ病気や怪我で苦しむわんちゃんとそのご家族の助けになります。
+          オーナーの皆さまの記録は、同じ病気や怪我で悩むわんちゃんとそのご家族にとって体験談や治療法を知る手助けになります。
           </p>
         </div>
       </div>
