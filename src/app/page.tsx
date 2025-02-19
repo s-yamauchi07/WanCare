@@ -19,15 +19,30 @@ export default function WelcomePage() {
       </header>
 
       {/* firstViewエリア */}
-      <div className="bg-first-view bg-contain bg-no-repeat bg-center h-96 p-4">
-        <div>
-          <h2>愛犬の小さな変化を</h2>
-          <h2>見逃さない</h2>
-          <p>愛犬家のための健康管理アプリ</p>
+      <div className="relative py-12 px-4">
+        <Image 
+            src="/first_view.png"
+            alt="トップ画像"
+            width={200}
+            height={200}
+            className="m-auto mt-10"
+        />
+
+        <div className="absolute top-10 font-bold">
+          <span className="bg-white text-xl">愛犬の小さな変化を</span><br />
+          <span className="bg-white text-xl">見逃さない</span><br />
+          <span className="bg-white text-xs">愛犬家のための健康管理アプリ</span><br />
         </div>
 
-        <div>
-          <button>新規登録</button>
+        <div className="mt-4 text-center">
+          <Link href="/signin">
+            <IconButton 
+              iconName="i-material-symbols-check-circle-outline"
+              buttonText="新規登録"
+              color="bg-primary"
+              textColor="text-main"
+            />
+          </Link>
         </div>
       </div>
 
