@@ -47,16 +47,31 @@ export default function WelcomePage() {
       </div>
 
       {/* 説明エリア */}
-      <div>
-        <h2>WanCareとは?</h2>
-        <p>
-          「ご飯を食べない...」
-          「いつから症状が出ていたの?」
-          「この病気の具体的な治療法は?」
-        </p>
+      <div className="bg-secondary text-center py-8 px-4">
+        <h2 className="text-xl font-bold mb-4">WanCareとは?</h2>
 
-        <p>WanCareは日々の記録を通じて、愛犬の病気の早期発見をサポートします。</p>
-        <p>またオーナーの皆さまが記録を投稿することは、同じ病気や怪我で苦しむわんちゃんとそのご家族の手助けになります。</p>
+        <div className="flex flex-col gap-2">
+          <p className="text-sm font-bold">
+            「ご飯を食べない...」<br />
+            「いつから症状が出ていたの?」<br />
+            「この病気の具体的な治療法は?」<br />
+          </p>
+
+          <Image 
+            src="/about_WanCare.png"
+            width={200}
+            height={200}
+            alt="アプリについて"
+            className="m-auto"
+          />
+
+          <p className="text-sm">
+            WanCareは日々の記録を通じて、愛犬の病気の早期発見をサポートします。
+          </p>
+          <p className="text-sm">
+            またオーナーの皆さまが記録を投稿することは、同じ病気や怪我で苦しむわんちゃんとそのご家族の助けになります。
+          </p>
+        </div>
       </div>
 
       {/* アプリでできることの説明 */}
