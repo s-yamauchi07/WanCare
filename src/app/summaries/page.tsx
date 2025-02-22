@@ -10,7 +10,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 import LoadingDiary from "../diaries/_components/LoadingDiary";
 import { AllSummary } from "@/_types/summary";
 import PostUnit from "../_components/PostUnit";
-import summaryThumbnail from "@/public/summaryThumbnail.png";
+import summaryThumbnail from "/public/summaryThumbnail.png";
 
 const SummaryIndex: React.FC = () => {
   const { token } = useSupabaseSession();

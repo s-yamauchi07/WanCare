@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
 import { usePreviewImage } from "@/_hooks/usePreviewImage";
-import no_diary_img from "@/public/no_diary_img.png";
+import no_diary_img from "/public/no_diary_img.png";
 import { DiaryDetails } from "@/_types/diary";
 import Image from "next/image";
 import ModalWindow from "@/app/_components/ModalWindow";
