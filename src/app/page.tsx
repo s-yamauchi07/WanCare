@@ -144,7 +144,7 @@ export default function WelcomePage() {
           width={200}
           height={200}
           alt="サービス紹介画像"
-          className="m-auto"
+          className="m-auto mb-8"
         />
 
         <div className="my-4 text-center">
@@ -160,7 +160,7 @@ export default function WelcomePage() {
       </div>
 
       <footer>
-        <p>©️ WanCare 2025</p>
+        <p className="text-xs py-3 px-4 bg-secondary text-center">©️ WanCare 2025</p>
       </footer>
       
     </>
