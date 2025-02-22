@@ -131,11 +131,12 @@ export default function WelcomePage() {
         </div>
       </div>
 
+
       {/* buttonエリア */}
-      <div className="bg-primary">
-        <div>
+      <div className="bg-secondary py-8 px-4">
+        <div className="text-2xl font-bold text-white">
           <h2>大切な家族の健康は</h2>
-          <h2>に日の記録から。</h2>
+          <h2>日々の記録から。</h2>
         </div>
 
         <Image 
@@ -143,11 +144,19 @@ export default function WelcomePage() {
           width={200}
           height={200}
           alt="サービス紹介画像"
+          className="m-auto"
         />
 
-        <button>
-          使ってみる
-        </button>
+        <div className="my-4 text-center">
+          <Link href="/signup">
+            <IconButton 
+              iconName="i-material-symbols-check-circle-outline"
+              buttonText="使ってみる"
+              color="bg-primary"
+              textColor="text-main"
+            />
+          </Link>
+        </div>
       </div>
 
       <footer>
@@ -157,3 +166,4 @@ export default function WelcomePage() {
     </>
   );
 }
+
