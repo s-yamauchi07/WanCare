@@ -41,7 +41,10 @@ const config: Config = {
       },
       backgroundImage : {
         "first-view" : "url('/first_view.png')"
-      }
+      },
+      screens: {
+        xs: "450px",
+      },
     },
   },
   plugins: [

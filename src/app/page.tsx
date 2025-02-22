@@ -23,18 +23,18 @@ export default function WelcomePage() {
         <Image 
             src="/first_view.png"
             alt="トップ画像"
-            width={200}
-            height={200}
+            width={300}
+            height={300}
             className="m-auto mt-10"
         />
 
         <div className="absolute top-10 font-bold">
-          <span className="bg-white text-xl">愛犬の小さな変化を</span><br />
-          <span className="bg-white text-xl">見逃さない</span><br />
-          <span className="bg-white text-xs">愛犬家のための健康管理アプリ</span><br />
+          <span className="bg-white text-2xl xs:text-3xl">愛犬の小さな変化を</span><br />
+          <span className="bg-white text-2xl xs:text-3xl">見逃さない</span><br />
+          <span className="bg-white text-xs xs:text-sm">愛犬家のための健康管理アプリ</span><br />
         </div>
 
-        <div className="mt-4 text-center">
+        <div className="mt-6 text-center">
           <Link href="/signup">
             <IconButton 
               iconName="i-material-symbols-check-circle-outline"
