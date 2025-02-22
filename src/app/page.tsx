@@ -48,7 +48,7 @@ export default function WelcomePage() {
 
       {/* 説明エリア */}
       <div className="bg-secondary text-center py-8 px-4">
-        <h2 className="text-xl font-bold mb-4">WanCareとは?</h2>
+        <h2 className="text-2xl font-bold mb-4">WanCareとは?</h2>
 
         <div className="flex flex-col gap-2">
           <p className="text-sm font-bold text-primary">
@@ -65,12 +65,11 @@ export default function WelcomePage() {
             className="m-auto"
           />
 
-          <p className="text-sm">
-            WanCareは日々の記録を通じて、愛犬の病気の早期発見をサポートする
-            <span className="text-primary font-bold">愛犬家のための健康管理アプリ</span>です。
+          <p className="text-sm m-auto xs:w-72">
+            WanCareは日々の記録を通じて、愛犬の病気や怪我の早期発見をサポートします。
           </p>
-          <p className="text-sm">
-          オーナーの皆さまの記録は、同じ病気や怪我で悩むわんちゃんとそのご家族にとって体験談や治療法を知る手助けになります。
+          <p className="text-sm m-auto xs:w-72">
+            また、他のオーナーの記録からあなたの愛犬に適したケア方法を知ることができます。
           </p>
         </div>
       </div>
