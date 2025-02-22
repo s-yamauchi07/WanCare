@@ -28,7 +28,7 @@ export default function WelcomePage() {
             className="m-auto mt-10"
         />
 
-        <div className="absolute top-10 font-bold">
+        <div className="absolute top-10 font-bold leading-7 text-gray-800">
           <span className="bg-white text-2xl xs:text-3xl">愛犬の小さな変化を</span><br />
           <span className="bg-white text-2xl xs:text-3xl">見逃さない</span><br />
           <span className="bg-white text-xs xs:text-sm">愛犬家のための健康管理アプリ</span><br />
@@ -47,7 +47,7 @@ export default function WelcomePage() {
       </div>
 
       {/* 説明エリア */}
-      <div className="bg-secondary text-center py-8 px-4">
+      <div className="bg-secondary text-center text-gray-800 py-8 px-4">
         <h2 className="text-2xl font-bold mb-4">WanCareとは?</h2>
 
         <div className="flex flex-col gap-2">
@@ -75,8 +75,8 @@ export default function WelcomePage() {
       </div>
 
       {/* アプリでできることの説明 */}
-      <div className="text-center py-8 px-4">
-        <h2 className="text-xl font-bold mb-4">WanCareでできること</h2>
+      <div className="text-center text-gray-800 py-8 px-4">
+        <h2 className="text-2xl font-bold mb-4">WanCareでできること</h2>
 
         <div className="flex flex-col gap-6">
           <div>
@@ -88,7 +88,7 @@ export default function WelcomePage() {
               alt="お世話の登録"
               className="m-auto my-3"
             />
-            <div className="text-xs min-w-64 m-auto">
+            <div className="text-xs m-auto xs:text-sm xs: w-72">
               <p>項目ごとにお世話の記録ができます。</p>
               <p>さんぼやトイレの回数、ごはんの量など記録の一元管理が可能です。</p>
             </div>
@@ -103,7 +103,7 @@ export default function WelcomePage() {
               alt="お世話の登録"
               className="m-auto my-3"
             />
-            <div className="text-xs min-w-64 m-auto">
+            <div className="text-xs m-auto xs:text-sm xs: w-72">
               <p>
                 愛犬の気になる症状や日々の変化を簡単に投稿できます。
                 テキストや写真を使って、愛犬の健康状態を記録しておきましょう。
@@ -120,10 +120,10 @@ export default function WelcomePage() {
               alt="お世話の登録"
               className="m-auto my-3"
             />
-            <div className="text-xs min-w-64 m-auto">
+            <div className="text-xs m-auto xs:text-sm xs: w-72">
               <p>
-                他のユーザーが投稿した日記をタグで効率的に検索できます。
-                愛犬の症状や状態に適した記事から、最適なケア方法を探しましょう。
+                他のユーザーが投稿した日記をキーワードで検索できます。
+                愛犬の症状や状態とマッチした投稿から、最適なケア方法を探しましょう。
               </p>
             </div>
           </div>
@@ -159,7 +159,7 @@ export default function WelcomePage() {
       </div>
 
       <footer>
-        <p className="text-xs py-3 px-4 bg-secondary text-center">©️ WanCare 2025</p>
+        <p className="text-xs py-3 px-4 bg-secondary text-center text-primary">©WanCare 2025</p>
       </footer>
       
     </>
