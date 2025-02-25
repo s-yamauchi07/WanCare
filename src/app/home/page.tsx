@@ -73,12 +73,12 @@ const Home: React.FC = () => {
 
   return(
     <div className="flex justify-center text-gray-800">
-      <div className="w-full my-20 pb-20 px-4 flex flex-col gap-10 overflow-y: auto">
+      <div className="w-full my-20 pb-20 px-8 flex flex-col gap-10 overflow-y: auto">
         {/* 犬の情報 */}
       {(dogInfo && dogImage) ? (
         <>
           <div className="flex flex-col gap-6">
-            <div className="flex justify-between">
+            <div className="flex justify-around">
               <div>
                 <Image 
                   className="w-28 h-28 rounded-full border border-primary ring-primary ring-offset-2 ring"
