@@ -126,14 +126,15 @@ const Home: React.FC = () => {
 
           {/* 予定のエリア */}
           <div>
-            <h2 className="text-primary font-bold text-2xl mb-4">今日の予定</h2>
+            <h2 className="text-primary font-bold text-2xl mb-4">今日の記録/予定</h2>
             <ul className="flex flex-col gap-1">
               {todayCare.length === 0 ? (
                 <p>今日の予定はありません</p>
               ) : (
                 todayCare.map((care) => {
                   return(
-                    <li key={care.id} className="border rounded-full py-2 px-4 shadow-md">
+                    <li key={care.id} 
+                        className="bg-main border-2 border-primary text-primary rounded-full py-2 px-4">
                       <div className="flex gap-2">
                         <span className={`${care.careList.icon} w-5 h-5`}></span>
                         <span className="w-24">{care.careList.name}</span>
