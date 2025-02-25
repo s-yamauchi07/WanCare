@@ -73,7 +73,7 @@ const Home: React.FC = () => {
 
   return(
     <div className="flex justify-center text-gray-800">
-      <div className="w-64 my-20 pb-20 flex flex-col gap-10 overflow-y: auto">
+      <div className="w-full my-20 pb-20 px-4 flex flex-col gap-10 overflow-y: auto">
         {/* 犬の情報 */}
       {(dogInfo && dogImage) ? (
         <>
@@ -87,7 +87,7 @@ const Home: React.FC = () => {
                   width={112} 
                   height={112}
                   style={{objectFit: "cover"}}
-                  priority={true}
+                  priority
                 />
               </div>
               <div className="flex flex-col justify-center">
