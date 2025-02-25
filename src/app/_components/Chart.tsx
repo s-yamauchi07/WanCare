@@ -26,7 +26,7 @@ const Chart: React.FC<ChartProps> = ({ dogWeight }) => {
 
   const filteredDate = getFilterData().map(d => ({
     ...d,
-    careDate: changeFromISOtoDate(d.careDate, "MonthDate"),
+    careDate: changeFromISOtoDate(d.careDate, "monthDate"),
   }));
 
   // クリックごとに表示する日付を切り替える

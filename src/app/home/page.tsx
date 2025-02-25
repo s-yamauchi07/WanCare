@@ -10,7 +10,7 @@ import Link from "next/link";
 import  Chart from "../_components/Chart"
 import IconButton from "../_components/IconButton";
 import  PageLoading  from "@/app/_components/PageLoading";
-import { changeDateFormat } from "../utils/ChangeDateTime/changeDateFormat";
+import { changeFromISOtoDate } from "../utils/ChangeDateTime/changeFromISOtoDate";
 import { changeTimeFormat } from "../utils/ChangeDateTime/changeTimeFormat";
 import { WeightInfo } from "@/_types/weight";
 import { TodayCareInfo } from "@/_types/care";
@@ -104,11 +104,11 @@ const Home: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="i-mdi-cake w-5 h-5"></span>
-                  <span className="text-base">{changeDateFormat(dogInfo.dog.birthDate)}</span>
+                  <span className="text-base">{changeFromISOtoDate(dogInfo.dog.birthDate, "date")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="i-mdi-home w-5 h-5"></span>
-                  <span className="text-base">{changeDateFormat(dogInfo.dog.adoptionDate)}</span>
+                  <span className="text-base">{changeFromISOtoDate(dogInfo.dog.adoptionDate, "date")}</span>
                 </div>
               </div>
 
