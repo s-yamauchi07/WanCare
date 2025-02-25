@@ -46,18 +46,22 @@ const Chart: React.FC<ChartProps> = ({ dogWeight }) => {
 
   return(
     <>
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart 
-          data={filteredDate}
-          margin={{ top:10, right:20, left:-40, bottom: 0}}
-        >
-          <XAxis dataKey="careDate" interval={intervalValue()} tick={{fontSize:10}} angle={-30}/>
-          <YAxis dataKey="amount" />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Tooltip />
-          <Line type="monotone" dataKey="amount" strokeWidth={3} stroke="#15A083" fill="#15A083" />
-        </LineChart>
-      </ResponsiveContainer>
+      {filteredDate.length > 0 ? (
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart 
+            data={filteredDate}
+            margin={{ top:10, right:20, left:-40, bottom: 0}}
+          >
+            <XAxis dataKey="careDate" interval={intervalValue()} tick={{fontSize:10}} angle={-30}/>
+            <YAxis dataKey="amount" />
+            <CartesianGrid strokeDasharray="3 3" />
+            <Tooltip />
+            <Line type="monotone" dataKey="amount" strokeWidth={3} stroke="#15A083" fill="#15A083" dot={{r: 3}}/>
+          </LineChart>
+        </ResponsiveContainer>
+      ) : (
+        <div className="text-center mb-4">記録がありません</div>
+      )}
       
       <ul className="flex justify-center">
         <li className={`w-1/3 border border-primary rounded-lg p-1 text-center ${period === 'week' ? 'bg-primary text-main' : 'bg-main text-primary'}`}>
