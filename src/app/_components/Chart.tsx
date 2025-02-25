@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { WeightInfo } from "@/_types/weight";
 import { LineChart, XAxis, YAxis, Tooltip,  CartesianGrid, Line, ResponsiveContainer } from "recharts";
 import { filterLastWeek, filterLastMonth, filterLastThreeMonths } from "../utils/filterWeightData";
-
+import { changeFromISOtoDate } from "../utils/ChangeDateTime/changeFromISOtoDate";
 
 interface ChartProps {
   dogWeight: WeightInfo[]
@@ -24,17 +24,9 @@ const Chart: React.FC<ChartProps> = ({ dogWeight }) => {
     }
   }
 
-  // 日付をmm/dd形式に変換
-  const careDateFormat = (date: string) => {
-    const changeDate = new Date(date);
-    const month = (`0${changeDate.getMonth() + 1}`).slice(-2);
-    const day = (`0${changeDate.getDate()}`).slice(-2);
-    return `${month}/${day}`
-  }
-
   const filteredDate = getFilterData().map(d => ({
     ...d,
-    careDate: careDateFormat(d.careDate),
+    careDate: changeFromISOtoDate(d.careDate, "MonthDate"),
   }));
 
   // クリックごとに表示する日付を切り替える
@@ -51,7 +43,6 @@ const Chart: React.FC<ChartProps> = ({ dogWeight }) => {
         return 0; 
     }
   }
-
 
   return(
     <>
