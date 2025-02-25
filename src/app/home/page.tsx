@@ -11,7 +11,6 @@ import  Chart from "../_components/Chart"
 import IconButton from "../_components/IconButton";
 import  PageLoading  from "@/app/_components/PageLoading";
 import { changeFromISOtoDate } from "../utils/ChangeDateTime/changeFromISOtoDate";
-import { changeTimeFormat } from "../utils/ChangeDateTime/changeTimeFormat";
 import { WeightInfo } from "@/_types/weight";
 import { TodayCareInfo } from "@/_types/care";
 import { DogProfile } from "@/_types/dog";
@@ -138,7 +137,7 @@ const Home: React.FC = () => {
                       <div className="flex gap-2">
                         <span className={`${care.careList.icon} w-5 h-5`}></span>
                         <span className="w-24">{care.careList.name}</span>
-                        <span>{changeTimeFormat(care.careDate)}</span>
+                        <span>{changeFromISOtoDate(care.careDate, "time")}</span>
                       </div>
                     </li>
                   )
