@@ -53,7 +53,7 @@ export const GET = async (request: NextRequest) => {
         },
       },
       orderBy: {
-        careDate: 'desc',
+        careDate: 'asc',
       },
     })
     return NextResponse.json({ status: "OK", cares: cares }, { status: 200 });
