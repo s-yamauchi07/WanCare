@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { toast, Toaster } from "react-hot-toast"
 import Image from "next/image";
 import Link from "next/link";
-import  Chart from "../_components/Chart"
+import Chart from "./_components/Chart"
 import IconButton from "../_components/IconButton";
 import  PageLoading  from "@/app/_components/PageLoading";
 import { changeFromISOtoDate } from "../utils/ChangeDateTime/changeFromISOtoDate";
