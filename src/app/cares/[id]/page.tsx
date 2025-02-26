@@ -110,7 +110,7 @@ const CareDetail: React.FC = () => {
     <>
       {!isLoading ? (
         <div className="flex justify-center text-gray-800">
-          <div className="min-w-64 my-20 flex flex-col items-center gap-6 px-4">
+          <div className="w-full my-20 flex flex-col items-center gap-6 px-8">
             <h2 className="text-2xl font-bold text-center text-primary mb-6">お世話の詳細</h2>
             <div className="w-full flex flex-col gap-6">
               <div>
