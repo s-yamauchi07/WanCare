@@ -115,7 +115,7 @@ const Home: React.FC = () => {
                 <Link href="/dogs/edit">
                   <IconButton 
                   iconName="i-material-symbols-light-edit-square-outline"
-                  buttonText="Edit"
+                  buttonText="編集"
                   color="bg-primary"
                   textColor="text-white"
                   />
