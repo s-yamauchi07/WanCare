@@ -21,31 +21,32 @@ interface showListsProps {
 }
 
 const TabNavigation: React.FC<showListsProps> = ({ user, showLists, defaultImg, selectTab, SelectLists, linkPrefix, selectedTab }) => {
+  console.log(selectedTab)
   return(
     <>
       <div>
         <p className="text-lg font-bold text-primary">{user.nickname}さんの投稿/お気に入り</p>
         <ul className="flex text-sm font-medium text-center bg-secondary rounded-lg">
-          <li className="w-1/3 rounded-lg">
+          <li className={`w-1/3 rounded-lg ${selectedTab === "日記" ? "font-bold text-primary": "text-gray-800 "}`}>
             <button
               onClick={() => selectTab("日記")}
-              className="inline-block text-gray-800 px-2 py-1.5" aria-current="page">
+              className="inline-block px-2 py-1.5"  aria-current="page">
                 日記
             </button>
           </li>
 
-          <li className="w-1/3 border-r border-l border-main">
+          <li className={`w-1/3 border-r border-l border-main ${selectedTab === "まとめ" ? "font-bold text-primary": "text-gray-800 "}`}>
             <button
               onClick={() => selectTab("まとめ")}
-              className="inline-block text-gray-800 px-2 py-1.5"  aria-current="page">
+              className="inline-block px-2 py-1.5"  aria-current="page">
                 まとめ
             </button>
           </li>
           
-          <li className="w-1/3 rounded-lg">
+          <li className={`w-1/3 rounded-lg ${selectedTab === "お気に入り" ? "font-bold text-primary": "text-gray-800 "}`}>
             <button
               onClick={() => selectTab("お気に入り")}
-              className="inline-block text-gray-800 px-2 py-1.5" aria-current="page">
+              className="inline-block px-2 py-1.5" aria-current="page">
                 お気に入り
             </button>
           </li>
