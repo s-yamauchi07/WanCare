@@ -26,7 +26,7 @@ const PostUnit: React.FC<PostUnitUnitProps> = ({
   const thumbnailImage = usePreviewImage(imageKey, "diary_img");
 
   return (
-    <div className="rounded-lg shadow">
+    <div className="rounded-lg shadow bg-gray-50">
       <Link href={`/${linkPrefix}/${id}`}>
         <div className="relative w-full h-auto">
           <div className="relative w-full h-0 pb-[100%]">
@@ -41,7 +41,7 @@ const PostUnit: React.FC<PostUnitUnitProps> = ({
             />
           </div>
         </div>
-        <div className="text-gray-800 p-1">
+        <div className="text-gray-800 p-2">
           <p className="font-bold text-sm">{title}</p>
           <p className="text-xs line-clamp-2">
             {content}
@@ -49,7 +49,7 @@ const PostUnit: React.FC<PostUnitUnitProps> = ({
         </div>
       </Link>
 
-      <div className="p-1">
+      <div className="p-2">
         {tags && tags.length > 0 && (
           tags.map((tag) => (
             <span
