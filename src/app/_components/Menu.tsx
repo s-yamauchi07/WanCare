@@ -21,7 +21,7 @@ const Menu: React.FC = () => {
   if (!showMenu) return null;
 
   return(
-    <div className="fixed z-50 w-full h-16 max-w-md -translate-x-1/2 bg-main border border-gray-200 rounded-full bottom-0.5 left-1/2 shadow-md">
+    <div className="fixed z-50 w-full h-16 max-w-md -translate-x-1/2 bg-main border-main rounded-full bottom-0.5 left-1/2 shadow-2xl">
         <ul className="grid h-full max-w-md grid-cols-5 mx-auto">
           {menuList.map((menu) => {
             return(

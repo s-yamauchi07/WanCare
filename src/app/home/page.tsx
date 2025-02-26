@@ -10,8 +10,7 @@ import Link from "next/link";
 import  Chart from "../_components/Chart"
 import IconButton from "../_components/IconButton";
 import  PageLoading  from "@/app/_components/PageLoading";
-import { changeDateFormat } from "../utils/ChangeDateTime/changeDateFormat";
-import { changeTimeFormat } from "../utils/ChangeDateTime/changeTimeFormat";
+import { changeFromISOtoDate } from "../utils/ChangeDateTime/changeFromISOtoDate";
 import { WeightInfo } from "@/_types/weight";
 import { TodayCareInfo } from "@/_types/care";
 import { DogProfile } from "@/_types/dog";
@@ -73,12 +72,12 @@ const Home: React.FC = () => {
 
   return(
     <div className="flex justify-center text-gray-800">
-      <div className="w-64 my-20 pb-20 flex flex-col gap-10 overflow-y: auto">
+      <div className="w-full my-20 pb-20 px-8 flex flex-col gap-10 overflow-y: auto">
         {/* 犬の情報 */}
       {(dogInfo && dogImage) ? (
         <>
           <div className="flex flex-col gap-6">
-            <div className="flex justify-between">
+            <div className="flex justify-around">
               <div>
                 <Image 
                   className="w-28 h-28 rounded-full border border-primary ring-primary ring-offset-2 ring"
@@ -87,7 +86,7 @@ const Home: React.FC = () => {
                   width={112} 
                   height={112}
                   style={{objectFit: "cover"}}
-                  priority={true}
+                  priority
                 />
               </div>
               <div className="flex flex-col justify-center">
@@ -96,7 +95,7 @@ const Home: React.FC = () => {
               </div>
             </div>
 
-            <div className="font-medium text-gray-800 flex justify-between py-2 px-4 border rounded-lg shadow-md">
+            <div className="font-medium text-gray-800 flex justify-between py-2 px-4 border-main rounded-lg shadow-md">
               <div className="flex flex-col gap-1 text-sm text-gray-800">
                 <div className="flex items-center gap-2">
                   <span className="i-material-symbols-sound-detection-dog-barking-outline w-5 h-5"></span>
@@ -104,11 +103,11 @@ const Home: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="i-mdi-cake w-5 h-5"></span>
-                  <span className="text-base">{changeDateFormat(dogInfo.dog.birthDate)}</span>
+                  <span className="text-base">{changeFromISOtoDate(dogInfo.dog.birthDate, "date")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="i-mdi-home w-5 h-5"></span>
-                  <span className="text-base">{changeDateFormat(dogInfo.dog.adoptionDate)}</span>
+                  <span className="text-base">{changeFromISOtoDate(dogInfo.dog.adoptionDate, "date")}</span>
                 </div>
               </div>
 
@@ -127,18 +126,19 @@ const Home: React.FC = () => {
 
           {/* 予定のエリア */}
           <div>
-            <h2 className="text-primary font-bold text-2xl mb-4">今日の予定</h2>
+            <h2 className="text-primary font-bold text-2xl mb-4">今日の記録/予定</h2>
             <ul className="flex flex-col gap-1">
               {todayCare.length === 0 ? (
                 <p>今日の予定はありません</p>
               ) : (
                 todayCare.map((care) => {
                   return(
-                    <li key={care.id} className="border rounded-full py-2 px-4 shadow-md">
+                    <li key={care.id} 
+                        className="bg-main border-2 border-primary text-primary rounded-full py-2 px-4">
                       <div className="flex gap-2">
                         <span className={`${care.careList.icon} w-5 h-5`}></span>
                         <span className="w-24">{care.careList.name}</span>
-                        <span>{changeTimeFormat(care.careDate)}</span>
+                        <span>{changeFromISOtoDate(care.careDate, "time")}</span>
                       </div>
                     </li>
                   )
