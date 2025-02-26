@@ -29,3 +29,16 @@ export interface CareUnit {
   title :string;
   unit: string;
 }
+
+export interface CareDetails {
+  id: string;
+  careDate: string;
+  amount?: number | null;
+  memo?: string | null ;
+  imageKey: string | null;
+  ownerId: string;
+  careListId: string;
+  createdAt: string;
+  updatedAt: string;
+  careList: { name: string, icon: string };
+}

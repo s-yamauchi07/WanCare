@@ -5,32 +5,19 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { FileInput, Label } from "flowbite-react";
 import { useEffect } from "react";
 import { Care } from "@/_types/care";
+import { CareDetails } from "@/_types/care";
 import { careUnitLists } from "@/_constants/careUnitLists";
 import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
-
 import { toast, Toaster } from "react-hot-toast";
 import { useEditPreviewImage } from "@/_hooks/useEditPreviewImage";
 import { useUploadImage } from "@/_hooks/useUploadImage";
-
-interface CareDetail {
-  id: string;
-  careDate: string;
-  amount?: number | null;
-  memo?: string | null ;
-  imageKey: string | null;
-  ownerId: string;
-  careListId: string;
-  createdAt: string;
-  updatedAt: string;
-  careList: { name: string, icon: string };
-}
 
 interface CareFormProps {
   careId: string;
   careName: string;
   token: string | null;
   isEdit?: boolean,
-  careInfo?: CareDetail;
+  careInfo?: CareDetails;
   onClose: () => void;
 }
 
