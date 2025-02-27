@@ -48,7 +48,7 @@ export default function WelcomePage() {
 
       {/* 説明エリア */}
       <div className="bg-secondary text-center text-gray-800 p-8">
-        <h2 className="text-2xl font-bold mb-4">WanCareとは?</h2>
+        <h2 className="text-2xl font-bold mb-6">WanCareとは?</h2>
 
         <div className="flex flex-col gap-2">
           <p className="text-sm font-bold text-primary">
@@ -76,11 +76,11 @@ export default function WelcomePage() {
 
       {/* アプリでできることの説明 */}
       <div className="text-center text-gray-800 p-8">
-        <h2 className="text-2xl font-bold mb-4">WanCareでできること</h2>
+        <h2 className="text-2xl font-bold mb-6">WanCareでできること</h2>
 
         <div className="flex flex-col gap-6">
           <div>
-            <h3 className="text-lg font-bold">お世話の記録</h3>
+            <h3 className="text-lg font-bold text-primary">お世話の記録</h3>
             <Image 
               src="/care_record.png"
               width={250}
@@ -95,7 +95,7 @@ export default function WelcomePage() {
           </div>
 
           <div>
-            <h3 className="text-lg font-bold">日記投稿</h3>
+            <h3 className="text-lg font-bold text-primary">日記投稿</h3>
             <Image 
               src="/add_diary.png"
               width={200}
@@ -112,7 +112,7 @@ export default function WelcomePage() {
           </div>
 
           <div>
-            <h3 className="text-lg font-bold">情報収集</h3>
+            <h3 className="text-lg font-bold text-primary">情報収集</h3>
             <Image 
               src="/search_info.png"
               width={200}
@@ -133,7 +133,7 @@ export default function WelcomePage() {
 
       {/* buttonエリア */}
       <div className="bg-secondary p-8">
-        <div className="text-2xl font-bold text-white">
+        <div className="text-2xl font-bold text-primary">
           <h2>大切な家族の健康は</h2>
           <h2>日々の記録から。</h2>
         </div>
