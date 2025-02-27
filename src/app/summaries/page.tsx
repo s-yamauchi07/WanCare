@@ -11,8 +11,10 @@ import LoadingDiary from "../diaries/_components/LoadingDiary";
 import { AllSummary } from "@/_types/summary";
 import PostUnit from "../_components/PostUnit";
 import summaryThumbnail from "/public/summaryThumbnail.png";
+import { useRouteGuard } from "@/_hooks/useRouteGuard";
 
 const SummaryIndex: React.FC = () => {
+  useRouteGuard();
   const { token } = useSupabaseSession();
   const [summaryList, setSummaryList] = useState<AllSummary[]>([]);
   const [hasMore, setHasMore] = useState(true);
