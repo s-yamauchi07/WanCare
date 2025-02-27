@@ -19,8 +19,10 @@ import DeleteRoundButton from "@/app/_components/DeleteRoundButton";
 import CommentForm from "../_components/CommentForm";
 import CommentList from "../_components/CommentList";
 import Link from "next/link";
+import { useRouteGuard } from "@/_hooks/useRouteGuard";
 
 const DiaryDetail: React.FC = () => {
+  useRouteGuard();
   const params = useParams();
   const router = useRouter();
   const { id } = params;
