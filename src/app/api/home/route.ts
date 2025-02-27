@@ -57,7 +57,10 @@ export const GET = async(request: NextRequest) => {
               icon: true,
             }
           }
-        }
+        },
+        orderBy: {
+          careDate: "asc",
+        },
       }),
       
       prisma.care.findMany({

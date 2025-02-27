@@ -1,10 +1,10 @@
 "use client"
 
-import { supabase } from "../utils/supabase"
+import { supabase } from "../../../utils/supabase"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { toast, Toaster } from "react-hot-toast"
-import Input from "../_components/Input"
-import LoadingButton from "../_components/LoadingButton"
+import Input from "../../../_components/Input"
+import LoadingButton from "../../../_components/LoadingButton"
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"

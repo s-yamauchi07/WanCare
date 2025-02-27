@@ -30,7 +30,7 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose, summary, isEdit }) =
   const onSubmit: SubmitHandler<SummaryRequest> = async (data) => {
     const req = {
       ...data,
-      tags: data.tags?.split(" ").filter(tag => tag.trim() !== "") ?? null,
+      tags: data.tags?.split((/[\s　]+/)).filter(tag => tag.trim() !== "") ?? null,
       diaryIds: selectedDiaryIds.map(diary => diary.id)
     }
 

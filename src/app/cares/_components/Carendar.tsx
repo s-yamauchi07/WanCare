@@ -98,7 +98,7 @@ const Calendar: React.FC<CalendarProps> = ({ cares }) => {
         <ul className="flex flex-col gap-1">
           {selectEvent.map((event) => {
             return(
-              <li key={event.id} className="border text-gray-800 rounded-full py-2 px-4 shadow-md">
+              <li key={event.id} className="border-main text-gray-800 rounded-full py-2 px-4 shadow-lg">
                 <Link href={`/cares/${event.id}`} className="flex gap-4">
                   <div className="flex items-center gap-2">
                     <span className={`${event.careIcon} w-5 h-5`}></span>

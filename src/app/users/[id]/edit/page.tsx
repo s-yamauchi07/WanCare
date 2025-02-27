@@ -1,6 +1,6 @@
 "use client"
 
-import UserForm from "@/app/_components/UserForm";
+import UserForm from "@/app/users/[id]/_components/UserForm";
 import React from "react";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 

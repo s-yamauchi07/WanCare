@@ -6,12 +6,12 @@ export default function WelcomePage() {
   return (
     <>
       {/* ヘッダーエリア */}
-      <header className="h-16 bg-primary flex items-center justify-between px-4">
+      <header className="h-16 bg-primary flex items-center justify-between px-8">
         <p className="text-2xl font-bold text-main">WanCare</p>
         <Link href="/signin">
           <IconButton 
             iconName="i-material-symbols-login"
-            buttonText="Login"
+            buttonText="ログイン"
             color="bg-primary"
             textColor="text-main"
           />
@@ -19,7 +19,7 @@ export default function WelcomePage() {
       </header>
 
       {/* firstViewエリア */}
-      <div className="relative py-12 px-4">
+      <div className="relative py-12 px-8">
         <Image 
             src="/first_view.png"
             alt="トップ画像"
@@ -31,7 +31,7 @@ export default function WelcomePage() {
         <div className="absolute top-10 font-bold leading-7 text-gray-800">
           <span className="bg-white text-2xl xs:text-3xl">愛犬の小さな変化を</span><br />
           <span className="bg-white text-2xl xs:text-3xl">見逃さない</span><br />
-          <span className="bg-white text-xs xs:text-sm">愛犬家のための健康管理アプリ</span><br />
+          <span className="bg-white text-sm xs:text-sm">愛犬家のための健康管理アプリ</span><br />
         </div>
 
         <div className="mt-6 text-center">
@@ -47,8 +47,8 @@ export default function WelcomePage() {
       </div>
 
       {/* 説明エリア */}
-      <div className="bg-secondary text-center text-gray-800 py-8 px-4">
-        <h2 className="text-2xl font-bold mb-4">WanCareとは?</h2>
+      <div className="bg-secondary text-center text-gray-800 p-8">
+        <h2 className="text-2xl font-bold mb-6">WanCareとは?</h2>
 
         <div className="flex flex-col gap-2">
           <p className="text-sm font-bold text-primary">
@@ -75,12 +75,12 @@ export default function WelcomePage() {
       </div>
 
       {/* アプリでできることの説明 */}
-      <div className="text-center text-gray-800 py-8 px-4">
-        <h2 className="text-2xl font-bold mb-4">WanCareでできること</h2>
+      <div className="text-center text-gray-800 p-8">
+        <h2 className="text-2xl font-bold mb-6">WanCareでできること</h2>
 
         <div className="flex flex-col gap-6">
           <div>
-            <h3 className="text-lg font-bold">お世話の記録</h3>
+            <h3 className="text-lg font-bold text-primary">お世話の記録</h3>
             <Image 
               src="/care_record.png"
               width={250}
@@ -88,14 +88,14 @@ export default function WelcomePage() {
               alt="お世話の登録"
               className="m-auto my-3"
             />
-            <div className="text-xs m-auto xs:text-sm xs: w-72">
+            <div className="text-sm m-auto xs:text-sm xs: w-72">
               <p>項目ごとにお世話の記録ができます。</p>
               <p>さんぼやトイレの回数、ごはんの量など記録の一元管理が可能です。</p>
             </div>
           </div>
 
           <div>
-            <h3 className="text-lg font-bold">日記投稿</h3>
+            <h3 className="text-lg font-bold text-primary">日記投稿</h3>
             <Image 
               src="/add_diary.png"
               width={200}
@@ -103,16 +103,16 @@ export default function WelcomePage() {
               alt="お世話の登録"
               className="m-auto my-3"
             />
-            <div className="text-xs m-auto xs:text-sm xs: w-72">
+            <div className="text-sm m-auto xs:text-sm xs: w-72">
               <p>
                 愛犬の気になる症状や日々の変化を簡単に投稿できます。
-                テキストや写真を使って、愛犬の健康状態を記録しておきましょう。
+                テキストや写真で愛犬の健康状態を記録しておきましょう。
               </p>
             </div>
           </div>
 
           <div>
-            <h3 className="text-lg font-bold">情報収集</h3>
+            <h3 className="text-lg font-bold text-primary">情報収集</h3>
             <Image 
               src="/search_info.png"
               width={200}
@@ -120,7 +120,7 @@ export default function WelcomePage() {
               alt="お世話の登録"
               className="m-auto my-3"
             />
-            <div className="text-xs m-auto xs:text-sm xs: w-72">
+            <div className="text-sm m-auto xs:text-sm xs: w-72">
               <p>
                 他のユーザーが投稿した日記をキーワードで検索できます。
                 愛犬の症状や状態とマッチした投稿から、最適なケア方法を探しましょう。
@@ -132,8 +132,8 @@ export default function WelcomePage() {
 
 
       {/* buttonエリア */}
-      <div className="bg-secondary py-8 px-4">
-        <div className="text-2xl font-bold text-white">
+      <div className="bg-secondary p-8">
+        <div className="text-2xl font-bold text-primary">
           <h2>大切な家族の健康は</h2>
           <h2>日々の記録から。</h2>
         </div>

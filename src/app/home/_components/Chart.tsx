@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 import { WeightInfo } from "@/_types/weight";
 import { LineChart, XAxis, YAxis, Tooltip,  CartesianGrid, Line, ResponsiveContainer } from "recharts";
-import { filterLastWeek, filterLastMonth, filterLastThreeMonths } from "../utils/filterWeightData";
-import { changeFromISOtoDate } from "../utils/ChangeDateTime/changeFromISOtoDate";
+import { filterLastWeek, filterLastMonth, filterLastThreeMonths } from "../../utils/filterWeightData";
+import { changeFromISOtoDate } from "../../utils/ChangeDateTime/changeFromISOtoDate";
 
 interface ChartProps {
   dogWeight: WeightInfo[]

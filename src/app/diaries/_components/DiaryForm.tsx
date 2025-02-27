@@ -30,7 +30,7 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose}) => {
   const onSubmit: SubmitHandler<DiaryRequest> = async(data) => {
     const req = {
       ...data,
-      tags: data.tags?.split(" ").filter(tag => tag.trim() !== "") ?? null,
+      tags: data.tags?.split(/[\s　]+/).filter(tag => tag.trim() !== "") ?? null,
       imageKey: uploadedKey || diary?.imageKey,
     }
 

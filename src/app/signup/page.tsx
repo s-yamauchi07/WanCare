@@ -5,7 +5,7 @@
 // import { toast, Toaster } from "react-hot-toast"
 // import Input from "../_components/Input"
 // import LoadingButton from "../_components/LoadingButton"
-import UserForm from "../_components/UserForm"
+import UserForm from "../users/[id]/_components/UserForm"
 
 
 // type Owner = {

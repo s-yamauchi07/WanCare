@@ -1,6 +1,6 @@
 "use client"
 
-import DogForm from "@/app/_components/DogForm";
+import DogForm from "@/app/dogs/_components/DogForm";
 import { useEffect, useState } from "react"
 import { DogResponse } from "@/_types/dog";
 

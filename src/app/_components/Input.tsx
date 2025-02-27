@@ -27,6 +27,11 @@ const Input: React.FC<InputProps> = ({ id, labelName, type, placeholder, step, r
         {...register} 
       />
       {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
+      {id === "tags" && (
+        <p className="text-xs mt-2">
+          ※タグを複数入力をする際はスペースで区切って入力してください。
+        </p>
+      )}
     </div>
   )
 }

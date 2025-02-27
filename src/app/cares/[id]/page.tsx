@@ -14,19 +14,7 @@ import PageLoading from "@/app/_components/PageLoading";
 import { toast, Toaster } from "react-hot-toast"
 import DeleteAlert from "@/app/_components/DeleteAlert";
 import deleteStorageImage from "@/app/utils/deleteStorageImage";
-
-interface CareDetail {
-  id: string;
-  careDate: string;
-  amount?: number | null;
-  memo?: string | null ;
-  imageKey: string | null;
-  ownerId: string;
-  careListId: string;
-  createdAt: string;
-  updatedAt: string;
-  careList: { name: string, icon: string };
-}
+import { CareDetails } from "@/_types/care";
 
 const CareDetail: React.FC = () => {
   const params = useParams();
@@ -34,7 +22,7 @@ const CareDetail: React.FC = () => {
   const { token, session } = useSupabaseSession();
   const router = useRouter();
   const currentUserId = session?.user.id;
-  const [care, setCare] = useState<CareDetail | null>(null);
+  const [care, setCare] = useState<CareDetails | null>(null);
   const careImage = usePreviewImage(care?.imageKey ?? null, "care_img");
   const [careTitle, setTitle] = useState<string>("");
   const [careUnit, setUnit] = useState<string>("");
@@ -122,7 +110,7 @@ const CareDetail: React.FC = () => {
     <>
       {!isLoading ? (
         <div className="flex justify-center text-gray-800">
-          <div className="min-w-64 my-20 flex flex-col items-center gap-6 px-4">
+          <div className="w-full my-20 flex flex-col items-center gap-6 px-8">
             <h2 className="text-2xl font-bold text-center text-primary mb-6">お世話の詳細</h2>
             <div className="w-full flex flex-col gap-6">
               <div>
