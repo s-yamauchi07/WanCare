@@ -7,12 +7,14 @@ import LoadingDiary from "./_components/LoadingDiary";
 import { DiaryDetails } from "@/_types/diary";
 import ModalWindow from "../_components/ModalWindow";
 import DiaryForm from "./_components/DiaryForm";
+import { useRouteGuard } from "@/_hooks/useRouteGuard";
 import  Tab  from "@/app/_components/Tab";
 import  SearchForm  from "@/app/_components/SearchForm";
 import PostUnit from "../_components/PostUnit";
 import no_diary_img from "/public/no_diary_img.png";
 
 const DiaryIndex: React.FC = () => {
+  useRouteGuard();
   const { token } = useSupabaseSession();
   const [diaryList, setDiaryList] = useState<DiaryDetails[]>([]);
   const [hasMore, setHasMore] = useState(true);

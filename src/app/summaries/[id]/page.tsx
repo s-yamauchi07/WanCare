@@ -13,8 +13,10 @@ import ModalWindow from "@/app/_components/ModalWindow";
 import SummaryForm from "../_components/SummaryForm";
 import DeleteAlert from "@/app/_components/DeleteAlert";
 import { toast, Toaster } from "react-hot-toast"
+import { useRouteGuard } from "@/_hooks/useRouteGuard";
 
 const SummaryDetail: React.FC = () => {
+  useRouteGuard();
   const params = useParams();
   const router = useRouter();
   const { id } = params;

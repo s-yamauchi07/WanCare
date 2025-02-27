@@ -21,7 +21,6 @@ interface showListsProps {
 }
 
 const TabNavigation: React.FC<showListsProps> = ({ user, showLists, defaultImg, selectTab, SelectLists, linkPrefix, selectedTab }) => {
-  console.log(selectedTab)
   return(
     <>
       <div>
