@@ -81,7 +81,7 @@ const DiaryIndex: React.FC = () => {
           hasMore={hasMore}
           loader={<LoadingDiary key={0} />}
         >
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 gap-4">
               {diaryList.map((diary) => {
                   return(
                   <PostUnit 

@@ -4,7 +4,7 @@ const LoadingDiary: React.FC = () => {
   const skeletons = Array(6).fill(0);
 
   return(
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-2 gap-4">
       {skeletons.map((_, index) => {
         return(
           <div key={index} role="status" className="relative w-full h-32 bg-gray-300 rounded-lg animate-pulse dark:bg-gray-700 flex items-center justify-center">
