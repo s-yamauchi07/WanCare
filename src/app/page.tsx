@@ -1,6 +1,12 @@
+"use client"
+
 import Image from "next/image";
 import Link from "next/link";
 import IconButton from "./_components/IconButton";
+
+const handleGuestLogin = () => {
+  console.log("ゲストログイン")
+}
 
 export default function WelcomePage() {
   return (
@@ -53,6 +59,7 @@ export default function WelcomePage() {
             color="bg-primary"
             textColor="text-main"
             width="w-40"
+            onClick={() => handleGuestLogin()}
           />
         </div>
       </div>
