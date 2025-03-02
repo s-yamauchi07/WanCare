@@ -37,12 +37,23 @@ export default function WelcomePage() {
         <div className="mt-6 text-center">
           <Link href="/signup">
             <IconButton 
-              iconName="i-material-symbols-check-circle-outline"
+              iconName="i-material-symbols-person-add"
               buttonText="新規登録"
-              color="bg-primary"
-              textColor="text-main"
+              color="bg-secondary"
+              textColor="text-gray-800"
+              width="w-40"
             />
           </Link>
+        </div>
+
+        <div className="mt-6 text-center">
+          <IconButton 
+            iconName="i-material-symbols-check-circle-outline"
+            buttonText="ゲストログイン"
+            color="bg-primary"
+            textColor="text-main"
+            width="w-40"
+          />
         </div>
       </div>
 
@@ -153,6 +164,7 @@ export default function WelcomePage() {
               buttonText="使ってみる"
               color="bg-primary"
               textColor="text-main"
+              width="w-40"
             />
           </Link>
         </div>
