@@ -5,9 +5,10 @@ import React from "react"
 interface LoadingButtonProps {
   isSubmitting: boolean
   buttonText: string
+  disabled?: boolean
 }
 
-const LoadingButton: React.FC<LoadingButtonProps> = ({isSubmitting, buttonText}) => {
+const LoadingButton: React.FC<LoadingButtonProps> = ({isSubmitting, buttonText, disabled}) => {
   return(
     <div className="flex items-center justify-center my-8">
       {isSubmitting ? (
@@ -20,9 +21,10 @@ const LoadingButton: React.FC<LoadingButtonProps> = ({isSubmitting, buttonText})
         </button>
       ) : (
         <button 
-          className="bg-primary hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline min-w-[130px]"
+          className={`text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline min-w-[130px] ${isSubmitting || disabled ? 'bg-gray-500' : 'bg-primary hover:bg-emerald-500'}`}
           type="submit"
-          disabled={isSubmitting}>
+          disabled={isSubmitting || disabled}
+          >
             {buttonText}
         </button>
         )
