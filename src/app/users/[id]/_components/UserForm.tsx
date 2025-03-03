@@ -12,7 +12,8 @@ import Link from "next/link"
 interface UserInfo{
   userNickname?: string;
   userEmail?: string;
-  isEdit: boolean
+  isEdit: boolean;
+  isGuest: boolean;
 }
 
 type Owner = {
@@ -21,7 +22,7 @@ type Owner = {
   password: string;
 }
 
-const UserForm: React.FC<UserInfo> = ({ userNickname, userEmail, isEdit }) => {
+const UserForm: React.FC<UserInfo> = ({ userNickname, userEmail, isEdit, isGuest }) => {
   const { register, handleSubmit, reset, setValue, formState: { errors, isSubmitting } } = useForm<Owner>();
   const router = useRouter();
   const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -75,9 +76,9 @@ const UserForm: React.FC<UserInfo> = ({ userNickname, userEmail, isEdit }) => {
   useEffect(() => {
     if(isEdit && userNickname && userEmail) {
       setValue("nickname", userNickname);
-      setValue("email", userEmail);
+      setValue("email", isGuest ? "*******" : userEmail);
     }
-  }, [isEdit, userNickname, userEmail, setValue])
+  }, [isEdit, userNickname, userEmail, setValue, isGuest])
 
   return(
     <div className="flex justify-center">
@@ -114,13 +115,21 @@ const UserForm: React.FC<UserInfo> = ({ userNickname, userEmail, isEdit }) => {
         />
         
         {isEdit ? (
-          <p className="text-sm text-center text-gray-800">
-            パスワードの変更は
-              <Link href={`/users/772cd76c-fe3a-4016-8c25-e5f53151e973/password-change`} className="text-primary font-bold">
-                こちら
-              </Link>
-            から 
-          </p>
+          <>
+            {isGuest ? (
+              <p className="text-xs text-center text-red-800">
+                ゲストログインではユーザー情報の編集はできません。
+              </p>
+            ) : (
+              <p className="text-sm text-center text-gray-800">
+                パスワードの変更は
+                  <Link href={`/users/772cd76c-fe3a-4016-8c25-e5f53151e973/password-change`} className="text-primary font-bold">
+                    こちら
+                  </Link>
+                から 
+              </p>
+            )} 
+          </>
         ) : (
           <Input
             id="password"
@@ -144,6 +153,7 @@ const UserForm: React.FC<UserInfo> = ({ userNickname, userEmail, isEdit }) => {
         <LoadingButton 
           isSubmitting={isSubmitting}
           buttonText={isEdit ? "更新" : "新規登録"}
+          disabled={isGuest}
         />
       </form>
       <Toaster />
