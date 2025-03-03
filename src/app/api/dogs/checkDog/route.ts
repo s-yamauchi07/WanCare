@@ -21,6 +21,8 @@ export const POST = async(request: NextRequest) => {
         adoptionDate: dogRecord.adoptionDate.toISOString(),
       };
       return NextResponse.json({ status: "OK", dog: dogResponse }, { status: 200 });
+    } else {
+      return NextResponse.json({ status: "OK", dog: null}, { status: 200});
     }
   } catch (error) {
     return handleError(error);

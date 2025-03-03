@@ -1,8 +1,37 @@
+"use client"
+
 import Image from "next/image";
 import Link from "next/link";
 import IconButton from "./_components/IconButton";
+import { supabase } from "./utils/supabase";
+import { toast, Toaster } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function WelcomePage() {
+  const router = useRouter();
+
+  const handleGuestLogin = async() => {
+    const guestEmail = process.env.NEXT_PUBLIC_GUEST_USER_EMAIL;
+    const guestPassword = process.env.NEXT_PUBLIC_GUEST_USER_PASSWORD;
+    
+    if(!guestEmail || !guestPassword) {
+      toast.error("ゲストユーザーが未登録です");
+      return;
+    }
+  
+    const { error } = await supabase.auth.signInWithPassword({
+      email: guestEmail,
+      password: guestPassword,
+    });
+  
+    if(error) {
+      toast.error("ゲストログインに失敗しました");
+    } else {
+      toast.success("ゲストユーザーとしてログインしました");
+      router.push("/home");
+    }
+  }
+
   return (
     <>
       {/* ヘッダーエリア */}
@@ -37,12 +66,24 @@ export default function WelcomePage() {
         <div className="mt-6 text-center">
           <Link href="/signup">
             <IconButton 
-              iconName="i-material-symbols-check-circle-outline"
+              iconName="i-material-symbols-person-add"
               buttonText="新規登録"
-              color="bg-primary"
-              textColor="text-main"
+              color="bg-secondary"
+              textColor="text-gray-800"
+              width="w-40"
             />
           </Link>
+        </div>
+
+        <div className="mt-6 text-center">
+          <IconButton 
+            iconName="i-material-symbols-check-circle-outline"
+            buttonText="ゲストログイン"
+            color="bg-primary"
+            textColor="text-main"
+            width="w-40"
+            onClick={() => handleGuestLogin()}
+          />
         </div>
       </div>
 
@@ -153,6 +194,7 @@ export default function WelcomePage() {
               buttonText="使ってみる"
               color="bg-primary"
               textColor="text-main"
+              width="w-40"
             />
           </Link>
         </div>
@@ -161,7 +203,7 @@ export default function WelcomePage() {
       <footer>
         <p className="text-xs py-3 px-4 bg-secondary text-center text-primary">©WanCare 2025</p>
       </footer>
-      
+      <Toaster />
     </>
   );
 }

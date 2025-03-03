@@ -39,12 +39,11 @@ const SignIn = () =>  {
       })
       
       const { dog } = await response.json();
-
-      if(dog) {
+      if(!dog) {
+        router.push("/dogs/new")
+      } else {
         toast.success("ログインが成功しました")
         router.push("/home")
-      } else {
-        router.push("/dogs/new")
       }
     }
   }
