@@ -35,16 +35,15 @@ const SignIn = () =>  {
         headers: {
           "Content-Type" : "application/json",
         },
-        body: JSON.stringify(userId)
+        body: JSON.stringify({userId})
       })
       
       const { dog } = await response.json();
-
-      if(dog) {
+      if(!dog) {
+        router.push("/dogs/new")
+      } else {
         toast.success("ログインが成功しました")
         router.push("/home")
-      } else {
-        router.push("/dogs/new")
       }
     }
   }
