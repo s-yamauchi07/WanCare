@@ -4,7 +4,6 @@ import { useRouteGuard } from "@/_hooks/useRouteGuard";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { toast, Toaster } from "react-hot-toast"
 import Image from "next/image";
 import Link from "next/link";
 import Chart from "./_components/Chart"
@@ -54,7 +53,7 @@ const Home: React.FC = () => {
         });
 
         if(response.status !== 200) {
-          toast.error("接続に失敗しました");
+          console.error("接続に失敗しました");
           throw new Error("Network response was not OK");
         }
 
@@ -156,8 +155,6 @@ const Home: React.FC = () => {
       ) : (
         <PageLoading />
       )} 
-
-        <Toaster />
       </div>
   </div>
   )
