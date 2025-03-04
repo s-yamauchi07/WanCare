@@ -1,6 +1,6 @@
 import { supabase } from "@/app/utils/supabase";
 
-export const useDeleteStorageImage = async (image: string, bucketName: string) => {
+export const deleteStorageImage = async (image: string, bucketName: string) => {
   try {
     const { error } = await supabase.storage.from(bucketName).remove([image]);
     if(error) {
@@ -11,5 +11,3 @@ export const useDeleteStorageImage = async (image: string, bucketName: string) =
     throw error;
   }
 } 
-
-export default useDeleteStorageImage;

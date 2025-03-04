@@ -70,7 +70,7 @@ const Calendar: React.FC<CalendarProps> = ({ cares }) => {
     <>
       <FullCalendar
         plugins={[ dayGridPlugin,interactionPlugin]}
-        timeZone="UTC"
+        timeZone="Asia/Tokyo"
         headerToolbar={{ start: "prev", center: "title", end: "next" }}
         initialView="dayGridMonth"
         contentHeight="auto"

@@ -13,7 +13,7 @@ import IconButton from "@/app/_components/IconButton";
 import PageLoading from "@/app/_components/PageLoading";
 import { toast, Toaster } from "react-hot-toast"
 import DeleteAlert from "@/app/_components/DeleteAlert";
-import deleteStorageImage from "@/app/utils/deleteStorageImage";
+import { deleteStorageImage } from "@/app/utils/deleteStorageImage";
 import { CareDetails } from "@/_types/care";
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
 

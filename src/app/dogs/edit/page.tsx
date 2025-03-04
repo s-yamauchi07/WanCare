@@ -3,19 +3,18 @@
 import DogForm from "@/app/dogs/_components/DogForm";
 import { useEffect, useState } from "react"
 import { DogResponse } from "@/_types/dog";
+import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
+import { authGuest } from "@/app/utils/authGuest";
 
 const EditDog: React.FC = () => {
-  const [userId, setUserId] = useState<string | null>(null); 
+  const { session } = useSupabaseSession();
+  const userId = session?.user.id;
+  const userEmail = session?.user.email;
+  const isGuest = authGuest(userEmail);
   const [dogInfo, setDogInfo] = useState<DogResponse | undefined>(undefined);
-
-  useEffect(()=> {
-    const storedUserId = localStorage.getItem("userId");
-    if(storedUserId) {
-      setUserId(storedUserId)
-    }
-  },[userId])
-
+  
   useEffect(() => {
+
     if(userId) {
       const fetchDogData = async() => {
         try {
@@ -37,7 +36,7 @@ const EditDog: React.FC = () => {
   },[userId])
 
   return(
-    <DogForm isEdit={true} dogInfo={dogInfo}/>
+    <DogForm isEdit={true} dogInfo={dogInfo} isGuest={isGuest}/>
   )
 }
 

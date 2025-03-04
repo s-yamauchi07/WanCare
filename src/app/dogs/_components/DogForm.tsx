@@ -25,9 +25,10 @@ const sexSelection = [
 interface DogFormProps {
   isEdit?: boolean;
   dogInfo?: DogResponse;
+  isGuest?: boolean;
 }
 
-const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
+const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
   useRouteGuard();
   
   const { register, handleSubmit, reset, watch, setValue, formState: { errors, isSubmitting}} = useForm<DogRequest>();
@@ -207,9 +208,15 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo }) => {
               })}}
               error={errors.adoptionDate?.message}
             />
+            {isGuest && (
+              <p className="text-xs text-red-800">
+                ゲストログイン中はペット編集ができません
+              </p>
+            )}
             <LoadingButton 
               isSubmitting={isSubmitting}
               buttonText={isEdit ? "更新" : "登録"}
+              disabled={isGuest}
             />
           </form>
         </div>

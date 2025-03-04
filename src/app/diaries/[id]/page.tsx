@@ -13,7 +13,7 @@ import DiaryForm from "../_components/DiaryForm";
 import  PageLoading  from "@/app/_components/PageLoading";
 import { toast, Toaster } from "react-hot-toast"
 import DeleteAlert from "@/app/_components/DeleteAlert";
-import deleteStorageImage from "@/app/utils/deleteStorageImage";
+import { deleteStorageImage } from "@/app/utils/deleteStorageImage";
 import EditRoundButton from "@/app/_components/EditRoundButton";
 import DeleteRoundButton from "@/app/_components/DeleteRoundButton";
 import CommentForm from "../_components/CommentForm";
