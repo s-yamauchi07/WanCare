@@ -28,7 +28,7 @@ const Input: React.FC<InputProps> = ({ id, labelName, type, placeholder, step, r
       />
       {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
       {id === "tags" && (
-        <p className="text-xs mt-2">
+        <p className="text-xs mt-2 text-gray-800">
           ※タグを複数入力をする際はスペースで区切って入力してください。
         </p>
       )}
