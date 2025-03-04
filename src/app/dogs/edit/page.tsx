@@ -4,22 +4,19 @@ import DogForm from "@/app/dogs/_components/DogForm";
 import { useEffect, useState } from "react"
 import { DogResponse } from "@/_types/dog";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
+import { authGuest } from "@/app/utils/authGuest";
 
 const EditDog: React.FC = () => {
   const { session } = useSupabaseSession();
   const userId = session?.user.id;
   const userEmail = session?.user.email;
-  const [isGuest, setIsGuest] = useState<boolean>(false);
+  const isGuest = authGuest(userEmail);
   const [dogInfo, setDogInfo] = useState<DogResponse | undefined>(undefined);
   
   useEffect(() => {
 
     if(userId) {
       const fetchDogData = async() => {
-        if(userEmail === process.env.NEXT_PUBLIC_GUEST_USER_EMAIL) {
-          setIsGuest(true);
-        }
-
         try {
           const response = await fetch("/api/dogs/checkDog", {
             method: 'POST',

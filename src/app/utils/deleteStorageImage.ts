@@ -11,5 +11,3 @@ export const useDeleteStorageImage = async (image: string, bucketName: string) =
     throw error;
   }
 } 
-
-export default useDeleteStorageImage;
