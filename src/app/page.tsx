@@ -200,8 +200,14 @@ export default function WelcomePage() {
         </div>
       </div>
 
-      <footer>
-        <p className="text-xs py-3 px-4 bg-secondary text-center text-primary">©WanCare 2025</p>
+      <footer className="bg-secondary text-primary py-3 flex justify-center">
+        <p className="text-xs text-center">©WanCare 2025</p>
+        <span className="i-tabler-brand-instagram"></span>
+        <Link 
+          href="https://www.instagram.com/shiony07?igsh=ZWxxeWxucTFuMWtw&utm_source=qr" 
+          className="text-xs font-bold"
+        >shiony07
+        </Link>
       </footer>
       <Toaster />
     </>
