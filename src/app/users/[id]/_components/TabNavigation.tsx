@@ -58,7 +58,7 @@ const TabNavigation: React.FC<showListsProps> = ({ user, showLists, defaultImg, 
           loadMore={SelectLists}
           loader={<LoadingDiary key={0} />}
         >
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             {showLists.map((list) => {
               return(
               <PostUnit 
