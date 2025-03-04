@@ -7,7 +7,7 @@ const PageLoading: React.FC = () => {
         visible={true}
         height="120"
         width="120"
-        colors={['#15A083', 'F3CF3E', '#DB5461']}
+        colors={['#326a55', '#FBC95C', '#DB5461']}
         ariaLabel="rotating-triangles-loading"
         wrapperStyle={{}}
         wrapperClass=""
