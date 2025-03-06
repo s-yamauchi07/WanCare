@@ -180,7 +180,7 @@ const CareDetail: React.FC = () => {
           </div>
           <ModalWindow show={openModal} onClose={ModalClose} >
             {isEditMode ? (
-              <CareForm careId={care.careListId} careName={care.careList.name} token={token} onClose={ModalClose} isEdit={true} careInfo={care}/>
+              <CareForm careId={care.careListId} careName={care.careList.name} onClose={ModalClose} isEdit={true} careInfo={care}/>
             ) : (
               <DeleteAlert onDelete={handleDelete} onClose={ModalClose} deleteObj="お世話記録" isDeleting={isDeleting} />
             )}
