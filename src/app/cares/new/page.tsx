@@ -3,9 +3,10 @@
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import PageLoading from "@/app/_components/PageLoading";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ModalWindow from "@/app/_components/ModalWindow";
 import CareForm from "@/app/cares/_components/CareForm";
+import useSWR from "swr";
 
 interface careList {
   id: string;
@@ -16,27 +17,19 @@ interface careList {
 const SelectCare: React.FC = () => {
   useRouteGuard();
 
-  const { token } = useSupabaseSession();
-  const [careLists, setCareList] = useState<careList[]>([]);
-  const [openModal, setOpenModal] = useState(false);
-  const [careId, setCareId] = useState<string>("");
-  const [careName, setCareName] = useState<string>("");
-
-  useEffect(()=> {
+  const fetchCareLists = async(url: string, token: string | null ) => {
     if (!token) return;
 
-    const fetchCareLists = async () => {
-      const response = await fetch("/api/careLists", {
-        headers: {
-          "Content-Type" : "application/json",
-          Authorization: token,
-        },
-      })
-      const { careLists } = await response.json();
-      setCareList(careLists);
-    }
-    fetchCareLists();
-  },[token]);
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type" : "application/json",
+        Authorization: token,
+      },
+    })
+    const data = await response.json();
+    
+    return data; 
+  }
 
   const ModalOpen = (careListId: string, careName: string) => {
     setOpenModal(true);
@@ -48,7 +41,16 @@ const SelectCare: React.FC = () => {
     setOpenModal(false);
   }
 
-  if (!careLists || careLists.length === 0) return <PageLoading/>;
+  const { token } = useSupabaseSession();
+  const { data, error, isLoading } = useSWR(["/api/careLists", token], ([url, token]) => fetchCareLists(url, token));
+  const careLists: careList[] = data?.careLists;
+  const [openModal, setOpenModal] = useState(false);
+  const [careId, setCareId] = useState<string>("");
+  const [careName, setCareName] = useState<string>("");
+
+  if (error) return <p>{error.message}</p>
+  if (isLoading) return <PageLoading/>;
+  if (!careLists) return;
 
   return(
     <div className="flex justify-center">
