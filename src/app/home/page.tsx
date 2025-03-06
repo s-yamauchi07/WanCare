@@ -30,7 +30,7 @@ const Home: React.FC = () => {
 
   const fetchDogInfo = async(url:string, token: string | null, session: Session | null | undefined) => {
     if(!token || !session) return;
-    const response = await fetch("api/home", {
+    const response = await fetch(url, {
       headers: {
         "Content-Type" : "application/json",
         Authorization: token,
