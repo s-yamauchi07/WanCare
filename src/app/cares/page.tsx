@@ -3,36 +3,13 @@
 import React from "react";
 import Calendar from "./_components/Carendar";
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
-import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
-import useSWR from "swr";
-import { Session } from "@supabase/supabase-js";
 import PageLoading from "../_components/PageLoading";
+import { useFetch } from "@/_hooks/useFetch";
 
 const CareIndex: React.FC = () => {
   useRouteGuard();
   
-  const fetchCareLists = async(url:string, token: string | null, session: Session | null | undefined) => {
-
-      if(!token || !session) return;
-
-      const response = await fetch("api/cares", {
-        headers: {
-          "Content-Type" : "application/json",
-          Authorization: token,
-        },
-      });
-
-      if (response.status !== 200) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
-      }
-      
-      const data = response.json();
-      return data;
-    }
-
-  const { token, session } = useSupabaseSession();
-  const { data, error, isLoading } = useSWR(["/api/cares", token, session], ([url, token, session]) => fetchCareLists(url, token, session));
+  const { data, error, isLoading } = useFetch("/api/cares")
   const cares = data?.cares;
   if (error) return <p>{error.message}</p>
   if (isLoading) return <PageLoading />

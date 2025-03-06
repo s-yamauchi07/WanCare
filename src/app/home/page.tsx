@@ -1,7 +1,6 @@
 "use client"
 
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
-import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,8 +13,7 @@ import { TodayCareInfo } from "@/_types/care";
 import { DogProfile } from "@/_types/dog";
 import usePreviewImage from "@/_hooks/usePreviewImage";
 import { getAgeInMonths } from "../utils/getAgeInMonths";
-import useSWR from "swr";
-import { Session } from "@supabase/supabase-js";
+import { useFetch } from "@/_hooks/useFetch";
 
 interface DogInfo {
   id: string;
@@ -28,25 +26,7 @@ interface DogInfo {
 const Home: React.FC = () => {
   useRouteGuard();
 
-  const fetchDogInfo = async(url:string, token: string | null, session: Session | null | undefined) => {
-    if(!token || !session) return;
-    const response = await fetch(url, {
-      headers: {
-        "Content-Type" : "application/json",
-        Authorization: token,
-      },
-    });
-
-    if(response.status !== 200) {
-      const errorData = await response.json();
-      throw new Error(errorData.message);
-    }
-    const data = response.json();
-    return data;
-  }
-
-  const { token, session } = useSupabaseSession();
-  const { data, error, isLoading} = useSWR(["api/home", token, session], ([url, token, session]) => fetchDogInfo(url, token, session));
+  const { data, error, isLoading} = useFetch("api/home")
   const dogInfo: DogInfo = data?.dogInfo;
   const dogImage = usePreviewImage(dogInfo?.dog.imageKey ?? null, "profile_img");
   const todayCare:TodayCareInfo[]  = data?.todayCare;
