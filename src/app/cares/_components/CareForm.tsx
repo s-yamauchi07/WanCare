@@ -11,18 +11,18 @@ import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoD
 import { toast, Toaster } from "react-hot-toast";
 import { useEditPreviewImage } from "@/_hooks/useEditPreviewImage";
 import { useUploadImage } from "@/_hooks/useUploadImage";
+import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 
 interface CareFormProps {
   careId: string;
   careName: string;
-  token: string | null;
   isEdit?: boolean,
   careInfo?: CareDetails;
   onClose: () => void;
 }
 
-const CareForm: React.FC<CareFormProps> = ({careId, careName, token, isEdit, careInfo, onClose } ) => {
-
+const CareForm: React.FC<CareFormProps> = ({careId, careName, isEdit, careInfo, onClose } ) => {
+  const { token } = useSupabaseSession();
   const { register, handleSubmit, reset, watch, setValue, formState: { errors, isSubmitting } } = useForm<Care>();
   const imageKey = watch("imageKey");
   const { uploadedKey, isUploading } = useUploadImage(imageKey ?? null, "care_img");
