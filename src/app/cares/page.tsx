@@ -1,52 +1,57 @@
 "use client"
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Calendar from "./_components/Carendar";
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
+import useSWR from "swr";
+import { Session } from "@supabase/supabase-js";
+import PageLoading from "../_components/PageLoading";
 
 const CareIndex: React.FC = () => {
   useRouteGuard();
   
-  const { token, session } = useSupabaseSession();
-  const [cares, setCares] = useState([]);
+  const fetchCareLists = async(url:string, token: string | null, session: Session | null | undefined) => {
 
-  useEffect(() => {
-    if(!token || !session) return;
+      if(!token || !session) return;
 
-    const fetchCareLists = async() => {
-      try {
-        const response = await fetch("api/cares", {
-          headers: {
-            "Content-Type" : "application/json",
-            Authorization: token,
-          },
-        });
+      const response = await fetch("api/cares", {
+        headers: {
+          "Content-Type" : "application/json",
+          Authorization: token,
+        },
+      });
 
-        if (response.status !== 200) {
-          throw new Error("Not record.")
-        }
-
-        const { cares } = await response.json();
-        setCares(cares);
-      } catch(error) {
-        console.log(error);
+      if (response.status !== 200) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
       }
+      
+      const data = response.json();
+      return data;
     }
-    fetchCareLists();
-  }, [token, session])
+
+  const { token, session } = useSupabaseSession();
+  const { data, error, isLoading } = useSWR(["/api/cares", token, session], ([url, token, session]) => fetchCareLists(url, token, session));
+  const cares = data?.cares;
+  if (error) return <p>{error.message}</p>
+  if (isLoading) return <PageLoading />
 
   return(
     <>
-      <div className="flex justify-center">
-        <div className="max-w-64 mt-20 flex flex-col items-center">
-          <h2 className="text-primary text-center text-2xl font-bold mb-10">お世話ログ</h2>
-        </div>
-      </div>
-      {/* カレンダーエリア */}
-      <div className="p-4 pb-20 win-h-screen overflow-y-auto text-gray-800">
-        <Calendar cares={cares} />
-      </div>
+      {cares && (
+        <>
+          <div className="flex justify-center">
+            <div className="max-w-64 mt-20 flex flex-col items-center">
+              <h2 className="text-primary text-center text-2xl font-bold mb-10">お世話ログ</h2>
+            </div>
+          </div>
+
+          <div className="p-4 pb-20 win-h-screen overflow-y-auto text-gray-800">
+            <Calendar cares={cares} />
+          </div>
+        </>
+      )}
     </>
   )
 }
