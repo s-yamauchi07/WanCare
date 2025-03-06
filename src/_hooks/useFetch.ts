@@ -29,10 +29,10 @@ export const useFetch = (url: string) => {
     session !== null && 
     session !== undefined;
 
-  const { data, error, isLoading } = useSWR(
+  const { data, error, isLoading, mutate } = useSWR(
     shouldFetch ? [url, token] : null,
     ([url, token]) => fetcher(url, token)
   )
 
-  return { data, error, isLoading }
+  return { data, error, isLoading, mutate }
 }

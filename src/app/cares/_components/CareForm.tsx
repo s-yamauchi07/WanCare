@@ -12,6 +12,7 @@ import { toast, Toaster } from "react-hot-toast";
 import { useEditPreviewImage } from "@/_hooks/useEditPreviewImage";
 import { useUploadImage } from "@/_hooks/useUploadImage";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
+import { KeyedMutator } from "swr";
 
 interface CareFormProps {
   careId: string;
@@ -19,9 +20,10 @@ interface CareFormProps {
   isEdit?: boolean,
   careInfo?: CareDetails;
   onClose: () => void;
+  mutate: KeyedMutator<CareDetails>;
 }
 
-const CareForm: React.FC<CareFormProps> = ({careId, careName, isEdit, careInfo, onClose } ) => {
+const CareForm: React.FC<CareFormProps> = ({careId, careName, isEdit, careInfo, onClose, mutate } ) => {
   const { token } = useSupabaseSession();
   const { register, handleSubmit, reset, watch, setValue, formState: { errors, isSubmitting } } = useForm<Care>();
   const imageKey = watch("imageKey");
@@ -63,6 +65,9 @@ const CareForm: React.FC<CareFormProps> = ({careId, careName, isEdit, careInfo, 
         reset();
         toast.success(isEdit? "更新しました" : "投稿が完了しました");
 
+        if (isEdit) {
+          mutate(); // mutate()関数でデータ更新
+        }
         // toast表示を待ってからClose
         setTimeout(()=> {
           onClose();
