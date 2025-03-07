@@ -7,17 +7,20 @@ import { Comment, CommentProps } from "@/_types/comment";
 import { DiaryDetails } from "@/_types/diary";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import toast from "react-hot-toast";
+import { KeyedMutator } from "swr";
 
 interface CommentFormProps {
   diary: DiaryDetails;
   onClose: () => void;
   isEdit: boolean;
   selectedComment: CommentProps | null;
+  mutate: KeyedMutator<DiaryDetails>
 }
 
-const CommentForm:React.FC<CommentFormProps> = ({ diary, onClose, isEdit, selectedComment }) => {
+const CommentForm:React.FC<CommentFormProps> = ({ diary, onClose, isEdit, selectedComment, mutate }) => {
   useRouteGuard();
   const { token } = useSupabaseSession();
+  console.log(diary)
   const diaryId = diary.id;
   const { register, handleSubmit, reset, setValue, formState: { errors, isSubmitting }} = useForm<Comment>();
 
@@ -37,8 +40,10 @@ const CommentForm:React.FC<CommentFormProps> = ({ diary, onClose, isEdit, select
         method: isEdit ? "PUT" : "POST",
         body: JSON.stringify(req),
       });
-
+      const data = await response.json()
+      console.log(data)
       if(response.status === 200) {
+        mutate();
         reset();
         toast.success(isEdit ? "更新しました" : "コメントを投稿しました");
 

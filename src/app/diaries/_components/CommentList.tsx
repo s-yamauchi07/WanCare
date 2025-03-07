@@ -7,15 +7,17 @@ import ModalWindow from "@/app/_components/ModalWindow";
 import { DiaryDetails } from "@/_types/diary";
 import DeleteAlert from "@/app/_components/DeleteAlert";
 import toast from "react-hot-toast";
+import { KeyedMutator } from "swr";
 
 interface CommentIndexProps extends CommentsProps {
   currentUserId?: string;
   diary: DiaryDetails;
   refreshComments: () => void;
   token: string | null;
+  mutate: KeyedMutator<DiaryDetails>
 }
 
-const CommentList: React.FC<CommentIndexProps> = ({ comments, currentUserId, diary, refreshComments,token }) => {
+const CommentList: React.FC<CommentIndexProps> = ({ comments, currentUserId, diary, token , mutate }) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [selectedComment, setSelectedComment] = useState<CommentProps | null>(null);
   const [modalType, setModalType] = useState<string>("");
@@ -31,7 +33,6 @@ const CommentList: React.FC<CommentIndexProps> = ({ comments, currentUserId, dia
     setOpenModal(false);
     setSelectedComment(null);
     setModalType("");
-    refreshComments();
   }
 
   const openCommentDeleteModal = (comment: CommentProps) => {
@@ -55,6 +56,7 @@ const CommentList: React.FC<CommentIndexProps> = ({ comments, currentUserId, dia
 
       if (response.status === 200) {
         toast.success("コメントを削除しました");
+        mutate();
         setTimeout(() => {
           closeEditCommentModal();
         }, 2000);
@@ -95,7 +97,7 @@ const CommentList: React.FC<CommentIndexProps> = ({ comments, currentUserId, dia
       ))}
         <ModalWindow show={openModal} onClose={closeEditCommentModal} >
           <>
-            {modalType === "edit" && <CommentForm diary={diary} selectedComment={selectedComment} onClose={closeEditCommentModal} isEdit={true}/>}
+            {modalType === "edit" && <CommentForm diary={diary} selectedComment={selectedComment} onClose={closeEditCommentModal} isEdit={true} mutate={mutate}/>}
             {modalType === "delete" && <DeleteAlert onDelete={handleCommentDelete} onClose={closeEditCommentModal} deleteObj="コメント" isDeleting={isDeleting} />}
           </>
         </ModalWindow>  
