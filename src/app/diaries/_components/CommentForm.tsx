@@ -20,7 +20,6 @@ interface CommentFormProps {
 const CommentForm:React.FC<CommentFormProps> = ({ diary, onClose, isEdit, selectedComment, mutate }) => {
   useRouteGuard();
   const { token } = useSupabaseSession();
-  console.log(diary)
   const diaryId = diary.id;
   const { register, handleSubmit, reset, setValue, formState: { errors, isSubmitting }} = useForm<Comment>();
 
@@ -41,7 +40,6 @@ const CommentForm:React.FC<CommentFormProps> = ({ diary, onClose, isEdit, select
         body: JSON.stringify(req),
       });
       const data = await response.json()
-      console.log(data)
       if(response.status === 200) {
         mutate();
         reset();
