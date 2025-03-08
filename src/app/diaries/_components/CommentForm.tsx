@@ -39,7 +39,7 @@ const CommentForm:React.FC<CommentFormProps> = ({ diary, onClose, isEdit, select
         method: isEdit ? "PUT" : "POST",
         body: JSON.stringify(req),
       });
-      const data = await response.json()
+
       if(response.status === 200) {
         mutate();
         reset();
