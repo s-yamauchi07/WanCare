@@ -68,10 +68,6 @@ const DiaryDetail: React.FC = () => {
     setOpenModal(true);
   }
 
-  const refreshComments = () => {
-    // setRefresh(!refresh);
-  }
-
   const handleDelete = async () => {
     if(!token || currentUserId !== diary?.owner.id) return;
 
@@ -226,7 +222,6 @@ const DiaryDetail: React.FC = () => {
                 comments={diary.comments} 
                 diary={diary} 
                 currentUserId={currentUserId}
-                refreshComments={refreshComments}
                 token={token}
                 mutate={mutate}
               />

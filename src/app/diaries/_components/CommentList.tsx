@@ -12,7 +12,6 @@ import { KeyedMutator } from "swr";
 interface CommentIndexProps extends CommentsProps {
   currentUserId?: string;
   diary: DiaryDetails;
-  refreshComments: () => void;
   token: string | null;
   mutate: KeyedMutator<DiaryDetails>
 }
