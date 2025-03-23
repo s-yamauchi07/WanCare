@@ -15,12 +15,12 @@ interface showListsProps {
   showLists: MypageDiaryLists[] | MypageSummaryLists[] | MypageBookmarkLists[] | [];
   defaultImg: StaticImageData
   selectTab: (tabName: string) => void;
-  SelectLists: () => void;
+  selectLists: () => void;
   linkPrefix: string;
   selectedTab: string;
 }
 
-const TabNavigation: React.FC<showListsProps> = ({ user, showLists, defaultImg, selectTab, SelectLists, linkPrefix, selectedTab }) => {
+const TabNavigation: React.FC<showListsProps> = ({ user, showLists, defaultImg, selectTab, selectLists, linkPrefix, selectedTab }) => {
   return(
     <>
       <div>
@@ -55,7 +55,7 @@ const TabNavigation: React.FC<showListsProps> = ({ user, showLists, defaultImg, 
       <div>
       {(showLists && showLists.length > 0) ? (
         <InfiniteScroll 
-          loadMore={SelectLists}
+          loadMore={selectLists}
           loader={<LoadingDiary key={0} />}
         >
           <div className="grid grid-cols-2 gap-4">

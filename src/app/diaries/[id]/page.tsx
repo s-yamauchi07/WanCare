@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
@@ -20,27 +20,36 @@ import CommentForm from "../_components/CommentForm";
 import CommentList from "../_components/CommentList";
 import Link from "next/link";
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
+import { useFetch } from "@/_hooks/useFetch";
 
 const DiaryDetail: React.FC = () => {
   useRouteGuard();
+  
   const params = useParams();
   const router = useRouter();
   const { id } = params;
   const { token, session } = useSupabaseSession();
+  const { data, error, isLoading, mutate }= useFetch(`/api/diaries/${id}`);
   const currentUserId = session?.user.id;
-  const [diary, setDiary] = useState<DiaryDetails | null >(null);
-  const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
+  const diary: DiaryDetails | null = data?.diary;
   const thumbnailImage = usePreviewImage(diary?.imageKey ?? null, "diary_img")
   const [openModal, setOpenModal] = useState(false);
-  const [refresh, setRefresh] = useState<boolean>(false);
-  const [isLoading, setLoading] = useState<boolean>(true);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [isBookmarking, setIsBookmarking] = useState<boolean>(false);
   const [modalType, setModalType] = useState<string>("");
 
+  const checkBookmarked = () => {
+    // ログインユーザーに紐づいたbookmarkが1つでも存在すればtrue, なければfalseを返す。
+    const isBookmarked = diary?.bookmarks.some((b: {id: string, ownerId: string}) => b.ownerId === currentUserId);
+    return isBookmarked;
+  }
+
+  const [isBookmarked, setIsBookmarked] = useState<boolean | undefined>(checkBookmarked);
+  
+
   const ModalClose = () => {
     setOpenModal(false);
-    setRefresh(!refresh);
+    // setRefresh(!refresh);
     setModalType("");
   }
 
@@ -57,10 +66,6 @@ const DiaryDetail: React.FC = () => {
   const openCommentModal = () => {
     setModalType("comment");
     setOpenModal(true);
-  }
-
-  const refreshComments = () => {
-    setRefresh(!refresh);
   }
 
   const handleDelete = async () => {
@@ -125,33 +130,7 @@ const DiaryDetail: React.FC = () => {
     }
   }
   
-  useEffect(() => {
-    if (!token) return;
-
-    const fetchDiary = async() => {
-      try {
-        const res = await fetch(`/api/diaries/${id}`, {
-          headers: {
-            "Content-Type" : "application/json",
-            Authorization: token,
-          },
-        });
-
-        const { diary } = await res.json();
-        setDiary(diary);
-        // ログインユーザーに紐づいたbookmarkが1つでも存在すればtrue, なければfalseを返す。
-        const UserBookmarked = diary.bookmarks.some((b: {id: string, ownerId: string}) => b.ownerId === currentUserId);
-        setIsBookmarked(UserBookmarked);
-
-      } catch(error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchDiary()
-  }, [id, token, refresh]);
-
+  if(error) return <p>{error.message}</p>;
 
   return(
     <>
@@ -198,7 +177,7 @@ const DiaryDetail: React.FC = () => {
               </Link>
             </div>
     
-            <div className="min-h-6 text-primary font-bold text-gray-700">
+            <div className="min-h-6 text-primary font-bold">
               {diary.diaryTags && diary.diaryTags.length > 0 && (
                 diary.diaryTags.map((tag) => (
                   <span 
@@ -243,8 +222,8 @@ const DiaryDetail: React.FC = () => {
                 comments={diary.comments} 
                 diary={diary} 
                 currentUserId={currentUserId}
-                refreshComments={refreshComments}
                 token={token}
+                mutate={mutate}
               />
             </div>
           </div>
@@ -253,7 +232,7 @@ const DiaryDetail: React.FC = () => {
             <>
               {modalType === "edit" && <DiaryForm diary={diary} isEdit={true} onClose={ModalClose} />}
               {modalType === "delete" && <DeleteAlert onDelete={handleDelete} onClose={ModalClose} deleteObj="日記" isDeleting={isDeleting}/>}
-              {modalType === "comment" && <CommentForm diary={diary} onClose={ModalClose} isEdit={false} selectedComment={null} />}
+              {modalType === "comment" && <CommentForm diary={diary} onClose={ModalClose} isEdit={false} selectedComment={null} mutate={mutate} />}
             </>
           </ModalWindow>
         </div>

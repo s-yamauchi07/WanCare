@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { SummaryDetails } from "@/_types/summary";
@@ -14,6 +14,7 @@ import SummaryForm from "../_components/SummaryForm";
 import DeleteAlert from "@/app/_components/DeleteAlert";
 import { toast, Toaster } from "react-hot-toast"
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
+import { useFetch } from "@/_hooks/useFetch";
 
 const SummaryDetail: React.FC = () => {
   useRouteGuard();
@@ -21,40 +22,15 @@ const SummaryDetail: React.FC = () => {
   const router = useRouter();
   const { id } = params;
   const { token, session } = useSupabaseSession();
+  const { data, error, isLoading, mutate } = useFetch(`/api/summaries/${id}`);
+  const summary: SummaryDetails = data?.summary
   const currentUserId = session?.user.id;
-  const [summary, setSummary] = useState<SummaryDetails>();
-  const [isLoading, setLoading] = useState<boolean>(true);
   const [openModal, setOpenModal] = useState(false);
-  const [refresh, setRefresh] = useState<boolean>(false);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
-  useEffect(()=> {
-    if(!token) return;
-    
-    const fetchSummary = async() => {
-      try {
-        const res = await fetch(`/api/summaries/${id}`, {
-          headers: {
-            "Content-Type" : "application/json",
-            Authorization: token,
-          },
-        });
-
-        const { summary } = await res.json();
-        setSummary(summary);
-      } catch(error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchSummary();
-  }, [token, id, refresh]);
-
   const ModalClose = () => {
     setOpenModal(false);
-    setRefresh(!refresh);
   }
 
   const openEditModal = () => {
@@ -96,6 +72,8 @@ const SummaryDetail: React.FC = () => {
     }
   }
 
+  if(error) return <p>{error.message}</p>;
+
   return(
     <>
       {(summary && !isLoading) ? (
@@ -110,9 +88,19 @@ const SummaryDetail: React.FC = () => {
               )}
               <ModalWindow show={openModal} onClose={ModalClose}>
                 {isEditMode ? (
-                  <SummaryForm summary={summary} isEdit={true} onClose={ModalClose} />
+                  <SummaryForm 
+                    summary={summary} 
+                    isEdit={true} 
+                    onClose={ModalClose} 
+                    mutate={mutate}
+                  />
                 ) : (
-                  <DeleteAlert onDelete={handleDelete} onClose={ModalClose} deleteObj="まとめ" isDeleting={isDeleting}/>
+                  <DeleteAlert 
+                    onDelete={handleDelete} 
+                    onClose={ModalClose} 
+                    deleteObj="まとめ" 
+                    isDeleting={isDeleting}
+                  />
                 )}
               </ModalWindow>  
           </div>

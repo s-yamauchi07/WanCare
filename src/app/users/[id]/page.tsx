@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { useParams } from "next/navigation";
-import { toast, Toaster } from "react-hot-toast";
 import { StaticImageData } from "next/image";
 import usePreviewImage from "@/_hooks/usePreviewImage";
 import no_diary_img from "/public/no_diary_img.png";
@@ -18,81 +17,64 @@ import { MypageSummaryLists } from "@/_types/summary";
 import { MypageBookmarkLists } from "@/_types/bookmark";
 import UserDogInfo from "./_components/UserDogInfo";
 import TabNavigation from "./_components/TabNavigation";
+import { useFetch } from "@/_hooks/useFetch";
 
 const UserPage: React.FC = () => {
   useRouteGuard();
+
   const params = useParams();
   const router = useRouter();
   const { id } = params;
   const { token, session } = useSupabaseSession();
   const currentUserId = session?.user.id;
-  const [otherUser, setOtherUser] = useState<UserMyPage | null>(null);
+  const { data, error, isLoading } = useFetch(`/api/users/${id}`);
+  const otherUser: UserMyPage = data?.otherUser;
   const dogImg = usePreviewImage(otherUser?.dog.imageKey ?? null, "profile_img");
   const [showLists, setShowLists] = useState<MypageDiaryLists[] | MypageSummaryLists[] | MypageBookmarkLists[]>([]);
   const [selectedTab, setSelectedTab] = useState<string>("日記"); 
   const [linkPrefix, setLinkPrefix] = useState<string>("");
   const [defaultImg, setDefaultImg] = useState<StaticImageData>(no_diary_img);
 
-  useEffect(() => {
-    if(!token) return;
-
-    const fetchOtherUser = async() => {
-      try {
-        const response = await fetch(`/api/users/${id}`, {
-          headers: {
-            "Content-Type" : "application/json",
-            Authorization: token, 
-          },
-        });
-
-        if (response.status !== 200) {
-          toast.error("ユーザー情報の取得に失敗しました");
-          throw new Error("Network response was not OK")
-        }
-
-        const { otherUser } = await response.json();
-        if (otherUser.id === currentUserId) {
-          router.push("/mypage")
-        } else {
-          setOtherUser(otherUser);
-          setShowLists(otherUser.diaries);
-        }
-      } catch(error) {
-        console.log(error);
-      }
-    }
-    fetchOtherUser();
-  }, [token, id, router]);
-  
   const selectTab = (tabName: string) => {
     setSelectedTab(tabName)
   }
 
-  const SelectLists = () => {
-    if (!otherUser) return;
-
-    try {
-      if (selectedTab === "日記") {
-        setShowLists(otherUser.diaries);
-        setDefaultImg(no_diary_img);
-        setLinkPrefix("diaries")
-      } else if (selectedTab === "まとめ") {
-        setShowLists(otherUser.summaries);
-        setDefaultImg(summaryThumbnail);
-        setLinkPrefix("summaries")
-      } else if (selectedTab === "お気に入り") {
-        setShowLists(otherUser.bookmarks);
-        setDefaultImg(no_diary_img);
-        setLinkPrefix("diaries")
+  const selectLists = () => {
+    if (otherUser) {
+      switch (selectedTab) {
+        case "日記":
+          setShowLists(otherUser.diaries);
+          setDefaultImg(no_diary_img);
+          setLinkPrefix("diaries");
+          break;
+        case "まとめ":
+          setShowLists(otherUser.summaries);
+          setDefaultImg(summaryThumbnail);
+          setLinkPrefix("summaries");
+          break;
+        case "お気に入り":
+          setShowLists(otherUser.bookmarks);
+          setDefaultImg(no_diary_img);
+          setLinkPrefix("diaries");
+          break;
       }
-    } catch (error) {
-      console.log(error);
     }
-  };  
+  }
+
+  // ログインユーザーが自身のページにアクセスしたらリダイレクトさせる
+  useEffect(() => {
+    if (otherUser && otherUser.id === currentUserId) {
+      router.push("/mypage")
+    }
+  }, [otherUser, currentUserId, router]);
+
 
   useEffect(() => {
-    SelectLists();
+    selectLists();
   }, [otherUser, selectedTab]);
+
+  if (isLoading) return <PageLoading />
+  if (error) return <p>{error.message}</p>
 
   return(
     <div className="flex justify-center text-gray-800">
@@ -106,7 +88,7 @@ const UserPage: React.FC = () => {
             showLists={showLists}
             defaultImg={defaultImg}
             selectTab={selectTab}
-            SelectLists={SelectLists}
+            selectLists={selectLists}
             linkPrefix={linkPrefix}
             selectedTab={selectedTab}
           />            
@@ -114,7 +96,6 @@ const UserPage: React.FC = () => {
         ) : (
           <PageLoading />
         )}
-        <Toaster />
       </div>
     </div>
   )
