@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR, { SWRConfiguration } from "swr";
 import { useSupabaseSession } from "./useSupabaseSession"
 
 // データfetch用の関数
@@ -22,7 +22,7 @@ export const fetcher = async(url:string, token: string | null) => {
 }
 
 // useSWRを実行するための関数。tokenとsessionがある時だけfetcher関数を呼び出す。
-export const useFetch = (url: string) => {
+export const useFetch = (url: string, config?: SWRConfiguration) => {
   const { token, session } = useSupabaseSession();
   const shouldFetch = 
     token !== null && 
@@ -31,7 +31,8 @@ export const useFetch = (url: string) => {
 
   const { data, error, isLoading, mutate } = useSWR(
     shouldFetch ? [url, token] : null,
-    ([url, token]) => fetcher(url, token)
+    ([url, token]) => fetcher(url, token),
+    config
   )
 
   return { data, error, isLoading, mutate }

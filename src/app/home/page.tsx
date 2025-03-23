@@ -26,7 +26,9 @@ interface DogInfo {
 const Home: React.FC = () => {
   useRouteGuard();
 
-  const { data, error, isLoading} = useFetch("api/home")
+  const { data, error, isLoading} = useFetch("api/home", {
+    revalidateOnFocus: true
+  });
   const dogInfo: DogInfo = data?.dogInfo;
   const dogImage = usePreviewImage(dogInfo?.dog.imageKey ?? null, "profile_img");
   const todayCare:TodayCareInfo[]  = data?.todayCare;
