@@ -68,30 +68,30 @@ const UserPage: React.FC = () => {
     setSelectedTab(tabName)
   }
 
-  const SelectLists = () => {
-    if (!otherUser) return;
-
-    try {
-      if (selectedTab === "日記") {
-        setShowLists(otherUser.diaries);
-        setDefaultImg(no_diary_img);
-        setLinkPrefix("diaries")
-      } else if (selectedTab === "まとめ") {
-        setShowLists(otherUser.summaries);
-        setDefaultImg(summaryThumbnail);
-        setLinkPrefix("summaries")
-      } else if (selectedTab === "お気に入り") {
-        setShowLists(otherUser.bookmarks);
-        setDefaultImg(no_diary_img);
-        setLinkPrefix("diaries")
+  const selectLists = () => {
+    if (otherUser) {
+      switch (selectedTab) {
+        case "日記":
+          setShowLists(otherUser.diaries);
+          setDefaultImg(no_diary_img);
+          setLinkPrefix("diaries");
+          break;
+        case "まとめ":
+          setShowLists(otherUser.summaries);
+          setDefaultImg(summaryThumbnail);
+          setLinkPrefix("summaries");
+          break;
+        case "お気に入り":
+          setShowLists(otherUser.bookmarks);
+          setDefaultImg(no_diary_img);
+          setLinkPrefix("diaries");
+          break;
       }
-    } catch (error) {
-      console.log(error);
     }
-  };  
+  }
 
   useEffect(() => {
-    SelectLists();
+    selectLists();
   }, [otherUser, selectedTab]);
 
   return(
@@ -106,7 +106,7 @@ const UserPage: React.FC = () => {
             showLists={showLists}
             defaultImg={defaultImg}
             selectTab={selectTab}
-            SelectLists={SelectLists}
+            selectLists={selectLists}
             linkPrefix={linkPrefix}
             selectedTab={selectedTab}
           />            
