@@ -109,7 +109,9 @@ const SummaryIndex: React.FC = () => {
               </span>
             </div>
           <ModalWindow show={openModal} onClose={ModalClose}>
-            <SummaryForm onClose={ModalClose} />
+            <SummaryForm 
+              onClose={ModalClose} 
+            />
           </ModalWindow>
         </div>
       </div>

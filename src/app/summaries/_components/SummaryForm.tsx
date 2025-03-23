@@ -18,7 +18,7 @@ interface SummaryFormProps {
   summary?: SummaryDetails;
   isEdit?: boolean
   onClose: () => void;
-  mutate: KeyedMutator<SummaryDetails>
+  mutate?: KeyedMutator<SummaryDetails>
 }
 
 const SummaryForm: React.FC<SummaryFormProps> = ({ onClose, summary, isEdit, mutate }) => {
@@ -54,7 +54,7 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose, summary, isEdit, mut
         toast.success(isEdit ? "更新しました" : "投稿が完了しました");
         reset();
 
-        if (isEdit) {
+        if (isEdit && mutate) {
           mutate();
         }
 
