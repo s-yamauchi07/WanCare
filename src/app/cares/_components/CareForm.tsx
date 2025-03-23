@@ -20,7 +20,7 @@ interface CareFormProps {
   isEdit?: boolean,
   careInfo?: CareDetails;
   onClose: () => void;
-  mutate: KeyedMutator<CareDetails>;
+  mutate?: KeyedMutator<CareDetails>;
 }
 
 const CareForm: React.FC<CareFormProps> = ({careId, careName, isEdit, careInfo, onClose, mutate } ) => {
@@ -65,7 +65,7 @@ const CareForm: React.FC<CareFormProps> = ({careId, careName, isEdit, careInfo, 
         reset();
         toast.success(isEdit? "更新しました" : "投稿が完了しました");
 
-        if (isEdit) {
+        if (isEdit && mutate) {
           mutate(); // mutate()関数でデータ更新
         }
         // toast表示を待ってからClose
