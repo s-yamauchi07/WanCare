@@ -11,21 +11,25 @@ import Select, { MultiValue, SingleValue } from "react-select";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import DiarySelection from "./DiarySelection";
 import { Option } from "../_types/Option";
+import { KeyedMutator } from "swr";
+import { useFetch } from "@/_hooks/useFetch";
 
 interface SummaryFormProps {
   summary?: SummaryDetails;
   isEdit?: boolean
   onClose: () => void;
+  mutate: KeyedMutator<SummaryDetails>
 }
 
-const SummaryForm: React.FC<SummaryFormProps> = ({ onClose, summary, isEdit }) => {
+const SummaryForm: React.FC<SummaryFormProps> = ({ onClose, summary, isEdit, mutate }) => {
   useRouteGuard();
   const { token, session } = useSupabaseSession();
   const userId = session?.user.id;
   const {register, handleSubmit, reset, setValue, formState: {errors, isSubmitting}} = useForm<SummaryRequest>();
   const initialSelectedDiaries = isEdit ? summary?.diaries : [];
   const [selectedDiaryIds, setSelectedDiaryIds] = useState<Option[]>(initialSelectedDiaries || []);
-  const [diaryLists, setDiaryLists] = useState<Option[]>([]);
+  const { data, error } = useFetch(`/api/users/${userId}/diaries`);
+  const diaryLists : Option[] = data?.diaries;
 
   const onSubmit: SubmitHandler<SummaryRequest> = async (data) => {
     const req = {
@@ -47,8 +51,12 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose, summary, isEdit }) =
       });
 
       if(response.status === 200) {
-        reset();
         toast.success(isEdit ? "更新しました" : "投稿が完了しました");
+        reset();
+
+        if (isEdit) {
+          mutate();
+        }
 
         setTimeout(() => {
           onClose();
@@ -65,30 +73,6 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose, summary, isEdit }) =
   }
 
   useEffect(() => {
-    if(!token) return;
-    const fetchDiaryList = async () => {
-      try {
-        const response = await fetch(`/api/users/${userId}/diaries`, {
-          headers: {
-            "Content-Type" : "application/json",
-            Authorization: token,
-          },
-        });
-
-        if(response.status !== 200) {
-          throw new Error("Not record.")
-        }
-
-        const { diaries } = await response.json();
-        setDiaryLists(diaries);
-      } catch(error) {
-        console.log(error);
-      }
-    }
-    fetchDiaryList();
-  },[token, userId]);
-
-  useEffect(() => {
     if(isEdit && summary) {
       setValue("title", summary.title);
       const tagNames = summary.summaryTags.map(tag => tag.tag.name).join(" ") ?? "";
@@ -96,6 +80,8 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose, summary, isEdit }) =
       setValue("explanation", summary.explanation);
     }
   },[isEdit, setValue, summary]);
+
+  if (error) return <p>{error.message}</p>;
 
   return(
     <div className="flex justify-center">
