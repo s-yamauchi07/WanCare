@@ -36,7 +36,12 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
   const router = useRouter();
   const [breeds, setBreeds] = useState<Breed[]>([]);
   const imageKey = watch("imageKey");
-  const { uploadedKey, isUploading } = useUploadImage(imageKey ?? null, "profile_img"); 
+  const existingImageKey = dogInfo?.imageKey ?? null;
+  const { uploadedKey, isUploading } = useUploadImage(
+    imageKey ?? null, 
+    "profile_img",
+    isEdit ? existingImageKey : null,
+  ); 
   const thumbnailImageUrl = useEditPreviewImage(uploadedKey, "profile_img", dogInfo?.imageKey ?? null);
   const [isLoading, setLoading] = useState<boolean>(true);
 
