@@ -27,7 +27,12 @@ const CareForm: React.FC<CareFormProps> = ({careId, careName, isEdit, careInfo, 
   const { token } = useSupabaseSession();
   const { register, handleSubmit, reset, watch, setValue, formState: { errors, isSubmitting } } = useForm<Care>();
   const imageKey = watch("imageKey");
-  const { uploadedKey, isUploading } = useUploadImage(imageKey ?? null, "care_img");
+  const existingImageKey = careInfo?.imageKey ?? null;
+  const { uploadedKey, isUploading } = useUploadImage(
+    imageKey ?? null,
+    "care_img", 
+    isEdit ? existingImageKey : null,
+  );
   const thumbnailImageUrl = useEditPreviewImage(uploadedKey ?? null,"care_img", careInfo?.imageKey ?? null)
   const unit = careUnitLists[careName]?.unit;
   const unitTitle = careUnitLists[careName]?.title;
