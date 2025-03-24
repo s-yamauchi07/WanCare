@@ -23,7 +23,7 @@ const Textarea: React.FC<InputProps> = ({
     <div className="mb-6">
       <Label id={labelName} />
       <textarea
-        className="border border-primary rounded w-full py-2 px-3 border-primary bg-white text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        className="border border-primary rounded w-full py-2 px-3 bg-white text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
         id={id}
         placeholder={placeholder}
         {...register}
