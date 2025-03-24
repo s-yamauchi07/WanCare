@@ -3,8 +3,13 @@ import { v4 as uuidv4 } from "uuid";
 import { supabase } from "../app/utils/supabase";
 import { toast } from "react-hot-toast";
 import imageCompression from "browser-image-compression";
+import { deleteStorageImage } from "@/app/utils/deleteStorageImage";
 
-export const useUploadImage = (imageKey: string | null, bucketName: string) => {
+export const useUploadImage = (
+  imageKey: string | null, 
+  bucketName: string,
+  existingImageKey: string | null,
+) => {
   const [isUploading, setUploading] = useState<boolean>(false);
   const [uploadedKey, setUploadedKey] = useState<string | null>(null);
 
@@ -38,6 +43,20 @@ export const useUploadImage = (imageKey: string | null, bucketName: string) => {
           }
           setUploadedKey(data.path);
           setUploading(false);
+
+          if (existingImageKey && data.path !== existingImageKey) {
+            // const { error: deleteError } = await supabase.storage
+            // .from(bucketName)
+            // .remove([existingImageKey]);
+
+            // if (deleteError) {
+            //   console.log(error);
+            //   toast.error("画像の更新に失敗しました");
+            // } else {
+            //   console.log("既存の画像を削除しました");
+            // }
+            deleteStorageImage(existingImageKey, bucketName);
+          }
         } catch(error) {
           console.log(error);
           toast.error("画像の圧縮に失敗しました")
@@ -45,7 +64,7 @@ export const useUploadImage = (imageKey: string | null, bucketName: string) => {
       }
     }
     uploadImage();
-  },[imageKey, bucketName]);
+  },[imageKey, bucketName, existingImageKey]);
 
   return { isUploading, uploadedKey };
 }

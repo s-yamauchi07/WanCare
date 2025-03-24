@@ -11,19 +11,26 @@ import useUploadImage from "@/_hooks/useUploadImage";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { DiaryRequest, DiaryDetails } from "@/_types/diary";
 import { useFetchSummaries } from "../_hooks/useFetchSummaries";
+import { KeyedMutator } from "swr";
 
 interface DiaryFormProps {
   diary?: DiaryDetails;
   isEdit?: boolean;
   onClose: () => void;
+  mutate?: KeyedMutator<DiaryDetails>
 }
 
-const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose}) => {
+const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) => {
   useRouteGuard();
   const { token } = useSupabaseSession();
   const { register, handleSubmit, reset, setValue, watch, formState: { errors, isSubmitting}} = useForm<DiaryRequest>();
   const imageKey = watch("imageKey");
-  const { uploadedKey, isUploading } = useUploadImage(imageKey ?? null, "diary_img" );
+  const existingImageKey = diary?.imageKey ?? null;
+  const { uploadedKey, isUploading } = useUploadImage(
+    imageKey ?? null, 
+    "diary_img",
+    isEdit ? existingImageKey : null,
+  );
   const thumbnailImageUrl = useEditPreviewImage(uploadedKey ?? null, "diary_img", diary?.imageKey ?? null);
   const { summaryLists } = useFetchSummaries();
 
@@ -46,8 +53,12 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose}) => {
       });
 
       if(response.status === 200) {
-        reset();
         toast.success(isEdit ? "更新しました" : "投稿が完了しました");
+        reset();
+
+        if (isEdit && mutate) {
+          mutate();
+        }
 
         setTimeout(() => {
           onClose();
