@@ -23,7 +23,7 @@ interface DiaryFormProps {
 const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) => {
   useRouteGuard();
   const { token } = useSupabaseSession();
-  const { register, handleSubmit, reset, setValue, watch, formState: { errors, isSubmitting}} = useForm<DiaryRequest>();
+  const { register, handleSubmit, reset,  watch, formState: { errors, isSubmitting}} = useForm<DiaryRequest>();
   const imageKey = watch("imageKey");
   const existingImageKey = diary?.imageKey ?? null;
   const { uploadedKey, isUploading } = useUploadImage(
@@ -72,14 +72,15 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) =
 
   useEffect(() => {
     if(isEdit && diary) {
-      setValue("title", diary.title)
-      setValue("content", diary.content)
-      setValue("imageKey", diary.imageKey ?? "")
-
-      const tagNames = diary.diaryTags?.map(tag => tag.tag.name).join(" ") ?? "";
-      setValue("tags", tagNames)
+      reset({
+        title: diary.title,
+        content: diary.content,
+        imageKey: diary.imageKey ?? "",
+        tags: diary.diaryTags?.map(tag => tag.tag.name).join(" ") ?? "",
+        summaryId: diary.summaryId ?? "",
+      })
     }
-  },[isEdit, setValue, diary]);
+  },[isEdit, reset, diary]);
 
   return(
     <div className="flex justify-center">
@@ -149,6 +150,7 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) =
             まとめに追加する
           </label>
           <div className="inline-block w-64">
+          {summaryLists.length > 0 && (
             <select
               className="block appearance-none border border-primary bg-white text-gray-800 w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
               {...register("summaryId")}
@@ -160,6 +162,7 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) =
                 )
               })} 
             </select>
+          )}
           </div>
           <div className="text-red-500 text-xs mt-2">{errors.summaryId?.message}</div>
         </div>
