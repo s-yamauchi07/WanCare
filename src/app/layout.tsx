@@ -23,8 +23,8 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body
-        className={`${ZenMaruGothic.className} antialiased min-h-screen flex justify-center`}>
-          <div className="w-main min-h-full bg-main">
+        className={`${ZenMaruGothic.className} antialiased min-h-screen flex justify-center bg-main`}>
+          <div className="w-main min-h-full bg-main shadow-lg">
             {children}
           </div>
           <Menu />

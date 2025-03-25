@@ -163,7 +163,7 @@ export default function WelcomePage() {
             />
             <div className="text-sm m-auto xs:text-sm xs: w-72">
               <p>
-                他のユーザーが投稿した日記をキーワードで検索できます。
+                他のユーザーの投稿記事をキーワードで検索できます。
                 愛犬の症状や状態とマッチした投稿から、最適なケア方法を探しましょう。
               </p>
             </div>
@@ -200,13 +200,12 @@ export default function WelcomePage() {
         </div>
       </div>
 
-      <footer className="bg-secondary text-primary py-3 flex justify-center">
-        <p className="text-xs text-center">©WanCare 2025</p>
-        <span className="i-tabler-brand-instagram"></span>
+      <footer className="bg-secondary text-primary py-3">
         <Link 
           href="https://www.instagram.com/shiony07?igsh=ZWxxeWxucTFuMWtw&utm_source=qr" 
-          className="text-xs font-bold"
-        >shiony07
+          className="text-xs flex justify-center items-center"
+        >お問い合わせ
+        <span className="i-tabler-brand-instagram w-5 h-5"></span>
         </Link>
       </footer>
       <Toaster />
