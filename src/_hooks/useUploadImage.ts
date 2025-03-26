@@ -45,16 +45,6 @@ export const useUploadImage = (
           setUploading(false);
 
           if (existingImageKey && data.path !== existingImageKey) {
-            // const { error: deleteError } = await supabase.storage
-            // .from(bucketName)
-            // .remove([existingImageKey]);
-
-            // if (deleteError) {
-            //   console.log(error);
-            //   toast.error("画像の更新に失敗しました");
-            // } else {
-            //   console.log("既存の画像を削除しました");
-            // }
             deleteStorageImage(existingImageKey, bucketName);
           }
         } catch(error) {
