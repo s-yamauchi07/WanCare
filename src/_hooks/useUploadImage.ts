@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { supabase } from "../app/utils/supabase";
 import { toast } from "react-hot-toast";
@@ -12,6 +12,7 @@ export const useUploadImage = (
 ) => {
   const [isUploading, setUploading] = useState<boolean>(false);
   const [uploadedKey, setUploadedKey] = useState<string | null>(null);
+  const previousKey = useRef<string | null>(null);
 
   const options = {
     maxSizeMB: 1,
@@ -44,6 +45,14 @@ export const useUploadImage = (
           setUploadedKey(data.path);
           setUploading(false);
 
+          // 現在formのimageKeyに保持されている画像キーが存在し、かつ現在のキーと異なる場合は削除する(画像をform投稿前に変更した場合)
+          if (previousKey.current && data.path !== previousKey.current) {
+            deleteStorageImage(previousKey.current, bucketName);
+          }
+          // 現在選択中の画像キーをpreviousKeyで保持。
+          previousKey.current = data.path;
+
+          // 編集機能で既存画像を削除する場合
           if (existingImageKey && data.path !== existingImageKey) {
             deleteStorageImage(existingImageKey, bucketName);
           }
