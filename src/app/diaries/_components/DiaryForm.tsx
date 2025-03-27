@@ -145,12 +145,12 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) =
           </Label>
         </div>
 
+        {summaryLists.length > 0 && (
         <div className="mt-6 mb-3">
           <label className="block text-primary text-sm font-bold mb-2" id="summaryId">
             まとめに追加する
           </label>
           <div className="inline-block w-64">
-          {summaryLists.length > 0 && (
             <select
               className="block appearance-none border border-primary bg-white text-gray-800 w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
               {...register("summaryId")}
@@ -162,10 +162,10 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) =
                 )
               })} 
             </select>
-          )}
           </div>
           <div className="text-red-500 text-xs mt-2">{errors.summaryId?.message}</div>
         </div>
+        )}
 
         <LoadingButton 
           isSubmitting={isSubmitting}
