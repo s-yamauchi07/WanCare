@@ -17,9 +17,15 @@ export const GET = async(request: NextRequest) => {
     const diaries = await prisma.diary.findMany({
       skip: page * 4,
       take: 4,
-      include: {
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        imageKey: true,
+        summaryId: true,
         diaryTags: {
-          include: {
+          select: {
+            id: true,
             tag: {
               select:{
                 id: true,
