@@ -8,4 +8,9 @@ export const careUnitLists : { [key: string]: CareUnit } = {
   うんち: { title: "回数", unit: "回" },
   体重: { title: "体重", unit: "kg" },
   くすり: { title: "1回の量", unit: "錠" },
+  ワクチン: { title: "", unit: ""},
+  通院: { title: "", unit: ""},
+  トリミング: { title: "", unit: ""},
+  シャンプー: { title: "", unit: ""},
+  爪切り: { title: "", unit: ""},
 };
