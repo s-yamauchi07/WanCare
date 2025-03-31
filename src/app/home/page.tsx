@@ -93,9 +93,9 @@ const Home: React.FC = () => {
           </div>
 
           {/* 予定のエリア */}
-             <div>
-             <h2 className="text-primary font-bold text-2xl mb-4">今日の記録/予定</h2>
-             <ul className="flex flex-col gap-1">
+          <div>
+            <h2 className="text-primary font-bold text-2xl mb-4">今日の記録/予定</h2>
+            <ul className="flex flex-col gap-1">
                {todayCare.length === 0 ? (
                 <p>今日の予定はありません</p>
               ) : (

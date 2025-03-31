@@ -51,6 +51,8 @@ export const GET = async(request: NextRequest) => {
           },
         },
         select: {
+          id: true,
+          careDate: true,
           careList: {
             select: {
               name: true,
