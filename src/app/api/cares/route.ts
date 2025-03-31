@@ -44,7 +44,12 @@ export const GET = async (request: NextRequest) => {
       where: {
         ownerId: currentUserId,
       },
-      include: {
+      select: {
+        id: true,
+        careDate: true,
+        amount: true,
+        memo: true,
+        imageKey: true,
         careList: {
           select: {
             name: true,
@@ -55,7 +60,7 @@ export const GET = async (request: NextRequest) => {
       orderBy: {
         careDate: 'asc',
       },
-    })
+    });
     return NextResponse.json({ status: "OK", cares: cares }, { status: 200 });
   } catch(error) {
     return handleError(error);
