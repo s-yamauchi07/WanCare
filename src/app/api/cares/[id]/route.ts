@@ -21,7 +21,13 @@ export const GET = async (request: NextRequest, { params } : { params : Promise<
       where: {
         id
       },
-      include: {
+      select: {
+        id: true,
+        careDate: true,
+        amount: true,
+        memo: true,
+        imageKey: true,
+        ownerId: true,
         careList: {
           select: {
             name: true,

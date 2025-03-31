@@ -38,7 +38,5 @@ export interface CareDetails {
   imageKey: string | null;
   ownerId: string;
   careListId: string;
-  createdAt: string;
-  updatedAt: string;
   careList: { name: string, icon: string };
 }
