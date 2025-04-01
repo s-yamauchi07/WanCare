@@ -13,7 +13,9 @@ export const GET = async(request: NextRequest, { params } : { params : Promise<{
       where: {
         id,
       },
-      include: {
+      select: {
+        id: true,
+        nickname: true,
         dog: {
           select: {
             name: true,
