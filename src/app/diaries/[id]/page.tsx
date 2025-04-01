@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { changeFromISOtoDate } from "@/app/utils/ChangeDateTime/changeFromISOtoDate";
@@ -39,9 +39,8 @@ const DiaryDetail: React.FC = () => {
   const [modalType, setModalType] = useState<string>("");
 
   const checkBookmarked = () => {
-    // ログインユーザーに紐づいたbookmarkが1つでも存在すればtrue, なければfalseを返す。
-    const isBookmarked = diary?.bookmarks.some((b: {id: string, ownerId: string}) => b.ownerId === currentUserId);
-    return isBookmarked;
+      // ログインユーザーに紐づいたbookmarkが1つでも存在すればtrue, なければfalseを返す。
+      return diary?.bookmarks.some((b: {id: string, ownerId: string}) => b.ownerId === currentUserId);
   }
 
   const [isBookmarked, setIsBookmarked] = useState<boolean | undefined>(checkBookmarked);
@@ -129,6 +128,12 @@ const DiaryDetail: React.FC = () => {
       setIsBookmarking(false);
     }
   }
+
+  useEffect(() => {
+    if (diary) {
+      setIsBookmarked(checkBookmarked());
+    }
+  },[diary]);
   
   if(error) return <p>{error.message}</p>;
 
