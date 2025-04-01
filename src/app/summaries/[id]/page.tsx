@@ -131,12 +131,12 @@ const SummaryDetail: React.FC = () => {
           {/* タグエリア */}
           <div>
             {summary.summaryTags && summary.summaryTags.length > 0 && (
-              summary.summaryTags.map((tag) => (
+              summary.summaryTags.map((summaryTag) => (
                 <span 
-                  key={tag.tagId}
+                  key={summaryTag.tag.id}
                   className="mr-2 text-primary font-bold"
                 >
-                  {`#${tag.tag.name}`}
+                  {`#${summaryTag.tag.name}`}
                 </span>
               ))
             )}

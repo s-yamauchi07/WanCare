@@ -5,4 +5,5 @@ export const getISODateWithMidnightInJST = (targetDate: Date) => {
   const offset = targetDate.getTimezoneOffset() * 60000;
   const jstDate = new Date(targetDate.getTime() - offset);
   return jstDate.toISOString();
+  
 }

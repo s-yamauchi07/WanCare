@@ -16,12 +16,20 @@ export const GET = async(request:NextRequest, { params } : { params: Promise<{id
       where: {
         id,
       },
-      include: {
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        imageKey: true,
+        summaryId: true,
+        createdAt: true,
         diaryTags: {
-          include: {
+          select: {
+            id: true,
             tag: {
-              select: {
-                name: true
+              select:{
+                id: true,
+                name: true,
               },
             },
           },
@@ -36,6 +44,9 @@ export const GET = async(request:NextRequest, { params } : { params: Promise<{id
                 nickname: true
               },
             },
+          },
+          orderBy: {
+            createdAt: "desc"
           },
         },
         owner: {

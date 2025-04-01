@@ -23,7 +23,7 @@ export const GET = async(request: NextRequest) => {
         where: {
           id: currentUserId,
         },
-        include: {
+        select: {
           // ログインユーザーに紐づく犬情報を取得
           dog: {
             select: {
@@ -50,7 +50,9 @@ export const GET = async(request: NextRequest) => {
             lt: tomorrowJST,
           },
         },
-        include: {
+        select: {
+          id: true,
+          careDate: true,
           careList: {
             select: {
               name: true,

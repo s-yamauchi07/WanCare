@@ -17,7 +17,6 @@ export interface BaseDiary {
   diaryTags: Tag[] | null;
   summaryId: string | null;
   createdAt: string;
-  updatedAt: string;
 }
 
 export interface DiaryDetails extends BaseDiary {

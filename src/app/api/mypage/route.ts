@@ -15,7 +15,9 @@ export const GET = async(request: NextRequest) => {
       where: {
         id: currentUserId,
       },
-      include: {
+      select: {
+        id: true,
+        nickname: true,
         dog: {
           select: {
             name: true,
