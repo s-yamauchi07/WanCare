@@ -121,7 +121,7 @@ const SummaryForm: React.FC<SummaryFormProps> = ({ onClose, summary, isEdit, mut
         />
 
         <div className="mt-6 mb-3">
-          <Label id="まとめに登録する記事" />
+          <Label id="まとめに登録する日記" />
           <Select 
             options={diaryLists}
             value={selectedDiaryIds}
