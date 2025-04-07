@@ -135,7 +135,7 @@ const UserForm: React.FC<UserInfo> = ({ userNickname, userEmail, isEdit, isGuest
             id="password"
             labelName="password"
             type="password"
-            placeholder="*******"
+            placeholder="******"
             register={{...register("password", {
               required: "passwordは必須です。",
               pattern: { 
