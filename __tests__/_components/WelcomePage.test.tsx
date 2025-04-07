@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import WelcomePage from '@/app/page';
-import { useRouter } from 'next/navigation';
 
 // useRouter をモックする
 jest.mock('next/navigation', () => ({
@@ -9,12 +8,6 @@ jest.mock('next/navigation', () => ({
 
 describe('WelcomePage Component', () => {
   it('render root component', () => {
-    // useRouterをjestのmockに置き換え、useRouter関数が実行された場合もmockのpush関数を呼び出す。
-    (useRouter as jest.Mock).mockReturnValue({
-      push: jest.fn(),
-    });
-
-
     // WelComeコンポーネントをレンダリングする
     render(<WelcomePage />);
 
