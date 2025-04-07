@@ -14,6 +14,7 @@ describe('WelcomePage Component', () => {
       push: jest.fn(),
     });
 
+
     // WelComeコンポーネントをレンダリングする
     render(<WelcomePage />);
 
