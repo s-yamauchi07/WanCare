@@ -8,7 +8,7 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: '/',
     display: 'standalone',
     background_color: '#f5ebda',
-    theme_color: '#326a55',
+    theme_color: '#f5ebda',
     icons: [
       {
         "src": "/wancare/public/web-app-manifest-192x192.png",
