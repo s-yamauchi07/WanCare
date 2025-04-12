@@ -9,7 +9,6 @@ const ZenMaruGothic = Zen_Maru_Gothic({
     subsets: ["latin"]
   }) 
   
-
 export const metadata: Metadata = {
   title: "WanCare",
   description: "小さな変化も見逃さない。犬の健康管理アプリ",

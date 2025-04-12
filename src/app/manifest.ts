@@ -7,7 +7,7 @@ export default function manifest(): MetadataRoute.Manifest {
     description: '愛犬の「いつも」を記録し、「もしも」に備える',
     start_url: '/',
     display: 'standalone',
-    background_color: '#f5ebda',
+    background_color: '#000000',
     theme_color: '#f5ebda',
     icons: [
       {
