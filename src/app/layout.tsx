@@ -13,6 +13,7 @@ const ZenMaruGothic = Zen_Maru_Gothic({
 export const metadata: Metadata = {
   title: "WanCare",
   description: "小さな変化も見逃さない。犬の健康管理アプリ",
+  manifest: "/manifest.json"
 };
 
 export default function RootLayout({

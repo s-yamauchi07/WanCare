@@ -42,3 +42,7 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# pwa
+/public/sw.js
+/public/workbox-*.js
