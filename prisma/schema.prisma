@@ -1,205 +1,188 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client-js"
-  previewFeatures = ["multiSchema"]
+  provider        = "prisma-client-js"
 }
 
-
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
-  schemas  = ["auth", "public"]
 }
 
 model Owner {
-  id            String      @id @default(uuid()) @db.Uuid
-  nickname      String
-  dog           Dog?
-  cares         Care[]
-  diaries       Diary[]
-  summaries     Summary[]
-  comments      Comment[]
-  bookmarks     BookMark[]
-  follower      Follow[]    @relation("following")
-  following     Follow[]    @relation("follower")
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  id        String     @id @default(uuid()) @db.Uuid
+  nickname  String
+  bookmarks BookMark[]
+  cares     Care[]
+  comments  Comment[]
+  diaries   Diary[]
+  dog       Dog?
+  following Follow[]   @relation("follower")
+  follower  Follow[]   @relation("following")
+  summaries Summary[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
   @@map("owners")
-  @@schema("public")
 }
 
 model Dog {
-  id            String      @id @default(uuid()) @db.Uuid
-  name          String
-  sex           String
-  birthDate     DateTime
-  adoptionDate  DateTime
-  imageKey      String
-  breed         Breed       @relation(fields: [breedId], references: [id])
-  breedId       String      @db.Uuid
-  owner         Owner       @relation(fields: [ownerId], references: [id])
-  ownerId       String      @unique @db.Uuid
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String
+  sex          String
+  birthDate    DateTime
+  adoptionDate DateTime
+  imageKey     String
+  breedId      String   @db.Uuid
+  ownerId      String   @unique @db.Uuid
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  breed        Breed    @relation(fields: [breedId], references: [id])
+  owner        Owner    @relation(fields: [ownerId], references: [id])
 
   @@map("dogs")
-  @@schema("public")
 }
 
 model Breed {
-  id            String   @id @default(uuid()) @db.Uuid
-  name          String   @unique
-  dogs          Dog[]
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  order         Int
-  @@map("breeds")
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  order     Int
+  dogs      Dog[]
 
-  @@schema("public")
+  @@map("breeds")
 }
 
 model Care {
-  id            String    @id @default(uuid()) @db.Uuid
-  careDate      DateTime
-  amount        Float?
-  memo          String?
-  imageKey      String?
-  owner         Owner     @relation(fields: [ownerId], references: [id])
-  ownerId       String    @db.Uuid
-  careList      CareList  @relation(fields: [careListId], references: [id])
-  careListId    String    @db.Uuid
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id         String   @id @default(uuid()) @db.Uuid
+  careDate   DateTime
+  amount     Float?
+  memo       String?
+  imageKey   String?
+  ownerId    String   @db.Uuid
+  careListId String   @db.Uuid
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  careList   CareList @relation(fields: [careListId], references: [id])
+  owner      Owner    @relation(fields: [ownerId], references: [id])
 
   @@map("cares")
-  @@schema("public")
 }
 
 model CareList {
-  id            String    @id @default(uuid()) @db.Uuid
-  name          String    @unique
-  icon          String    
-  cares         Care[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  order         Int
-  
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  icon      String
+  order     Int
+  cares     Care[]
+
   @@map("care_lists")
-  @@schema("public")
 }
 
 model Summary {
-  id            String        @id @default(uuid()) @db.Uuid
-  title         String
-  explanation   String
-  owner         Owner         @relation(fields: [ownerId], references: [id])
-  ownerId       String        @db.Uuid
-  diaries       Diary[]
-  summaryTags   SummaryTag[]
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  id          String       @id @default(uuid()) @db.Uuid
+  title       String
+  explanation String
+  ownerId     String       @db.Uuid
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  diaries     Diary[]
+  owner       Owner        @relation(fields: [ownerId], references: [id])
+  summaryTags SummaryTag[]
 
   @@map("summary")
-  @@schema("public")
+
 }
 
 model SummaryTag {
-  id            String   @id @default(uuid()) @db.Uuid
-  summary       Summary  @relation(fields: [summaryId], references: [id])
-  summaryId     String   @db.Uuid
-  tag           Tag      @relation(fields: [tagId], references: [id])
-  tagId         String   @db.Uuid
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id        String   @id @default(uuid()) @db.Uuid
+  summaryId String   @db.Uuid
+  tagId     String   @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  summary   Summary  @relation(fields: [summaryId], references: [id])
+  tag       Tag      @relation(fields: [tagId], references: [id])
 
   @@map("summary_tags")
-  @@schema("public")
+
 }
 
 model Diary {
-  id            String      @id @default(uuid()) @db.Uuid
-  title         String
-  content       String
-  imageKey      String?
-  owner         Owner       @relation(fields: [ownerId], references: [id])
-  ownerId       String      @db.Uuid
-  summary       Summary?    @relation(fields: [summaryId], references: [id])
-  summaryId     String?     @db.Uuid
-  diaryTags     DiaryTag[]
-  bookmarks     BookMark[]
-  comments      Comment[]
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  id        String     @id @default(uuid()) @db.Uuid
+  title     String
+  content   String
+  imageKey  String?
+  ownerId   String     @db.Uuid
+  summaryId String?    @db.Uuid
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  bookmarks BookMark[]
+  comments  Comment[]
+  owner     Owner      @relation(fields: [ownerId], references: [id])
+  summary   Summary?   @relation(fields: [summaryId], references: [id])
+  diaryTags DiaryTag[]
 
   @@map("diaries")
-  @@schema("public")
 }
 
 model DiaryTag {
-  id            String   @id @default(uuid()) @db.Uuid
-  diary         Diary    @relation(fields: [diaryId], references: [id])
-  diaryId       String   @db.Uuid
-  tag           Tag      @relation(fields: [tagId], references: [id])
-  tagId         String   @db.Uuid
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id        String   @id @default(uuid()) @db.Uuid
+  diaryId   String   @db.Uuid
+  tagId     String   @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  diary     Diary    @relation(fields: [diaryId], references: [id])
+  tag       Tag      @relation(fields: [tagId], references: [id])
 
   @@map("diary_tags")
-  @@schema("public")
 }
 
 model Tag {
-  id            String        @id @default(uuid()) @db.Uuid
-  name          String        @unique
-  diaryTags     DiaryTag[]
-  summaryTags   SummaryTag[]
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  id          String       @id @default(uuid()) @db.Uuid
+  name        String       @unique
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  diaryTags   DiaryTag[]
+  summaryTags SummaryTag[]
 
   @@map("tags")
-  @@schema("public")
 }
 
 model BookMark {
-  id            String   @id @default(uuid()) @db.Uuid
-  owner         Owner    @relation(fields: [ownerId], references: [id])
-  ownerId       String   @db.Uuid
-  diary         Diary    @relation(fields: [diaryId], references: [id]) 
-  diaryId       String   @db.Uuid
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id        String   @id @default(uuid()) @db.Uuid
+  ownerId   String   @db.Uuid
+  diaryId   String   @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  diary     Diary    @relation(fields: [diaryId], references: [id], onDelete: Cascade )
+  owner     Owner    @relation(fields: [ownerId], references: [id])
 
   @@map("bookmarks")
-  @@schema("public")
 }
 
 model Comment {
-  id            String   @id @default(uuid()) @db.Uuid
-  comment       String
-  owner         Owner    @relation(fields: [ownerId], references: [id])
-  ownerId       String   @db.Uuid
-  diary         Diary    @relation(fields: [diaryId], references: [id])
-  diaryId       String   @db.Uuid
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id        String   @id @default(uuid()) @db.Uuid
+  comment   String
+  ownerId   String   @db.Uuid
+  diaryId   String   @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  diary     Diary    @relation(fields: [diaryId], references: [id])
+  owner     Owner    @relation(fields: [ownerId], references: [id])
 
   @@map("comments")
-  @@schema("public")
 }
 
 model Follow {
-  follower      Owner    @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
-  followerId    String   @db.Uuid
-  following     Owner    @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
-  followingId   String   @db.Uuid
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  followerId  String   @db.Uuid
+  followingId String   @db.Uuid
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  follower    Owner    @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
+  following   Owner    @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
 
   @@id([followingId, followerId])
   @@map("follows")
-  @@schema("public")
 }
