@@ -119,6 +119,11 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
   const handleChange = (text: string) => {
     const normalizedText = text.replace(/ /g, "");
     setDogBreed(normalizedText);
+
+    if (normalizedText === "") {
+      setSuggestions([]);
+      return;
+    }
     
     const breedMatch = breeds.filter((opt) => {
       const regex = new RegExp(normalizedText, "gi");
