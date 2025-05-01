@@ -88,6 +88,7 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
     }}, [dogInfo, isEdit, setValue, breeds]);
 
   const onsubmit: SubmitHandler<DogRequest> = async(data) => {
+    console.log(data)
     const req = {
       ...data,
       imageKey: uploadedKey || dogInfo?.imageKey
@@ -210,6 +211,23 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
               </div>
               <div className="text-red-500 text-xs mt-2">{errors.breedId?.message}</div>
             </div>
+            <div className="px-4 shadow-lg bg-gray-50 rounded-lg">
+              {isFocus && (
+                suggestions?.map((suggestion, i) => (
+                  <p
+                    key={i}
+                    onClick={() => {
+                      setDogBreed(suggestion.name);
+                      setIsFocus(false);
+                    }}
+                    className="text-sm py-1 text-gray-700"
+                  >
+                    # {suggestion.name}
+                  </p>
+                ))
+              )}
+            </div>
+
 
             <Input
               id="name"
