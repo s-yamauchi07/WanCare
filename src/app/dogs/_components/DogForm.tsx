@@ -49,10 +49,9 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
   ); 
   const thumbnailImageUrl = useEditPreviewImage(uploadedKey, "profile_img", dogInfo?.imageKey ?? null);
   const [isLoading, setLoading] = useState<boolean>(true);
-  const [dogBreed, setDogBreed] = useState<string>('');
-  const [selectedBreedId, setSelectedBreedId] = useState<string>('');
+  const [inputBreed, setInputBreed] = useState<string>(''); 
   const [isFocus, setIsFocus] = useState<boolean>(false);
-  const [suggestions, setSuggestions] = useState<KeyWordProps[]>([]);
+  const [suggestions, setSuggestions] = useState<KeyWordProps[]>([]); 
 
   useEffect(()=>{
     if(!token) return
@@ -85,13 +84,14 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
       setValue("name", dogInfo.name); 
       setValue("birthDate", dogInfo.birthDate.split('T')[0]); 
       setValue("adoptionDate", dogInfo.adoptionDate.split('T')[0]);
+      setInputBreed(breeds.find(breed => breed.id === dogInfo.breedId)?.name || '');
       setLoading(false);
     }}, [dogInfo, isEdit, setValue, breeds]);
 
   const onsubmit: SubmitHandler<DogRequest> = async(data) => {
     const req = {
       ...data,
-      breedId: selectedBreedId,
+      // breedId: selectedBreedId,
       imageKey: uploadedKey || dogInfo?.imageKey
     }
 
@@ -119,7 +119,7 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
 
   const handleChange = (text: string) => {
     const normalizedText = text.replace(/ /g, "");
-    setDogBreed(normalizedText);
+    setInputBreed(normalizedText);
 
     if (normalizedText === "") {
       setSuggestions([]);
@@ -195,7 +195,7 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
                 <input 
                   type="search" 
                   className="block appearance-none border border-primary bg-white text-gray-800 w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                  value={dogBreed}
+                  value={inputBreed}
                   {...register("breedId",{
                     validate: value => value !== "" ||"犬種を選択してください。"
                   })}
@@ -211,8 +211,8 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
                   <p
                     key={i}
                     onClick={() => {
-                      setDogBreed(suggestion.name);
-                      setSelectedBreedId(suggestion.id);
+                      setInputBreed(suggestion.name);
+                      // setSelectedBreedId(suggestion.id);
                       setValue("breedId", suggestion.id);
                       setIsFocus(false);
                     }}
