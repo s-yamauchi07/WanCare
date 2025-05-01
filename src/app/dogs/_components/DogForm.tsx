@@ -190,18 +190,6 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
             <div className="mb-6">
               <Label id="犬種" />
               <div className="inline-block w-64">
-                {/* <select 
-                  className="block appearance-none border border-primary bg-white text-gray-800 w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                  {...register("breedId",{
-                    validate: value => value !== "" ||"犬種を選択してください。"
-                  })}>
-                  <option value="">犬種を選択してください</option>
-                  {breeds.map((breed) => {
-                    return (
-                      <option key={breed.id} value={breed.id}>{breed.name}</option>
-                    )
-                  })}
-                </select> */}
                 <input 
                   type="search" 
                   className="block appearance-none border border-primary bg-white text-gray-800 w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
