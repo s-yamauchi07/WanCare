@@ -28,6 +28,11 @@ interface DogFormProps {
   isGuest?: boolean;
 }
 
+interface KeyWordProps {
+  id: string;
+  name: string;
+}
+
 const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
   useRouteGuard();
   
@@ -44,6 +49,9 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
   ); 
   const thumbnailImageUrl = useEditPreviewImage(uploadedKey, "profile_img", dogInfo?.imageKey ?? null);
   const [isLoading, setLoading] = useState<boolean>(true);
+  const [dogBreed, setDogBreed] = useState<string>('');
+  const [isFocus, setIsFocus] = useState<boolean>(false);
+  const [suggestions, setSuggestions] = useState<KeyWordProps[]>([]);
 
   useEffect(()=>{
     if(!token) return
@@ -107,6 +115,17 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
       }
   }
 
+  const handleChange = (text: string) => {
+    const normalizedText = text.replace(/ /g, "");
+    setDogBreed(normalizedText);
+    
+    const breedMatch = breeds.filter((opt) => {
+      const regex = new RegExp(normalizedText, "gi");
+      return opt.name.match(regex);
+    });
+    setSuggestions(breedMatch);
+  }
+
   return(
     <>
       {!isLoading ? (
@@ -115,20 +134,21 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
             <h2 className="text-primary text-center text-2xl font-bold mb-10">{isEdit ? "ペット編集": "ペット登録"}</h2>
             
             <div className="mb-6">
-              <div className="rounded-full border border-primary ring-primary ring-offset-2 ring m-auto w-28 h-28 flex items-center justify-center overflow-hidden relative">
+              <div 
+                className="rounded-full border border-primary ring-primary ring-offset-2 ring m-auto w-28 h-28 flex items-center justify-center overflow-hidden relative"
+              >
                 <label className="w-full h-full flex items-center justify-center">
                 {thumbnailImageUrl ? (
-                    <div 
-                      className="absolute inset-0 bg-cover bg-center pointer-events-none" 
-                      style={{ backgroundImage: `url(${thumbnailImageUrl })` }}>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center">
-                      <span className="i-material-symbols-add-a-photo-outline-rounded text-5xl p-3 text-primary"></span>
-                      <span className="text-xs text-primary font-bold">{isUploading ? "uploading..." : "add image"}</span>
-                    </div>
-                  )
-                }
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center pointer-events-none" 
+                    style={{ backgroundImage: `url(${thumbnailImageUrl })` }}>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center">
+                    <span className="i-material-symbols-add-a-photo-outline-rounded text-5xl p-3 text-primary"></span>
+                    <span className="text-xs text-primary font-bold">{isUploading ? "uploading..." : "add image"}</span>
+                  </div>
+                )}
                   <input 
                     type="file" 
                     className="absolute inset-0 opacity-0 cursor-pointer"
@@ -165,7 +185,7 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
             <div className="mb-6">
               <Label id="犬種" />
               <div className="inline-block w-64">
-                <select 
+                {/* <select 
                   className="block appearance-none border border-primary bg-white text-gray-800 w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                   {...register("breedId",{
                     validate: value => value !== "" ||"犬種を選択してください。"
@@ -176,7 +196,17 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
                       <option key={breed.id} value={breed.id}>{breed.name}</option>
                     )
                   })}
-                </select>
+                </select> */}
+                <input 
+                  type="search" 
+                  className="block appearance-none border border-primary bg-white text-gray-800 w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                  value={dogBreed}
+                  {...register("breedId",{
+                    validate: value => value !== "" ||"犬種を選択してください。"
+                  })}
+                  onFocus={() => setIsFocus(true)}
+                  onChange={(e) => handleChange(e.target.value)}
+                />
               </div>
               <div className="text-red-500 text-xs mt-2">{errors.breedId?.message}</div>
             </div>
