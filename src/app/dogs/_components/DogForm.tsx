@@ -50,6 +50,7 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
   const thumbnailImageUrl = useEditPreviewImage(uploadedKey, "profile_img", dogInfo?.imageKey ?? null);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [dogBreed, setDogBreed] = useState<string>('');
+  const [selectedBreedId, setSelectedBreedId] = useState<string>('');
   const [isFocus, setIsFocus] = useState<boolean>(false);
   const [suggestions, setSuggestions] = useState<KeyWordProps[]>([]);
 
@@ -90,6 +91,7 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
   const onsubmit: SubmitHandler<DogRequest> = async(data) => {
     const req = {
       ...data,
+      breedId: selectedBreedId,
       imageKey: uploadedKey || dogInfo?.imageKey
     }
 
@@ -210,6 +212,8 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
                     key={i}
                     onClick={() => {
                       setDogBreed(suggestion.name);
+                      setSelectedBreedId(suggestion.id);
+                      setValue("breedId", suggestion.id);
                       setIsFocus(false);
                     }}
                     className="text-sm py-1 text-gray-700"
