@@ -28,6 +28,11 @@ interface DogFormProps {
   isGuest?: boolean;
 }
 
+interface KeyWordProps {
+  id: string;
+  name: string;
+}
+
 const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
   useRouteGuard();
   
@@ -44,6 +49,9 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
   ); 
   const thumbnailImageUrl = useEditPreviewImage(uploadedKey, "profile_img", dogInfo?.imageKey ?? null);
   const [isLoading, setLoading] = useState<boolean>(true);
+  const [inputBreed, setInputBreed] = useState<string>(''); 
+  const [isFocus, setIsFocus] = useState<boolean>(false);
+  const [suggestions, setSuggestions] = useState<KeyWordProps[]>([]); 
 
   useEffect(()=>{
     if(!token) return
@@ -76,12 +84,14 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
       setValue("name", dogInfo.name); 
       setValue("birthDate", dogInfo.birthDate.split('T')[0]); 
       setValue("adoptionDate", dogInfo.adoptionDate.split('T')[0]);
+      setInputBreed(breeds.find(breed => breed.id === dogInfo.breedId)?.name || '');
       setLoading(false);
     }}, [dogInfo, isEdit, setValue, breeds]);
 
   const onsubmit: SubmitHandler<DogRequest> = async(data) => {
     const req = {
       ...data,
+      // breedId: selectedBreedId,
       imageKey: uploadedKey || dogInfo?.imageKey
     }
 
@@ -107,6 +117,22 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
       }
   }
 
+  const handleChange = (text: string) => {
+    const normalizedText = text.replace(/ /g, "");
+    setInputBreed(normalizedText);
+
+    if (normalizedText === "") {
+      setSuggestions([]);
+      return;
+    }
+    
+    const breedMatch = breeds.filter((opt) => {
+      const regex = new RegExp(normalizedText, "gi");
+      return opt.name.match(regex);
+    });
+    setSuggestions(breedMatch);
+  }
+
   return(
     <>
       {!isLoading ? (
@@ -115,20 +141,21 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
             <h2 className="text-primary text-center text-2xl font-bold mb-10">{isEdit ? "ペット編集": "ペット登録"}</h2>
             
             <div className="mb-6">
-              <div className="rounded-full border border-primary ring-primary ring-offset-2 ring m-auto w-28 h-28 flex items-center justify-center overflow-hidden relative">
+              <div 
+                className="rounded-full border border-primary ring-primary ring-offset-2 ring m-auto w-28 h-28 flex items-center justify-center overflow-hidden relative"
+              >
                 <label className="w-full h-full flex items-center justify-center">
                 {thumbnailImageUrl ? (
-                    <div 
-                      className="absolute inset-0 bg-cover bg-center pointer-events-none" 
-                      style={{ backgroundImage: `url(${thumbnailImageUrl })` }}>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center">
-                      <span className="i-material-symbols-add-a-photo-outline-rounded text-5xl p-3 text-primary"></span>
-                      <span className="text-xs text-primary font-bold">{isUploading ? "uploading..." : "add image"}</span>
-                    </div>
-                  )
-                }
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center pointer-events-none" 
+                    style={{ backgroundImage: `url(${thumbnailImageUrl })` }}>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center">
+                    <span className="i-material-symbols-add-a-photo-outline-rounded text-5xl p-3 text-primary"></span>
+                    <span className="text-xs text-primary font-bold">{isUploading ? "uploading..." : "add image"}</span>
+                  </div>
+                )}
                   <input 
                     type="file" 
                     className="absolute inset-0 opacity-0 cursor-pointer"
@@ -165,21 +192,38 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
             <div className="mb-6">
               <Label id="犬種" />
               <div className="inline-block w-64">
-                <select 
+                <input 
+                  type="search" 
                   className="block appearance-none border border-primary bg-white text-gray-800 w-full px-3 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                  value={inputBreed}
                   {...register("breedId",{
                     validate: value => value !== "" ||"犬種を選択してください。"
-                  })}>
-                  <option value="">犬種を選択してください</option>
-                  {breeds.map((breed) => {
-                    return (
-                      <option key={breed.id} value={breed.id}>{breed.name}</option>
-                    )
                   })}
-                </select>
+                  onFocus={() => setIsFocus(true)}
+                  onChange={(e) => handleChange(e.target.value)}
+                />
               </div>
               <div className="text-red-500 text-xs mt-2">{errors.breedId?.message}</div>
             </div>
+            <div className="px-4 shadow-lg bg-gray-50 rounded-lg">
+              {isFocus && (
+                suggestions?.map((suggestion, i) => (
+                  <p
+                    key={i}
+                    onClick={() => {
+                      setInputBreed(suggestion.name);
+                      // setSelectedBreedId(suggestion.id);
+                      setValue("breedId", suggestion.id);
+                      setIsFocus(false);
+                    }}
+                    className="text-sm py-1 text-gray-700"
+                  >
+                    # {suggestion.name}
+                  </p>
+                ))
+              )}
+            </div>
+
 
             <Input
               id="name"
