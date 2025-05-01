@@ -88,7 +88,6 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
     }}, [dogInfo, isEdit, setValue, breeds]);
 
   const onsubmit: SubmitHandler<DogRequest> = async(data) => {
-    console.log(data)
     const req = {
       ...data,
       imageKey: uploadedKey || dogInfo?.imageKey
