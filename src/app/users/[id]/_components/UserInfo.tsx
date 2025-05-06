@@ -9,9 +9,10 @@ interface UserInfoProps {
   user: UserMyPage;
   isMypage: boolean;
   token?: string | null;
+  onSignout?: () => void;
 }
 
-const UserInfo: React.FC<UserInfoProps> = ({ user, isMypage, token }) => {
+const UserInfo: React.FC<UserInfoProps> = ({ user, isMypage, token, onSignout }) => {
   const [isFollowed, setIsFollowed] = useState<boolean>(user.following.length > 0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [followingCount, setFollowingCount] = useState<number>(user.following.length);
@@ -47,6 +48,8 @@ const UserInfo: React.FC<UserInfoProps> = ({ user, isMypage, token }) => {
     }
   }
 
+
+
   return(
     <>
       <h2 className="text-2xl font-bold text-primary text-center">{isMypage ? "マイページ" : `${user?.nickname}さんのページ`}</h2>
@@ -76,6 +79,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ user, isMypage, token }) => {
             <div className="flex justify-center items-center gap-2">
               <button
                 className="bg-primary text-white p-2 rounded-lg gap-2 flex items-center justify-center w-1/2"
+                onClick={onSignout}
               >
                 <span className="i-ri-logout-box-r-line w-5 h-5"></span>
                 <span>ログアウト</span>
