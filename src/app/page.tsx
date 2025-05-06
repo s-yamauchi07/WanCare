@@ -27,8 +27,8 @@ export default function WelcomePage() {
     if(error) {
       toast.error("ゲストログインに失敗しました");
     } else {
-      toast.success("ゲストユーザーとしてログインしました");
       router.push("/home");
+      toast.success("ゲストユーザーとしてログインしました");
     }
   }
 
@@ -50,11 +50,16 @@ export default function WelcomePage() {
       {/* firstViewエリア */}
       <div className="relative py-12 px-8">
         <Image 
-            src="/first_view.png"
-            alt="トップ画像"
-            width={300}
-            height={300}
-            className="m-auto mt-10"
+          src="/first_view.png"
+          alt="トップ画像"
+          width={300}
+          height={300}
+          style={{
+            width: '100%',
+            height: 'auto',
+          }}
+          priority={true}
+          className="m-auto mt-10"
         />
 
         <div className="absolute top-10 font-bold leading-7 text-gray-800">
@@ -102,6 +107,10 @@ export default function WelcomePage() {
             src="/about_WanCare.png"
             width={200}
             height={200}
+            style={{
+              width: '100%',
+              height: 'auto',
+            }}
             alt="アプリについて"
             className="m-auto"
           />
@@ -126,6 +135,10 @@ export default function WelcomePage() {
               src="/care_record.png"
               width={250}
               height={250}
+              style={{
+                width: '100%',
+                height: 'auto',
+              }}
               alt="お世話の登録"
               className="m-auto my-3"
             />
@@ -141,6 +154,10 @@ export default function WelcomePage() {
               src="/add_diary.png"
               width={200}
               height={200}
+              style={{
+                width: '100%',
+                height: 'auto',
+              }}
               alt="お世話の登録"
               className="m-auto my-3"
             />
@@ -158,6 +175,10 @@ export default function WelcomePage() {
               src="/search_info.png"
               width={200}
               height={200}
+              style={{
+                width: '100%',
+                height: 'auto',
+              }}
               alt="お世話の登録"
               className="m-auto my-3"
             />
@@ -183,6 +204,10 @@ export default function WelcomePage() {
           src="/bottom_img.png"
           width={200}
           height={200}
+          style={{
+            width: '100%',
+            height: 'auto',
+          }}
           alt="サービス紹介画像"
           className="m-auto mb-8"
         />
