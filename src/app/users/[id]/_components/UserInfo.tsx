@@ -71,23 +71,29 @@ const UserInfo: React.FC<UserInfoProps> = ({ user, isMypage, token }) => {
           </li>
         </ul>
 
-        <div className="bg-primary rounded-lg text-white flex items-center justify-center py-1">
+        <div>
           {isMypage ? (
-            <div className="flex gap-2">
-              <button>
-                <Link href={`/users/${user.id}/edit`}>
-                  プロフィール編集
+            <div className="flex justify-center items-center gap-2">
+              <button
+                className="bg-primary text-white p-2 rounded-lg gap-2 flex items-center justify-center w-1/2"
+              >
+                <span className="i-ri-logout-box-r-line w-5 h-5"></span>
+                <span>ログアウト</span>
+              </button>
+              <div className="bg-primary text-white p-2 rounded-lg gap-2 flex items-center justify-center w-1/2">
+                <Link 
+                  href={`/users/${user.id}/edit`}
+                  className="flex items-center"
+                >
+                  <span className="i-ri-user-settings-line w-5 h-5"></span>
+                  <span>プロフィール編集</span>
                 </Link>
-              </button>
-              <button>
-                <span></span>
-              </button>
-
+              </div>
             </div>
           ) : (
             <button 
               onClick={() => changeFollow()}
-              className="flex justify-center items-center gap-2"
+              className="bg-primary text-white p-2 rounded-lg gap-2 flex items-center justify-center w-full"
             >
               <span className={isFollowed 
                 ? "i-ri-user-unfollow-line w-5 h-5"
