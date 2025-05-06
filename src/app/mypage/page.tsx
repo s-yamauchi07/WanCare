@@ -3,6 +3,9 @@
 import React, { useEffect, useState } from "react";
 import { useRouteGuard } from "@/_hooks/useRouteGuard";
 import { StaticImageData } from "next/image";
+import { supabase } from "../utils/supabase";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 import PageLoading from "../_components/PageLoading";
 import usePreviewImage from "@/_hooks/usePreviewImage";
 import no_diary_img from "/public/no_diary_img.png";
@@ -26,6 +29,7 @@ const MyPage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<string>("日記"); 
   const [linkPrefix, setLinkPrefix] = useState<string>("");
   const [showLists, setShowLists] = useState<MypageDiaryLists[] | MypageSummaryLists[] | MypageBookmarkLists[]>([]);
+  const router = useRouter();
 
   const selectTab = (tabName: string) => {
     setSelectedTab(tabName)
@@ -53,6 +57,18 @@ const MyPage: React.FC = () => {
     }
   }
 
+  const handleSignout = async () => {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      toast.error('ログアウトに失敗しました');
+    } else {
+      toast.success('ログアウトしました');
+      router.push("/"); 
+    }
+  };
+
+
   useEffect(() => {
     selectLists();
   }, [currentUser, selectedTab]);
@@ -65,7 +81,7 @@ const MyPage: React.FC = () => {
       <div className="my-20 pb-20 px-4 w-full max-w-screen-lg flex flex-col gap-12 overflow-y-auto">
         {currentUser ? (
           <>
-          <UserInfo user={currentUser} isMypage={true}/>
+          <UserInfo user={currentUser} isMypage={true} onSignout={handleSignout}/>
           <UserDogInfo user={currentUser} dogImg={dogImg}/>
           <TabNavigation 
             user={currentUser}
