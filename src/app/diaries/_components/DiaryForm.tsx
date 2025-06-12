@@ -108,7 +108,7 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) =
           <input
             id="tags"
             type="text"
-            // value={text}
+            className="appearance-none border border-primary rounded w-full h-10 py-2 px-3 bg-white text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="柴犬 アレルギー"
             {...register("tags")}
           />
