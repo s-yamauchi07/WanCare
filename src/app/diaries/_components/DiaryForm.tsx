@@ -98,14 +98,22 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) =
           error={errors.title?.message}
         />
 
-        <Input 
-          id="tags"
-          labelName="タグ"
-          type="text"
-          placeholder="柴犬 アレルギー"
-          register={{...register("tags")}}
-          error={errors.tags?.message}
-        />
+        <div className="mb-6">
+          <label 
+            className="block text-primary text-sm font-bold mb-2"
+            id="tags"
+          >
+            タグ
+          </label>
+          <input
+            id="tags"
+            type="text"
+            // value={text}
+            placeholder="柴犬 アレルギー"
+            {...register("tags")}
+          />
+          <p>{errors.tags?.message}</p>
+        </div>
 
         <Textarea 
           id="content"
