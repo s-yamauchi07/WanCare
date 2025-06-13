@@ -28,7 +28,7 @@ interface KeyWordProps {
 const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) => {
   useRouteGuard();
   const { token } = useSupabaseSession();
-  const { register, handleSubmit, reset,  watch, formState: { errors, isSubmitting}} = useForm<DiaryRequest>();
+  const { register, handleSubmit, reset, setValue, watch, formState: { errors, isSubmitting}} = useForm<DiaryRequest>();
   const imageKey = watch("imageKey");
   const existingImageKey = diary?.imageKey ?? null;
   const { uploadedKey, isUploading } = useUploadImage(
@@ -81,13 +81,15 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) =
 
   useEffect(() => {
     if(isEdit && diary) {
+      const tagString = diary.diaryTags?.map(tag => tag.tag.name).join(" ") ?? "";
       reset({
         title: diary.title,
         content: diary.content,
         imageKey: diary.imageKey ?? "",
-        tags: diary.diaryTags?.map(tag => tag.tag.name).join(" ") ?? "",
+        tags: tagString,
         summaryId: diary.summaryId ?? "",
       })
+      setText(tagString);
     }
   },[isEdit, reset, diary]);
 
@@ -115,6 +117,7 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) =
   const handleChange = (text: string) => {
     const normalizedText = text.replace(/　/g, " ");
     setText(normalizedText);
+    setValue("tags", normalizedText);
     const keywords = text.split(" "); // 入力されたkeywordを半角スペースで分割
     const lastKeyword = keywords[keywords.length - 1]; // keywordsの配列の最後の要素を取得して変数化。
     if (lastKeyword.length > 0) {
@@ -152,6 +155,7 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) =
           <input
             id="tags"
             type="text"
+            value={text}
             className="appearance-none border border-primary rounded w-full h-10 py-2 px-3 bg-white text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="柴犬 アレルギー"
             {...register("tags")}
@@ -168,7 +172,9 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) =
                 onClick={() => {
                   const currentKeywords = text.split(" ");
                   currentKeywords[currentKeywords.length - 1] = suggestion.name; // text(フォーム入力されている配列)の末尾のデータを候補のtextにする
-                  setText(currentKeywords.join(" ")); // 入力値を再度スペース区切りの形式に変換
+                  const newTag = currentKeywords.join(" "); // 入力値を再度スペース区切りの形式に変換
+                  setText(newTag);
+                  setValue("tags", newTag); 
                   setIsFocus(false);
                 }}
                 className="text-sm py-1 text-gray-700"
