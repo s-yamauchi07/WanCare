@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
+import { KeywordProps } from "@/_types/suggestion";
+import { useSuggestion } from "@/_hooks/useSuggestion";
 
 interface SearchValue {
   keywords: string;
@@ -14,17 +16,21 @@ interface SearchProps<T> {
   searchType: "diaries" | "summaries";
 }
 
-interface KeyWordProps {
-  id: string;
-  name: string;
-}
-
 const SearchForm = <T,>({ token, onSearchResults, searchType }: SearchProps<T>) => {
   const { register, handleSubmit, reset } = useForm<SearchValue>();
-  const [text, setText] = useState<string>("");
-  const [isFocus, setIsFocus] = useState<boolean>(false);
-  const [suggestions, setSuggestions] = useState<KeyWordProps[]>([]);
-  const [tagLists, setTagLists] = useState<KeyWordProps[]>([]);
+  const [tagLists, setTagLists] = useState<KeywordProps[]>([]);
+  const { 
+    inputText: text,
+    setInputText: setText,
+    isFocus,
+    setIsFocus,
+    suggestions,
+    handleChange: handleTagChange,
+  } = useSuggestion({
+    initialValue: "",
+    data: tagLists,
+    filterType: "tag",
+  })
   
   useEffect(() => {
     const fetchLists = async() => {
@@ -44,20 +50,6 @@ const SearchForm = <T,>({ token, onSearchResults, searchType }: SearchProps<T>) 
     }
     fetchLists();
   }, [token]);
-
-  const handleChange = (text: string) => {
-    const normalizedText = text.replace(/　/g, " ");
-    setText(normalizedText);
-    const keywords = text.split(" "); // 入力されたkeywordを半角スペースで分割
-    const lastKeyword = keywords[keywords.length - 1]; // keywordsの配列の最後の要素を取得して変数化。
-    if (lastKeyword.length > 0) {
-      const KeywordsMatch = tagLists.filter((opt) => {
-        const regex = new RegExp(`${lastKeyword}`, "gi");
-        return opt.name.match(regex);
-      });
-      setSuggestions(KeywordsMatch) // キーワードマッチした候補が配列で格納される。
-    } 
-  }
 
   const onSubmit: SubmitHandler<SearchValue> = async (data) => {
     const searchWords = data.keywords.split(" ").filter(word => word.trim() !== "") ?? null;
@@ -105,7 +97,7 @@ const SearchForm = <T,>({ token, onSearchResults, searchType }: SearchProps<T>) 
             required
             {...register("keywords")}
             onFocus={() => setIsFocus(true)}
-            onChange={(e) => handleChange(e.target.value)}
+            onChange={(e) => handleTagChange(e.target.value)}
           />
           <button
             type="submit"
