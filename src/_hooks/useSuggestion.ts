@@ -1,13 +1,9 @@
 import { useState, useEffect } from "react";
-
-interface KeyWordProps {
-  id: string;
-  name: string;
-}
+import { KeywordProps } from "@/_types/suggestion";
 
 interface useSuggestionProps {
   initialValue?: string;
-  data: KeyWordProps[];
+  data: KeywordProps[];
   filterType: "breed" | "tag";
 }
 
@@ -18,7 +14,7 @@ export const useSuggestion = ({
 } :useSuggestionProps ) => {
   const [inputText, setInputText] = useState<string>(initialValue);
   const [isFocus, setIsFocus] = useState<boolean>(false);
-  const [suggestions, setSuggestions] = useState<KeyWordProps[]>([]);
+  const [suggestions, setSuggestions] = useState<KeywordProps[]>([]);
 
   useEffect(() => {
     if (initialValue) {
