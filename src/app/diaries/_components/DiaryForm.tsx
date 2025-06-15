@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "@/app/_components/Input";
 import Textarea from "@/app/_components/Textarea";
 import { FileInput, Label } from "flowbite-react";
@@ -20,10 +20,15 @@ interface DiaryFormProps {
   mutate?: KeyedMutator<DiaryDetails>
 }
 
+interface KeyWordProps {
+  id: string;
+  name: string;
+}
+
 const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) => {
   useRouteGuard();
   const { token } = useSupabaseSession();
-  const { register, handleSubmit, reset,  watch, formState: { errors, isSubmitting}} = useForm<DiaryRequest>();
+  const { register, handleSubmit, reset, setValue, watch, formState: { errors, isSubmitting}} = useForm<DiaryRequest>();
   const imageKey = watch("imageKey");
   const existingImageKey = diary?.imageKey ?? null;
   const { uploadedKey, isUploading } = useUploadImage(
@@ -33,6 +38,10 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) =
   );
   const thumbnailImageUrl = useEditPreviewImage(uploadedKey ?? null, "diary_img", diary?.imageKey ?? null);
   const { summaryLists } = useFetchSummaries();
+  const [text, setText] = useState<string>(""); //検索キーワード用のState
+  const [isFocus, setIsFocus] = useState<boolean>(false);
+  const [suggestions, setSuggestions] = useState<KeyWordProps[]>([]);
+  const [tagLists, setTagLists] = useState<KeyWordProps[]>([]);
 
   const onSubmit: SubmitHandler<DiaryRequest> = async(data) => {
     const req = {
@@ -72,15 +81,53 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) =
 
   useEffect(() => {
     if(isEdit && diary) {
+      const tagString = diary.diaryTags?.map(tag => tag.tag.name).join(" ") ?? "";
       reset({
         title: diary.title,
         content: diary.content,
         imageKey: diary.imageKey ?? "",
-        tags: diary.diaryTags?.map(tag => tag.tag.name).join(" ") ?? "",
+        tags: tagString,
         summaryId: diary.summaryId ?? "",
       })
+      setText(tagString);
     }
   },[isEdit, reset, diary]);
+
+  useEffect(() => {
+    const fetchLists = async() => {
+      if(!token) return;
+      try {
+        const res = await fetch("/api/tags/", {
+          headers: {
+            "Content-Type" : "application/json",
+            Authorization: token,
+          },
+        });
+        const { tags } = await res.json();
+
+        setTagLists(tags)
+      } catch(error) {
+        console.log(error)
+      }
+    }
+    fetchLists();
+  }, [token]);
+
+  // タグ候補を検索するための関数
+  const handleChange = (text: string) => {
+    const normalizedText = text.replace(/　/g, " ");
+    setText(normalizedText);
+    setValue("tags", normalizedText);
+    const keywords = text.split(" "); // 入力されたkeywordを半角スペースで分割
+    const lastKeyword = keywords[keywords.length - 1]; // keywordsの配列の最後の要素を取得して変数化。
+    if (lastKeyword.length > 0) {
+      const KeywordsMatch = tagLists.filter((opt) => {
+        const regex = new RegExp(`${lastKeyword}`, "gi");
+        return opt.name.match(regex);
+      });
+      setSuggestions(KeywordsMatch) // キーワードマッチした候補が配列で格納される。
+    } 
+  }
 
   return(
     <div className="flex justify-center">
@@ -98,14 +145,45 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) =
           error={errors.title?.message}
         />
 
-        <Input 
-          id="tags"
-          labelName="タグ"
-          type="text"
-          placeholder="柴犬 アレルギー"
-          register={{...register("tags")}}
-          error={errors.tags?.message}
-        />
+        <div className="mb-6">
+          <label 
+            className="block text-primary text-sm font-bold mb-2"
+            id="tags"
+          >
+            タグ
+          </label>
+          <input
+            id="tags"
+            type="text"
+            value={text}
+            className="appearance-none border border-primary rounded w-full h-10 py-2 px-3 bg-white text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="柴犬 アレルギー"
+            {...register("tags")}
+            onFocus={() => setIsFocus(true)}
+            onChange={(e) => handleChange(e.target.value)}
+          />
+          <p>{errors.tags?.message}</p>
+        </div>
+        <div className="px-4 mt-2 shadow-lg bg-gray-50 rounded-lg">
+          {isFocus && (
+            suggestions?.map((suggestion, i) => (
+              <p
+                key={i}
+                onClick={() => {
+                  const currentKeywords = text.split(" ");
+                  currentKeywords[currentKeywords.length - 1] = suggestion.name; // text(フォーム入力されている配列)の末尾のデータを候補のtextにする
+                  const newTag = currentKeywords.join(" "); // 入力値を再度スペース区切りの形式に変換
+                  setText(newTag);
+                  setValue("tags", newTag); 
+                  setIsFocus(false);
+                }}
+                className="text-sm py-1 text-gray-700"
+              >
+                # {suggestion.name}
+              </p>
+            ))
+          )}
+        </div>
 
         <Textarea 
           id="content"

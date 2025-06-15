@@ -13,7 +13,7 @@ const Label: React.FC<LabelProps> = ({id}) => {
       id={id}
     >
     {id}
-  </label>
+    </label>
   )
 }
 export default Label;
