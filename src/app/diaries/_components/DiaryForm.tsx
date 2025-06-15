@@ -12,17 +12,14 @@ import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
 import { DiaryRequest, DiaryDetails } from "@/_types/diary";
 import { useFetchSummaries } from "../_hooks/useFetchSummaries";
 import { KeyedMutator } from "swr";
+import { KeywordProps } from "@/_types/suggestion";
+import { useSuggestion } from "@/_hooks/useSuggestion";
 
 interface DiaryFormProps {
   diary?: DiaryDetails;
   isEdit?: boolean;
   onClose: () => void;
   mutate?: KeyedMutator<DiaryDetails>
-}
-
-interface KeyWordProps {
-  id: string;
-  name: string;
 }
 
 const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) => {
@@ -38,10 +35,20 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) =
   );
   const thumbnailImageUrl = useEditPreviewImage(uploadedKey ?? null, "diary_img", diary?.imageKey ?? null);
   const { summaryLists } = useFetchSummaries();
-  const [text, setText] = useState<string>(""); //検索キーワード用のState
-  const [isFocus, setIsFocus] = useState<boolean>(false);
-  const [suggestions, setSuggestions] = useState<KeyWordProps[]>([]);
-  const [tagLists, setTagLists] = useState<KeyWordProps[]>([]);
+  const [tagLists, setTagLists] = useState<KeywordProps[]>([]);
+
+  const { 
+    inputText: text,
+    setInputText: setText,
+    isFocus,
+    setIsFocus,
+    suggestions,
+    handleChange: handleTagChange,
+  } = useSuggestion({
+    initialValue: isEdit ? (diary?.diaryTags?.map(tag => tag.tag.name).join(" ") ?? "") : "",
+    data: tagLists,
+    filterType: "tag",
+  })
 
   const onSubmit: SubmitHandler<DiaryRequest> = async(data) => {
     const req = {
@@ -91,7 +98,7 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) =
       })
       setText(tagString);
     }
-  },[isEdit, reset, diary]);
+  },[isEdit, reset, diary, setText]);
 
   useEffect(() => {
     const fetchLists = async() => {
@@ -112,22 +119,6 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) =
     }
     fetchLists();
   }, [token]);
-
-  // タグ候補を検索するための関数
-  const handleChange = (text: string) => {
-    const normalizedText = text.replace(/　/g, " ");
-    setText(normalizedText);
-    setValue("tags", normalizedText);
-    const keywords = text.split(" "); // 入力されたkeywordを半角スペースで分割
-    const lastKeyword = keywords[keywords.length - 1]; // keywordsの配列の最後の要素を取得して変数化。
-    if (lastKeyword.length > 0) {
-      const KeywordsMatch = tagLists.filter((opt) => {
-        const regex = new RegExp(`${lastKeyword}`, "gi");
-        return opt.name.match(regex);
-      });
-      setSuggestions(KeywordsMatch) // キーワードマッチした候補が配列で格納される。
-    } 
-  }
 
   return(
     <div className="flex justify-center">
@@ -160,7 +151,7 @@ const DiaryForm: React.FC<DiaryFormProps> = ({isEdit, diary, onClose, mutate}) =
             placeholder="柴犬 アレルギー"
             {...register("tags")}
             onFocus={() => setIsFocus(true)}
-            onChange={(e) => handleChange(e.target.value)}
+            onChange={(e) => handleTagChange(e.target.value)}
           />
           <p>{errors.tags?.message}</p>
         </div>
