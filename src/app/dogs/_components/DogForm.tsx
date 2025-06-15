@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation"
 import { DogResponse } from "@/_types/dog";
 import  PageLoading  from "@/app/_components/PageLoading";
 import { useUploadImage } from "@/_hooks/useUploadImage";
+import { useSuggestion } from "@/_hooks/useSuggestion";
 
 const sexSelection = [
   {id: 1, name: "男の子"},
@@ -26,11 +27,6 @@ interface DogFormProps {
   isEdit?: boolean;
   dogInfo?: DogResponse;
   isGuest?: boolean;
-}
-
-interface KeyWordProps {
-  id: string;
-  name: string;
 }
 
 const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
@@ -49,9 +45,19 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
   ); 
   const thumbnailImageUrl = useEditPreviewImage(uploadedKey, "profile_img", dogInfo?.imageKey ?? null);
   const [isLoading, setLoading] = useState<boolean>(true);
-  const [inputBreed, setInputBreed] = useState<string>(''); 
-  const [isFocus, setIsFocus] = useState<boolean>(false);
-  const [suggestions, setSuggestions] = useState<KeyWordProps[]>([]); 
+  // suggestion機能のカスタムフック
+  const { 
+    inputText: inputBreed,
+    setInputText: setInputBreed,
+    isFocus,
+    setIsFocus,
+    suggestions,
+    handleChange: handleBreedChange,
+  } = useSuggestion({
+    initialValue: dogInfo?.breedId ? (breeds.find(breed => breed.id === dogInfo.breedId)?.name || "") : "",
+    data: breeds,
+    filterType: "breed"
+  });
 
   useEffect(()=>{
     if(!token) return
@@ -86,12 +92,11 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
       setValue("adoptionDate", dogInfo.adoptionDate.split('T')[0]);
       setInputBreed(breeds.find(breed => breed.id === dogInfo.breedId)?.name || '');
       setLoading(false);
-    }}, [dogInfo, isEdit, setValue, breeds]);
+    }}, [dogInfo, isEdit, setValue, breeds, setInputBreed]);
 
   const onsubmit: SubmitHandler<DogRequest> = async(data) => {
     const req = {
       ...data,
-      // breedId: selectedBreedId,
       imageKey: uploadedKey || dogInfo?.imageKey
     }
 
@@ -115,22 +120,6 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
         console.log(error);
         toast.error(isEdit ? "更新に失敗しました" : "登録に失敗しました");
       }
-  }
-
-  const handleChange = (text: string) => {
-    const normalizedText = text.replace(/ /g, "");
-    setInputBreed(normalizedText);
-
-    if (normalizedText === "") {
-      setSuggestions([]);
-      return;
-    }
-    
-    const breedMatch = breeds.filter((opt) => {
-      const regex = new RegExp(normalizedText, "gi");
-      return opt.name.match(regex);
-    });
-    setSuggestions(breedMatch);
   }
 
   return(
@@ -200,7 +189,7 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
                     validate: value => value !== "" ||"犬種を選択してください。"
                   })}
                   onFocus={() => setIsFocus(true)}
-                  onChange={(e) => handleChange(e.target.value)}
+                  onChange={(e) => handleBreedChange(e.target.value)}
                 />
               </div>
               <div className="text-red-500 text-xs mt-2">{errors.breedId?.message}</div>
@@ -212,7 +201,6 @@ const DogForm: React.FC<DogFormProps> = ({ isEdit, dogInfo, isGuest }) => {
                     key={i}
                     onClick={() => {
                       setInputBreed(suggestion.name);
-                      // setSelectedBreedId(suggestion.id);
                       setValue("breedId", suggestion.id);
                       setIsFocus(false);
                     }}
